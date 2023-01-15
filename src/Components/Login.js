@@ -1,8 +1,7 @@
 ﻿import React, {useState, useEffect} from 'react';
-import {Form, Container, Button, Alert} from 'react-bootstrap';
+import {Form, Container, Button} from 'react-bootstrap';
 import styled from 'styled-components';
 import {post} from '../Api/loginApi';
-import {includes} from 'lodash'
 import Calc from './Calculator';
 import {localLogin} from '../Api/routes';
 

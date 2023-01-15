@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import {
   createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link
+  RouterProvider
 } from 'react-router-dom'
 import { Alert, Container } from 'react-bootstrap'
 import Login from './Components/Login'

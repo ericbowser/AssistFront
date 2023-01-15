@@ -1,4 +1,5 @@
 {
+  "HTTPS": true,
   "name": "calcfront",
   "version": "1.0.0",
   "description": "React.js Calculator front end that calls node API",
@@ -6,6 +7,7 @@
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
+    "ci": "react-scripts build -p",
     "clean": "rm node_modules/ -R && npm install"
   },
   "repository": {
@@ -13,14 +15,13 @@
     "url": "git+https://github.com/ericbowser/CalcFront.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "",
   "dependencies": {
-    "cors": "^2.8.5",
-    "create-react-app": "^5.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
     "express-router": "^0.0.1",
     "lodash": "^4.17.21",
+    "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.4.3",
@@ -42,9 +43,9 @@
     ]
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.20.2",
-    "babel-loader": "^9.1.0",
-    "nodemon": "^2.0.20",
-    "webpack": "^5.75.0"
+    "@babel/core": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "babel-loader": "^8.2.5",
+    "webpack": "^4.46.0"
   }
 }
