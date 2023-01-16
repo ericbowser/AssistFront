@@ -11,7 +11,7 @@ import Login from './Components/Login'
 const router = createBrowserRouter([
   {
     path: '/login',
-    element: <Login  style={{'background-color': 'black'}}/>
+    element: <Login/>
   },
   {
     path: '/calcAccount',

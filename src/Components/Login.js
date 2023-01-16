@@ -6,9 +6,26 @@ import Calc from './Calculator';
 import {localLogin} from '../Api/routes';
 
 const StyledContainer = styled(Container)`
-    background-color: red;
-    margin-top: 2%;
-    padding: 2%;
+  height: 300px;
+  width: auto;
+  background-color: #5793be;
+  padding: 15px;
+  margin: 2%;
+  border: groove #a9cebd 3px;
+`;
+
+const Credential = styled(Form.Label)`
+  color: ghostwhite;
+`;
+
+const Register = styled(Button)`
+  border: outset;
+  color: ghostwhite;
+`;
+
+const SignIn = styled(Button)`
+  border: outset;
+  color: ghostwhite;
 `;
 
 function Login () {
@@ -43,29 +60,28 @@ function Login () {
   
   return (
       <StyledContainer>
-          <Calc/>
-          <Form onSubmit={handleSubmit} >
+          <Form onSubmit={handleSubmit}>
               <Form.Group className='mb-3' controlId='formBasicEmail'>
-                  <Form.Label style={{'color': 'white'}}>Email address</Form.Label>
+                  <Credential>Email address</Credential>
                   <Form.Control type='userName' placeholder='Enter email' onChange={event => {
                       setUserName(event.target.value);
                   }}/>
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicPassword'>
-                  <Form.Label style={{'color': 'white'}}>Password</Form.Label>
+                  <Credential>Password</Credential>
                   <Form.Control type='password' placeholder='Password' onChange={event => {
                       setPassword(event.target.value);
                   }}/>
               </Form.Group>
               <Form.Group>
                   <div style={{'paddingBottom': '30px'}}>
-                      <Button variant='primary' type='submit' style={{'float': 'right'}}>
-                          Submit
-                      </Button>
-
-                  <Button variant='info'  >
+                      <SignIn variant='primary' 
+                          type='submit'>
+                              Login
+                      </SignIn>
+                  <Register variant='primary'>
                           Register
-                      </Button>
+                      </Register>
                   </div>
               </Form.Group>
           </Form>
