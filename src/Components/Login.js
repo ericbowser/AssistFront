@@ -1,5 +1,5 @@
-﻿import React, {useState, useEffect} from 'react';
-import {Form, Container, Button} from 'react-bootstrap';
+﻿import React, {useState, useEffect, useMemo} from 'react';
+import {Form, Container, Button, Alert} from 'react-bootstrap';
 import styled from 'styled-components';
 import {post} from '../Api/loginApi';
 import Calc from './Calculator';
@@ -28,64 +28,88 @@ const SignIn = styled(Button)`
   color: ghostwhite;
 `;
 
-function Login () {
+function Login() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  
+  const [status, setStatus] = useState('');
+  const [submitType, setType] = useState('');
+
   useEffect(() => {
   }, [password, username]);
-  
-  async function handleSubmit() {
+
+  useMemo(() => {
+  }, [status]);
+
+  useMemo(() => {
+  }, [submitType]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
       const data = {
-          username: username,
-          password: password
+        username: username,
+        password: password,
+        loginType: submitType
       };
-      const x = await post(localLogin, data);
-      console.log("after request in Handle submit click action", x);
-      if (x.status === 409) {
-          console.log("It's a duplicate user, ask them to login");
-          alert("please login. You are already registered");
-      } else if (x.status === 400) {
-          alert("Bad request. Must have a username and password that hasn't been registered")
-      } else if (x.status === 500) {
-          console.log("server error status returned")
+
+      console.log('submit type', submitType)
+
+      const response = await post(localLogin, data);
+      console.log("returned status", response?.status);
+
+      if (response) {
+        switch (response?.status) {
+          case 200:
+            setStatus("Success");
+            break;
+          case 400:
+            setStatus('Bad request - User name and password must be set');
+            break;
+          case 409:
+            setStatus('User already exists, please login');
+            break;
+          case 500:
+            setStatus("Server error");
+            break;
+        }
       }
     } catch (err) {
       console.dir(err);
       alert(err);
-      // handle your error state here
     }
-  }
-  
+  };
+
+  function setSubmitType(submitType) {
+    setType(submitType);
+  };
+
   return (
-      <StyledContainer>
-          <Form onSubmit={handleSubmit}>
-              <Form.Group className='mb-3' controlId='formBasicEmail'>
-                  <Credential>Email address</Credential>
-                  <Form.Control type='userName' placeholder='Enter email' onChange={event => {
-                      setUserName(event.target.value);
-                  }}/>
-              </Form.Group>
-              <Form.Group className='mb-3' controlId='formBasicPassword'>
-                  <Credential>Password</Credential>
-                  <Form.Control type='password' placeholder='Password' onChange={event => {
-                      setPassword(event.target.value);
-                  }}/>
-              </Form.Group>
-              <Form.Group>
-                  <div style={{'paddingBottom': '30px'}}>
-                      <SignIn variant='primary' 
-                          type='submit'>
-                              Login
-                      </SignIn>
-                  <Register variant='primary'>
-                          Register
-                      </Register>
-                  </div>
-              </Form.Group>
-          </Form>
-      </StyledContainer>
+    <StyledContainer>
+      <Form method='post' onSubmit={handleSubmit}>
+        <Form.Group className='mb-3' controlId='formBasicEmail'>
+          <Credential>Email address</Credential>
+          <Form.Control type='userName' placeholder='Enter email' onChange={event => {
+            setUserName(event.target.value);
+          }}/>
+        </Form.Group>
+        <Form.Group className='mb-3' controlId='formBasicPassword'>
+          <Credential>Password</Credential>
+          <Form.Control type='password' placeholder='Password' onChange={event => {
+            setPassword(event.target.value);
+          }}/>
+        </Form.Group>
+        <Form.Group>
+          <div style={{'paddingBottom': '30px'}}>
+            <SignIn variant='primary' type='submit' onClick={() => setSubmitType('login')}> Login </SignIn>
+            <Register variant='primary' type='submit' onClick={() => setSubmitType('register')}> Register </Register>
+          </div>
+        </Form.Group>
+      </Form>
+      {status && (
+        <Alert title={status}/>
+      )}
+    </StyledContainer>
   );
 }
 

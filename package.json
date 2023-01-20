@@ -1,5 +1,5 @@
 {
-  "HTTPS": true,
+  "https": true,
   "name": "calcfront",
   "version": "1.0.0",
   "description": "React.js Calculator front end that calls node API",
