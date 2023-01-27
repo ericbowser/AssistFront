@@ -6,9 +6,9 @@ import Calc from './Calculator';
 import {localLogin} from '../Api/routes';
 
 const StyledContainer = styled(Container)`
-  height: 300px;
+  height: 350px;
   width: auto;
-  background-color: #5793be;
+  background-color: #172307;
   padding: 15px;
   margin: 2%;
   border: groove #a9cebd 3px;
@@ -107,7 +107,9 @@ function Login() {
         </Form.Group>
       </Form>
       {status && (
-        <Alert title={status}/>
+        <div>
+          <Alert title={status} variant={'success'} style={{'width': '200px'}}>{status}</Alert>
+        </div>
       )}
     </StyledContainer>
   );
