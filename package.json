@@ -7,7 +7,6 @@
   "scripts": {
     "dev": "webpack-d index.js",
     "build": "webpack --config webpack.config.js",
-    "ci": "react-scripts build -p",
     "clean": "rm node_modules/ -R && npm install"
   },
   "repository": {
@@ -17,7 +16,12 @@
   "author": "",
   "license": "",
   "dependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "bootstrap": "^5.2.3",
     "dotenv": "^16.0.3",
+    "html-webpack-plugin": "^5.5.0",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
@@ -25,7 +29,8 @@
     "react-router": "^6.4.3",
     "react-router-dom": "^6.4.3",
     "serve": "^14.1.2",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "webpack": "^5.75.0"
   },
   "browserslist": {
     "production": [
@@ -38,13 +43,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.12",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
-    "babel-install": "2.1.0",
-    "babel-loader": "^9.1.2",
-    "webpack": "^5.75.0"
   }
 }

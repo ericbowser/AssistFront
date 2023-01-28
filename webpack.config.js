@@ -1,8 +1,14 @@
 ﻿const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack'); //to access built-in plugins
 
 const e = {
     output: {
-        filename: 'build/bundle.js',
+        path: path.resolve(__dirname, "build"),
+        filename: 'bundle.js',
+    },
+    resolve: {
+        extensions: [".jsx", ".js"]
     },
     module: {
         rules: [{ 
@@ -12,12 +18,13 @@ const e = {
                 loader: 'babel-loader',
                 options: {
                     presets: [
-                        ['@babel/preset-env', {targets: "defaults"}]
+                        ['@babel/preset-env', "@babel/preset-react"]
                     ]
                 }
             }
         }
-    ]}
+    ]},
+    plugins: [new HtmlWebpackPlugin({template: "public/index.html"})]
 }
 
 module.exports = e;
