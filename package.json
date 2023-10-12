@@ -30,7 +30,7 @@
     "react-router-dom": "^6.4.3",
     "serve": "^14.1.2",
     "styled-components": "^5.3.6",
-    "webpack": "^5.75.0"
+    "webpack": "^5.76.0"
   },
   "browserslist": {
     "production": [
