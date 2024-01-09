@@ -1,2 +1,2 @@
-# CalcFront
-React.js Calculator front end that calls node API
+# Assist Front
+React.js front-end for various apis

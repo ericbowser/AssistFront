@@ -1,12 +1,12 @@
 ﻿import React from "react";
-import Login from './Components/Login.js';
+import Navigation from './Components/Navigation'
+
 
 function App() {
-        return (
-            <div style={{'background-color': 'blue'}}>
-                Home
-            </div>
-        )
+    return (
+      <Navigation>
+      </Navigation>
+    )
 }
 
 export default App;

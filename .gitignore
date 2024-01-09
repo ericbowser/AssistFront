@@ -1,4 +1,11 @@
 node_modules/
 build/
-
+*.idea/
 .idea/
+env/
+dist/
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
