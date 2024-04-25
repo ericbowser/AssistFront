@@ -109,16 +109,18 @@ function Birdeye() {
                     </Col>
                 </FormGroup>
             </div>
+            <Button onClick={GetPrice} style={{marginTop: "25px"}}>Get price</Button>
             {loadChart && (
                 <iframe
                     src={`${birdeyeBaseUrl}${token}${birdeyeChain}${params.chartType}${params.chartInterval}${params.showLeftToolbar}`}
                     height={"500px"}
-                    width={"1600px"}>
+                    width={"1600px"}
+                    style={{paddingBottom: '25px'}}>
                 </iframe>
-                )
+            )
             }
-            <div className="ag-theme-quartz">
-                {rowData && rowData.length > 0 &&
+            {rowData && rowData.length > 0 &&
+                <div className="ag-theme-quartz">
                     <div style={{width: '1800px', height: '100%'}}>
                         <AgGridReact
                             rowData={rowData}
@@ -131,9 +133,8 @@ function Birdeye() {
                             onPasteEnd={onPasteEnd}
                         />
                     </div>
-                }
-                <Button onClick={GetPrice} style={{marginTop: "25px"}}>Get price</Button>
-            </div>
+                </div>
+            }
         </div>
     )
 }
