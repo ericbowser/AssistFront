@@ -179,16 +179,6 @@ const Assist = () => {
                     <Row>
                         <Col smd={6}>
                             <Form.Control
-                                style={{boxShadow: 'blue 5px 5px 5px'}}
-                                as="textarea"
-                                placeholder="Instructions for Assist"
-                                className="mb-3"
-                                rows={2}
-                                onChange={event => InstructionsForAssist(event)}
-                            />
-                        </Col>
-                        <Col smd={6}>
-                            <Form.Control
                                 column sm="1"
                                 style={{boxShadow: 'blue 5px 5px 5px'}}
                                 as="textarea"
@@ -198,18 +188,44 @@ const Assist = () => {
                                 onChange={event => QuestionToAsk(event)}
                             />
                         </Col>
+                        <Col smd={6}>
+                            <Form.Control
+                                style={{boxShadow: 'blue 5px 5px 5px'}}
+                                as="textarea"
+                                placeholder="Instructions for Assist"
+                                className="mb-3"
+                                rows={2}
+                                onChange={event => InstructionsForAssist(event)}
+                            />
+                        </Col>
                     </Row>
                 </Form.Group>
                 <Form.Group>
-                        <span style={{'marginTop': '50px'}}>
-                            <Button variant='primary'
-                                    type='submit'
-                                    onClick={handleSubmit}
-                                    style={{boxShadow: 'blue 5px 5px 5px', margin: '50px 0 30px 0'}}
-                            >
-                                Submit Question
-                            </Button>
-                        </span>
+                    <Button variant='primary'
+                            type='submit'
+                            onClick={handleSubmit}
+                            style={{boxShadow: 'green 2px 5px 5px', float: 'left', marginRight: '25px'}}
+                    >
+                        Submit Question
+                    </Button>
+                  
+                    <Button onClick={SetCodeFromAnswer}
+                            variant={'primary'}
+                            style={{boxShadow: 'black 2px 5px 5px', float: 'right'}}
+                    >
+                        Extract Code From Answer
+                    </Button>
+                    <Button onClick={SaveText}
+                            variant={'primary'}
+                            style={{boxShadow: 'green 2px 5px 5px'}}
+                    >
+                        Save Text
+                    </Button>
+                    {messageSaved &&
+                        <Alert variant={'success'}>
+                            {answer}
+                        </Alert>
+                    }
                 </Form.Group>
             </Form>
             {!spinner && answer && (
@@ -240,24 +256,7 @@ const Assist = () => {
                     </SyntaxHighlighter>
                 </FormGroup>
             )}
-            <span>
-                    <Button onClick={SaveText} variant={'primary'}
-                            style={{boxShadow: 'purple 5px 5px 5px'}}
-                    >
-                        Save Text
-                    </Button>
-                     <Button onClick={SetCodeFromAnswer}
-                             variant={'primary'}
-                             style={{boxShadow: 'orange 12px 12px 12px', float: 'right'}}
-                     >
-                        Extract Code From Answer
-                    </Button>
-                </span>
-            {messageSaved &&
-                <Alert variant={'success'}>
-                    {answer}
-                </Alert>
-            }
+
         </Container>
     )
         ;
