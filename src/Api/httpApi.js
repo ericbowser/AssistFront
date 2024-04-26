@@ -15,7 +15,7 @@ async function post(url, body = {}, SetAnswerAsCallback) {
     console.log('POST body', body);
     const raw = JSON.stringify({
         "content": body.content,
-        "instructions": body.instructions
+        "instructions": "test"
     });
     
     const requestOptions = {

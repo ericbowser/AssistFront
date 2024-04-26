@@ -15,12 +15,13 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {GridCol1Row1, GridCol2Row1, GridWrapper} from "../styles";
 import {Col, Row} from "react-bootstrap";
+import {dark, lightfair} from "react-syntax-highlighter/dist/cjs/styles/hljs";
 
 const StyledContainer = styled(Container)`
     background-color: #ffff;
     color: white;
     padding: 8rem;
-    box-shadow: black 5px 30px 30px 5px;
+    box-shadow: black 5px 3px 3px 5px;
 `;
 
 // const Answer = styled(textarea)`
@@ -115,7 +116,7 @@ const Assist = () => {
             if (content) {
                 const body = {
                     content,
-                    instructions
+                    instructions: "test"
                 };
 
                 console.log('body and content', body, content)
@@ -190,6 +191,7 @@ const Assist = () => {
                         </Col>
                         <Col smd={6}>
                             <Form.Control
+                                value={instructions || 'test'}
                                 style={{boxShadow: 'blue 5px 5px 5px'}}
                                 as="textarea"
                                 placeholder="Instructions for Assist"
@@ -200,24 +202,24 @@ const Assist = () => {
                         </Col>
                     </Row>
                 </Form.Group>
-                <Form.Group>
+                <Form.Group style={{marginBottom: '50px'}}>
                     <Button variant='primary'
                             type='submit'
                             onClick={handleSubmit}
-                            style={{boxShadow: 'green 2px 5px 5px', float: 'left', marginRight: '25px'}}
+                            style={{boxShadow: 'black 2px 5px 5px', float: 'left', marginRight: '25px'}}
                     >
                         Submit Question
                     </Button>
-                  
+
                     <Button onClick={SetCodeFromAnswer}
                             variant={'primary'}
-                            style={{boxShadow: 'black 2px 5px 5px', float: 'right'}}
+                            style={{boxShadow: 'black 2px 5px 5px 2px', float: 'right'}}
                     >
                         Extract Code From Answer
                     </Button>
                     <Button onClick={SaveText}
                             variant={'primary'}
-                            style={{boxShadow: 'green 2px 5px 5px'}}
+                            style={{boxShadow: 'black 2px 5px 5px 2px'}}
                     >
                         Save Text
                     </Button>
@@ -230,36 +232,44 @@ const Assist = () => {
             </Form>
             {!spinner && answer && (
                 <FormGroup>
-                    <Form.Control
-                        style={{boxShadow: 'purple 5px 5px 5px'}}
+                    {/*   <Form.Control
+                        style={{boxShadow: 'black 2px 2px 2px 2px'}}
                         value={answer}
                         className="mb-3"
                         as="textarea"
                         rows={20}
                         readOnly={true}
-                    />
-                    <CodeEditor
-                        value={code}
-                        language="js"
-                        placeholder="Please enter JS code."
-                        // onChange={(evn) => setCode(evn.target.value)}
-                        padding={5}
-                        style={{
-                            boxShadow: 'purple 5px 5px 5px',
-                            backgroundColor: 'lightcyan',
-                            marginBottom: '50px'
-                        }}
-                        data-color-mode={'light'}
-                    />
-                    <SyntaxHighlighter language="JavaScript" style={docco}>
-                        {code}
-                    </SyntaxHighlighter>
+                    />*/}
+                    <Row>
+
+                        <Col smd={6}>
+                            <CodeEditor
+                                value={answer}
+                                language="js"
+                                placeholder="Please enter code"
+                                // onChange={(evn) => setCode(evn.target.value)}
+                                padding={5}
+                                style={{
+                                    boxShadow: 'black 2px 2px 2px 2px',
+                                    backgroundColor: 'lightcyan',
+                                    marginBottom: '50px'
+                                }}
+                                data-color-mode={'dark'}
+                            />
+
+                        </Col>
+                        <Col smd={"6"}>
+
+                            <SyntaxHighlighter language="JavaScript" style={docco}>
+                                {code}
+                            </SyntaxHighlighter>
+
+                        </Col>
+                    </Row>
                 </FormGroup>
             )}
-
         </Container>
     )
-        ;
 }
 
 export default Assist;
