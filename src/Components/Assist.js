@@ -7,15 +7,15 @@ import {post} from '../Api/httpApi';
 import Common from '../Types/Common';
 import Navigation from "./Navigation";
 import Spinner from 'react-bootstrap/Spinner';
+import Dropdown from 'react-bootstrap/Dropdown';
 import Alert from "react-bootstrap/Alert";
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import FormGroup from "react-bootstrap/FormGroup";
-import {forEach, isEmpty} from 'lodash';
+import {forEach} from 'lodash';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {GridCol1Row1, GridCol2Row1, GridWrapper} from "../styles";
-import {Col, Row} from "react-bootstrap";
-import {dark, lightfair} from "react-syntax-highlighter/dist/cjs/styles/hljs";
+import {Col, Row, SplitButton} from "react-bootstrap";
+import _ from 'lodash';
 
 const StyledContainer = styled(Container)`
     background-color: #ffff;
@@ -46,62 +46,61 @@ const Assist = () => {
     const [instructions, setInstructions] = useState('');
     const [status, setStatus] = useState('');
     const [messageSaved, setMessageSaved] = useState(false);
-    const [code, setCode] = useState([]);
+    const [code, setCode] = useState('');
+    const [language, setLanguage] = useState("javascript");
 
-    useEffect(() => {
-    }, [
-        embedding,
-        answer,
-        instructions,
-        status,
-        sessionId,
-        spinner,
-        content,
-        messageSaved,
-        code
-    ])
+        useEffect(() => {
+        }, [
+            embedding,
+            answer,
+            instructions,
+            status,
+            sessionId,
+            spinner,
+            content,
+            messageSaved,
+            code,
+            language
+        ])
 
-    async function SetAnswerAsCallback(res) {
-        setStatus(res.status);
-        console.log('response data', res.data);
+        async function SetAnswerAsCallback(res) {
+            setStatus(res.status);
+            console.log('response data', res.data);
 
-        if (res.status !== 200) {
-            setAnswer(`Server error ${res.status}`);
-        }
-
-        if (res.status === 200) {
-            if (res.data) {
-                setAnswer(res.data);
-                setSessionId(null);
-                /*
-                setSessionId(response.data.id);
-                */
+            if (res.status !== 200) {
+                setAnswer(`Server error ${res.status}`);
             }
 
-            setSpinner(false);
-        }
-    }
+            if (res.status === 200) {
+                if (res.data) {
+                    setAnswer(res.data);
+                    setSessionId(null);
+                    /*
+                    setSessionId(response.data.id);
+                    */
+                }
 
-    const SetCodeFromAnswer = () => {
-        if (answer) {
-            const codeBlockRegex = /```([\s\S]*?)```/g;
-            let codeString = [];
-            let match = '';
-
-            while ((match = codeBlockRegex.exec(answer)) !== null) {
-                forEach(codeString => {
-                    console.log(codeString)
-                })
-                // Remove the backticks and any language specifier from each code block.
-                const matched = match[0].replace(/^```\w*\n?|```$/g, '');
-                codeString.push(matched);
+                setSpinner(false);
             }
-
-            setCode(codeString);
         }
-    }
 
-    async function SaveTextAsCallback(response) {
+        const SetCodeFromAnswer = () => {
+            if (answer) {
+                const codeBlockRegex = /```([\s\S]*?)```/g;
+                let codeString = [];
+                let match = '';
+
+                while ((match = codeBlockRegex.exec(answer)) !== null) {
+                    // Remove the backticks and any language specifier from each code block.
+                    const matched = match[0].replace(/^```\w*\n?|```$/g, '');
+                    codeString.push(matched);
+                }
+
+                setCode(codeString.join(''));
+            }
+        }
+
+        async function SaveTextAsCallback(response) {
         if (response.status === 200) {
             setStatus(response.status);
             setMessageSaved(true);
@@ -122,9 +121,7 @@ const Assist = () => {
                 console.log('body and content', body, content)
                 setSpinner(true);
 
-                const response = await post(url, body, SetAnswerAsCallback);
-
-                console.log('response', response);
+                await post(url, body, SetAnswerAsCallback);
             }
 
             setSpinner(false);
@@ -137,7 +134,6 @@ const Assist = () => {
     const QuestionToAsk = async (event) => {
         if (event?.target?.value) {
             const content = event.target.value;
-            console.log("setting content state: ", content);
             setContent(content);
         }
     }
@@ -146,7 +142,6 @@ const Assist = () => {
         if (event?.target?.value) {
             const instructions = event.target.value;
             setInstructions(instructions);
-            console.log("setting instructions state: ", instructions)
         }
     }
 
@@ -163,6 +158,14 @@ const Assist = () => {
         } else {
             console.log('no answer or session saved')
         }
+    }
+
+    const mapCodeStrings = () => {
+        console.log(code.length);
+        const mappedCode = _.map(code, (snippet, index) => {
+            return (<div>{snippet}</div>);
+        });
+        return mappedCode;
     }
 
     return (
@@ -223,12 +226,27 @@ const Assist = () => {
                     >
                         Save Text
                     </Button>
+                    <SplitButton
+                        key={language}
+                        id={`dropdown-split-variants-${language}`}
+                        variant={'info'}
+                        title={language || 'Select language'}
+                        style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
+                    >
+                        <Dropdown.Item eventKey="javascript"
+                                       onClick={() => setLanguage("javascript")}>javascript</Dropdown.Item>
+                        <Dropdown.Item eventKey="html" onClick={() => setLanguage("html")}>html</Dropdown.Item>
+                        <Dropdown.Item eventKey="csharp" onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
+                        <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
+                    </SplitButton>
                     {messageSaved &&
                         <Alert variant={'success'}>
                             {answer}
                         </Alert>
                     }
+
                 </Form.Group>
+
             </Form>
             {!spinner && answer && (
                 <FormGroup>
@@ -245,7 +263,7 @@ const Assist = () => {
                         <Col smd={6}>
                             <CodeEditor
                                 value={answer}
-                                language="js"
+                                language={language}
                                 placeholder="Please enter code"
                                 // onChange={(evn) => setCode(evn.target.value)}
                                 padding={5}
@@ -258,13 +276,13 @@ const Assist = () => {
                             />
 
                         </Col>
-                        <Col smd={"6"}>
-
-                            <SyntaxHighlighter language="JavaScript" style={docco}>
-                                {code}
-                            </SyntaxHighlighter>
-
-                        </Col>
+                        {code.length > 0 &&
+                            <Col smd={"6"}>
+                                <SyntaxHighlighter language={language} style={docco}>
+                                    {code}
+                                </SyntaxHighlighter>
+                            </Col>
+                        }
                     </Row>
                 </FormGroup>
             )}
