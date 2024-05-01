@@ -71,6 +71,22 @@ const Assist = () => {
     }
 
     const SetCodeFromAnswer = () => {
+        /*const regex = /```(.*?)\n/gs;
+
+        const findLanguages = (responseText) => {
+            let match;
+            let languages = [];
+
+            // Use RegEx to find matches
+            while ((match = regex.exec(responseText)) !== null) {
+                const language = match[1].trim(); // Trim any white spaces around the language keyword
+                // Add the found language to the list if it isn't empty
+                if (language) {
+                    languages.push(language);
+                }
+            }
+
+            return languages;*/
         if (answer) {
             const codeBlockRegex = /```([\s\S]*?)```/g;
             let codeString = [];
@@ -101,7 +117,7 @@ const Assist = () => {
             if (content) {
                 const body = {
                     content,
-                    instructions: "test"
+                    instructions
                 };
 
                 console.log('body and content', body, content)
@@ -211,7 +227,7 @@ const Assist = () => {
                         </Col>
                         <Col smd={6}>
                             <Form.Control
-                                value={instructions || 'test'}
+                                value={instructions}
                                 style={{boxShadow: 'black 2px 2px 2px'}}
                                 as="textarea"
                                 placeholder="Instructions for Assist"
@@ -222,26 +238,25 @@ const Assist = () => {
                         </Col>
                     </Row>
                 </Form.Group>
-
             </Form>
             {!spinner && answer && (
                 <>
-                    <SplitButton
-                        key={language}
-                        id={`dropdown-split-variants-${language}`}
-                        variant={'info'}
-                        title={language || 'Select language'}
-                        style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
-                    >
-                        <Dropdown.Item eventKey="javascript"
-                                       onClick={() => setLanguage("javascript")}>javascript</Dropdown.Item>
-                        <Dropdown.Item eventKey="html" onClick={() => setLanguage("html")}>html</Dropdown.Item>
-                        <Dropdown.Item eventKey="csharp" onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
-                        <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
-                    </SplitButton>
                     <FormGroup>
                         <Row>
                             <Col smd={6}>
+                                <SplitButton
+                                    key={language}
+                                    id={`dropdown-split-variants-${language}`}
+                                    variant={'info'}
+                                    title={language || 'Select language'}
+                                    style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
+                                >
+                                    <Dropdown.Item eventKey="javascript"
+                                                   onClick={() => setLanguage("javascript")}>javascript</Dropdown.Item>
+                                    <Dropdown.Item eventKey="html" onClick={() => setLanguage("html")}>html</Dropdown.Item>
+                                    <Dropdown.Item eventKey="csharp" onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
+                                    <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
+                                </SplitButton>
                                 <CodeEditor
                                     value={answer}
                                     language={language}
@@ -249,10 +264,9 @@ const Assist = () => {
                                     padding={5}
                                     style={{
                                         boxShadow: 'black 2px 2px 2px 2px',
-                                        backgroundColor: 'lightcyan',
                                         marginBottom: '50px'
                                     }}
-                                    data-color-mode={'dark'}
+                                    data-color-mode={'light'}
                                 />
 
                             </Col>

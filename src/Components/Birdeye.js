@@ -10,7 +10,6 @@ import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
 import {Col, Row} from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-
 const birdeyeChain = "?chain=solana";
 const birdeyeBaseUrl = "https://birdeye.so/tv-widget/";
 const params = {
@@ -101,18 +100,17 @@ function Birdeye() {
                     </FormGroup>
                 </div>
                 <Button onClick={GetPrice} style={{marginTop: "25px"}}>Get price</Button>
-                {loadChart && (
-                    <iframe
+                {loadChart &&
+                    (<iframe
                         src={`${birdeyeBaseUrl}${token}${birdeyeChain}${params.chartType}${params.chartInterval}${params.showLeftToolbar}`}
                         height={"500px"}
-                        width={"1600px"}
+                        width={"1200px"}
                         style={{paddingBottom: '25px'}}>
-                    </iframe>
-                )
+                    </iframe>)
                 }
                 {rowData && rowData.length > 0 &&
                     <div className="ag-theme-quartz">
-                        <div style={{width: '100%', height: '100%'}}>
+                        <div style={{width: '100%', height: '100%', marginBottom: '5%'}}>
                             <AgGridReact
                                 rowData={rowData}
                                 columnDefs={colDefs}

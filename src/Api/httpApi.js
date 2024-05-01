@@ -29,7 +29,7 @@ async function post(url, data = {}, SetAnswerAsCallback) {
     console.log('POST body', data);
     const raw = JSON.stringify({
         "content": data.content,
-        "instructions": "test"
+        "instructions": data.instructions || "test"
     });
     
     const requestOptions = {

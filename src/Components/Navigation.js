@@ -12,9 +12,9 @@ const Navigation = () => {
                     <h2>Assist Management</h2>
                 </Navbar.Brand>
                 <Nav>
-                    <Nav.Link href={"/myLinks"} style={{color: "lightcoral", fontWeight: 'bold'}}>
+                {/*    <Nav.Link href={"/myLinks"} style={{color: "lightcoral", fontWeight: 'bold'}}>
                         <h3>Common Links</h3>
-                    </Nav.Link>
+                    </Nav.Link>*/}
                     <Nav.Link href={"/askAssist"} style={{color: "lightcoral", fontWeight: 'bold'}}>
                         <h3>Ask Assist</h3>
                     </Nav.Link>
