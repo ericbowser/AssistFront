@@ -51,11 +51,10 @@ function Birdeye() {
             headers: {'X-API-KEY': 'c871ef44be2647b88441255cbc8b3c7f'}
         };
 
-        const priceData = get('https://public-api.birdeye.so/defi/tokenlist', params)
+        get(process.env.BIRDEYE_BASE_URI, params)
             .then(priceData => {
-                console.log(priceData);
                 const wantTokens = [];
-                const tokens = _.map(priceData.data.tokens, (token, index) => {
+                const tokens = _.map(priceData.data.data.tokens, (token, index) => {
                     console.log(token);
                     if (token.liquidity > 1000 && token.mc > 15000) {
                         wantTokens.push(token);
@@ -69,14 +68,6 @@ function Birdeye() {
                 console.log(error);
             });
     }
-
-    const onPasteStart = (event) => {
-        console.log('Paste started', event);
-    };
-
-    const onPasteEnd = (event) => {
-        console.log('Paste ended', event);
-    };
 
     const processCellForClipboard = (params) => {
         return params.value;
@@ -95,20 +86,18 @@ function Birdeye() {
                 <Navigation/>
             </span>
                 <div>
-                    <FormGroup as={Row} className="mb-3" controlId={"formTokenInput"}>
-                        <Form.Label column sm="1" style={{color: "blue", fontWeight: "bolder"}}>Token</Form.Label>
-                        <Col sm="2">
-                            <Form.Control
-                                value={token}
-                                className="mb-3"
-                                as="input"
-                                rows={20}
-                                onChange={event => {
-                                    setToken(event.target.value)
-                                }}
-                            />
-                            <Button onClick={settoken}>Set Token</Button>
-                        </Col>
+                    <FormGroup className="mb-3" controlId={"formTokenInput"}>
+                        <Form.Label style={{color: "blue", fontWeight: "bolder"}}>Token</Form.Label>
+                        <Form.Control
+                            value={token}
+                            className="mb-3"
+                            as="input"
+                            rows={20}
+                            onChange={event => {
+                                setToken(event.target.value)
+                            }}
+                        />
+                        <Button onClick={settoken}>Set Token</Button>
                     </FormGroup>
                 </div>
                 <Button onClick={GetPrice} style={{marginTop: "25px"}}>Get price</Button>
@@ -125,14 +114,11 @@ function Birdeye() {
                     <div className="ag-theme-quartz">
                         <div style={{width: '100%', height: '100%'}}>
                             <AgGridReact
-                                
                                 rowData={rowData}
                                 columnDefs={colDefs}
                                 domLayout='autoHeight'
                                 pagination={true}
                                 processCellForClipboard={processCellForClipboard}
-                                onPasteStart={onPasteStart}
-                                onPasteEnd={onPasteEnd}
                                 copyHeadersToClipboard={true}
                             />
                         </div>
