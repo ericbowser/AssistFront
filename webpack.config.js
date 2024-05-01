@@ -1,7 +1,7 @@
 ﻿const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack'); //to access built-in plugins
 const dotenv = require('dotenv').config();
+const Dotenv = require('dotenv-webpack');
 
 console.log('Node env: ', process.env.NODE_ENV)
 console.log('Hosted port: ', process.env.PORT)
@@ -9,14 +9,6 @@ console.log('birdeye base uri: ', dotenv.parsed.BIRDEYE_BASE_URI)
 
 const port = process.env.PORT || 3000
 const environment = process.env.NODE_ENV || 'production'
-
-// Reduce it to a nice object, the same as before (Optional)
-module.exports = () =>{
-    Object.keys(env).reduce((prev, next) => {
-        prev[`process.env.${next}`] = JSON.stringify(env[next]);
-        return prev;
-    }, {});
-}
 
 module.exports = {
     entry: './src/index.js',
@@ -40,7 +32,12 @@ module.exports = {
         fallback: {
             os: require.resolve("os-browserify/browser"),
             path: require.resolve("path-browserify"),
-            crypto: false
+            crypto: require.resolve("crypto-browserify"),
+            https: require.resolve("https-browserify"),
+            url: require.resolve("url/"),
+            assert: require.resolve("assert"),
+            http: require.resolve("stream-http"),
+            stream: require.resolve("stream-browserify")
         },
         extensions: [".jsx", ".js"]
     },
@@ -64,6 +61,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({template: "./public/index.html"}),
+        new Dotenv()
     ],
     performance: {
         hints: false,

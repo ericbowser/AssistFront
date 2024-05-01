@@ -1,46 +1,61 @@
+import axios from 'axios';
+
 async function get(url, params = {}) {
     try {
+/*
         const response = await fetch(url, params);
-        console.log('response: ', response);
-        return response.json();
+*/
+        const response = await axios(url, params);
+        console.log('axios response: ', response);
+        return response;
     } catch (err) {
         console.log(err);
         throw err;
     }
 }
 
-async function post(url, body = {}, SetAnswerAsCallback) {
+async function post(url, data = {}, SetAnswerAsCallback) {
+   /* // Send a POST request
+    axios({
+        method: 'post',
+        url: '/user/12345',
+        data: {
+            firstName: 'Fred',
+            lastName: 'Flintstone'
+        }
+    });*/
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    console.log('POST body', body);
+    console.log('POST body', data);
     const raw = JSON.stringify({
-        "content": body.content,
+        "content": data.content,
         "instructions": "test"
     });
     
     const requestOptions = {
         method: "POST",
         headers: myHeaders,
-        body: raw,
+        body: data,
         redirect: "follow"
     };
     try {
-        console.log('request options ', {...requestOptions})
+        const response = await axios.post(url, {...data});
+/*
         const response = await fetch(url, requestOptions);
-        console.log('response body', );
-        if (response?.ok) {
-            console.log('gets here')
-            const content = await response.json();
-            console.log('response json: ', content.message.content)
+*/
+        if (response?.status === 200) {
+            const content = await response;
             const res = {
                 status: 200,
-                data: content.message.content
+                data: content?.data.message.content
             }
-            console.table('going to callback response: ', res);
+            console.log('response', res);
             SetAnswerAsCallback(res);
             return res;
+        } else {
+           console.error(response); 
+           return null;
         }
-        return response;
     } catch (err) {
         console.log(err);
         throw err;

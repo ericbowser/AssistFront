@@ -5,7 +5,8 @@ import {get, post} from "../Api/httpApi";
 import {AgGridReact} from 'ag-grid-react'; // AG Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import Navigation from "./Navigation"; // Optional Theme applied to the grid
+import Navigation from "./Navigation";
+import Container from "react-bootstrap/Container"; // Optional Theme applied to the grid
 
 function MyLinks() {
     const [category, setCategory] = useState(null);
@@ -61,7 +62,7 @@ function MyLinks() {
     }
 
     return (
-        <>
+        <Container>
             <Navigation/>
             <Form type="submit">
                 <Form.Group className="mb-3">
@@ -92,7 +93,7 @@ function MyLinks() {
                     domLayout='autoHeight'
                 />
             </div>
-        </>
+        </Container>
     )
 }
 

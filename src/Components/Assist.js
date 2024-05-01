@@ -4,17 +4,15 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import styled from 'styled-components';
 import {post} from '../Api/httpApi';
-import Common from '../Types/Common';
 import Navigation from "./Navigation";
 import Spinner from 'react-bootstrap/Spinner';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Alert from "react-bootstrap/Alert";
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import FormGroup from "react-bootstrap/FormGroup";
-import {forEach} from 'lodash';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {Col, Row, SplitButton} from "react-bootstrap";
+import {ButtonGroup, ButtonToolbar, Col, Row, SplitButton, ToggleButtonGroup} from "react-bootstrap";
 import _ from 'lodash';
 
 const StyledContainer = styled(Container)`
@@ -42,65 +40,53 @@ const Assist = () => {
     const [answer, setAnswer] = useState(null);
     const [sessionId, setSessionId] = useState(null);
     const [spinner, setSpinner] = useState(false);
-    const [embedding, setEmbedding] = useState(null);
     const [instructions, setInstructions] = useState('');
     const [status, setStatus] = useState('');
     const [messageSaved, setMessageSaved] = useState(false);
     const [code, setCode] = useState('');
     const [language, setLanguage] = useState("javascript");
 
-        useEffect(() => {
-        }, [
-            embedding,
-            answer,
-            instructions,
-            status,
-            sessionId,
-            spinner,
-            content,
-            messageSaved,
-            code,
-            language
-        ])
+    useEffect(() => {
+    }, [answer, instructions, status, sessionId, spinner, content, messageSaved, code, language]);
 
-        async function SetAnswerAsCallback(res) {
-            setStatus(res.status);
-            console.log('response data', res.data);
+    async function SetAnswerAsCallback(res) {
+        setStatus(res.status);
+        console.log('response data', res.data);
 
-            if (res.status !== 200) {
-                setAnswer(`Server error ${res.status}`);
-            }
-
-            if (res.status === 200) {
-                if (res.data) {
-                    setAnswer(res.data);
-                    setSessionId(null);
-                    /*
-                    setSessionId(response.data.id);
-                    */
-                }
-
-                setSpinner(false);
-            }
+        if (res.status !== 200) {
+            setAnswer(`Server error ${res.status}`);
         }
 
-        const SetCodeFromAnswer = () => {
-            if (answer) {
-                const codeBlockRegex = /```([\s\S]*?)```/g;
-                let codeString = [];
-                let match = '';
-
-                while ((match = codeBlockRegex.exec(answer)) !== null) {
-                    // Remove the backticks and any language specifier from each code block.
-                    const matched = match[0].replace(/^```\w*\n?|```$/g, '');
-                    codeString.push(matched);
-                }
-
-                setCode(codeString.join(''));
+        if (res.status === 200) {
+            if (res.data) {
+                setAnswer(res.data);
+                setSessionId(null);
+                /*
+                setSessionId(response.data.id);
+                */
             }
-        }
 
-        async function SaveTextAsCallback(response) {
+            setSpinner(false);
+        }
+    }
+
+    const SetCodeFromAnswer = () => {
+        if (answer) {
+            const codeBlockRegex = /```([\s\S]*?)```/g;
+            let codeString = [];
+            let match = '';
+
+            while ((match = codeBlockRegex.exec(answer)) !== null) {
+                // Remove the backticks and any language specifier from each code block.
+                const matched = match[0].replace(/^```\w*\n?|```$/g, '');
+                codeString.push(matched);
+            }
+
+            setCode(codeString.join(''));
+        }
+    }
+
+    async function SaveTextAsCallback(response) {
         if (response.status === 200) {
             setStatus(response.status);
             setMessageSaved(true);
@@ -111,7 +97,7 @@ const Assist = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const url = Common.AssistUrl;
+            const url = process.env.ASSIST_URL;
             if (content) {
                 const body = {
                     content,
@@ -152,7 +138,7 @@ const Assist = () => {
                 answer,
                 sessionId: sessionId
             };
-            const response = await post(Common.AssistSaveText, body, SaveTextAsCallback);
+            const response = await post(process.env.ASSIST_SAVE, body, SaveTextAsCallback);
             console.log('response', response);
             return response;
         } else {
@@ -160,31 +146,62 @@ const Assist = () => {
         }
     }
 
-    const mapCodeStrings = () => {
-        console.log(code.length);
-        const mappedCode = _.map(code, (snippet, index) => {
-            return (<div>{snippet}</div>);
-        });
-        return mappedCode;
-    }
+    /*
+      const mapCodeStrings = () => {
+          console.log(code.length);
+          return _.map(code, (snippet, index) => {
+              return (<div>{snippet}</div>);
+          });
+      }
+      */
+
+    /*  const callAnkrApi = async () => {
+          const res = await balances();
+          console.log(res);
+      }*/
 
     return (
-
-        <Container className={'container-sm'}>
+        <Container>
             <Navigation/>
             {spinner &&
-                <div>
-                    <Spinner animation="border" variant="success"
-                             style={{boxShadow: 'purple 12px 12px 12px'}}/>
+                <div style={{textAlign: 'center'}}>
+                    <Spinner animation="border" variant="success"/>
                 </div>
             }
+            <Form.Group style={{marginBottom: '15px', textAlign: 'center'}}>
+                <ButtonGroup size="sm">
+                    <Button variant='primary'
+                            type='submit'
+                            onClick={handleSubmit}
+                            style={{boxShadow: 'black 2px 2px 2px'}}
+                    >
+                        Submit Question
+                    </Button>
+                    <Button onClick={SetCodeFromAnswer}
+                            variant={'primary'}
+                            style={{boxShadow: 'black 2px 2px 2px'}}
+                    >
+                        Extract Code From Answer
+                    </Button>
+                    <Button onClick={SaveText}
+                            variant={'primary'}
+                            style={{boxShadow: 'black 2px 2px 2px'}}
+                    >
+                        Save Text
+                    </Button>
+                </ButtonGroup>
+                {messageSaved &&
+                    <Alert variant={'success'}>
+                        {answer}
+                    </Alert>
+                }
+            </Form.Group>
             <Form method='post' onSubmit={handleSubmit}>
                 <Form.Group>
                     <Row>
                         <Col smd={6}>
                             <Form.Control
-                                column sm="1"
-                                style={{boxShadow: 'blue 5px 5px 5px'}}
+                                style={{boxShadow: 'black 2px 2px 2px'}}
                                 as="textarea"
                                 placeholder="Ask a question"
                                 className="mb-3"
@@ -195,7 +212,7 @@ const Assist = () => {
                         <Col smd={6}>
                             <Form.Control
                                 value={instructions || 'test'}
-                                style={{boxShadow: 'blue 5px 5px 5px'}}
+                                style={{boxShadow: 'black 2px 2px 2px'}}
                                 as="textarea"
                                 placeholder="Instructions for Assist"
                                 className="mb-3"
@@ -205,27 +222,10 @@ const Assist = () => {
                         </Col>
                     </Row>
                 </Form.Group>
-                <Form.Group style={{marginBottom: '50px'}}>
-                    <Button variant='primary'
-                            type='submit'
-                            onClick={handleSubmit}
-                            style={{boxShadow: 'black 2px 5px 5px', float: 'left', marginRight: '25px'}}
-                    >
-                        Submit Question
-                    </Button>
 
-                    <Button onClick={SetCodeFromAnswer}
-                            variant={'primary'}
-                            style={{boxShadow: 'black 2px 5px 5px 2px', float: 'right'}}
-                    >
-                        Extract Code From Answer
-                    </Button>
-                    <Button onClick={SaveText}
-                            variant={'primary'}
-                            style={{boxShadow: 'black 2px 5px 5px 2px'}}
-                    >
-                        Save Text
-                    </Button>
+            </Form>
+            {!spinner && answer && (
+                <>
                     <SplitButton
                         key={language}
                         id={`dropdown-split-variants-${language}`}
@@ -239,52 +239,33 @@ const Assist = () => {
                         <Dropdown.Item eventKey="csharp" onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
                         <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
                     </SplitButton>
-                    {messageSaved &&
-                        <Alert variant={'success'}>
-                            {answer}
-                        </Alert>
-                    }
+                    <FormGroup>
+                        <Row>
+                            <Col smd={6}>
+                                <CodeEditor
+                                    value={answer}
+                                    language={language}
+                                    placeholder="Please enter code"
+                                    padding={5}
+                                    style={{
+                                        boxShadow: 'black 2px 2px 2px 2px',
+                                        backgroundColor: 'lightcyan',
+                                        marginBottom: '50px'
+                                    }}
+                                    data-color-mode={'dark'}
+                                />
 
-                </Form.Group>
-
-            </Form>
-            {!spinner && answer && (
-                <FormGroup>
-                    {/*   <Form.Control
-                        style={{boxShadow: 'black 2px 2px 2px 2px'}}
-                        value={answer}
-                        className="mb-3"
-                        as="textarea"
-                        rows={20}
-                        readOnly={true}
-                    />*/}
-                    <Row>
-
-                        <Col smd={6}>
-                            <CodeEditor
-                                value={answer}
-                                language={language}
-                                placeholder="Please enter code"
-                                // onChange={(evn) => setCode(evn.target.value)}
-                                padding={5}
-                                style={{
-                                    boxShadow: 'black 2px 2px 2px 2px',
-                                    backgroundColor: 'lightcyan',
-                                    marginBottom: '50px'
-                                }}
-                                data-color-mode={'dark'}
-                            />
-
-                        </Col>
-                        {code.length > 0 &&
-                            <Col smd={"6"}>
-                                <SyntaxHighlighter language={language} style={docco}>
-                                    {code}
-                                </SyntaxHighlighter>
                             </Col>
-                        }
-                    </Row>
-                </FormGroup>
+                            {code.length > 0 &&
+                                <Col smd={"6"}>
+                                    <SyntaxHighlighter language={language} style={docco}>
+                                        {code}
+                                    </SyntaxHighlighter>
+                                </Col>
+                            }
+                        </Row>
+                    </FormGroup>
+                </>
             )}
         </Container>
     )

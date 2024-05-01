@@ -2,7 +2,7 @@
 
 const GridWrapper = styled.span`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: 100%;
     word-wrap: break-word;
     @media only screen and (max-width: 650px) {
