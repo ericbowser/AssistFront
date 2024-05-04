@@ -71,22 +71,6 @@ const Assist = () => {
     }
 
     const SetCodeFromAnswer = () => {
-        /*const regex = /```(.*?)\n/gs;
-
-        const findLanguages = (responseText) => {
-            let match;
-            let languages = [];
-
-            // Use RegEx to find matches
-            while ((match = regex.exec(responseText)) !== null) {
-                const language = match[1].trim(); // Trim any white spaces around the language keyword
-                // Add the found language to the list if it isn't empty
-                if (language) {
-                    languages.push(language);
-                }
-            }
-
-            return languages;*/
         if (answer) {
             const codeBlockRegex = /```([\s\S]*?)```/g;
             let codeString = [];
