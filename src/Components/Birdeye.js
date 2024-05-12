@@ -47,7 +47,7 @@ function Birdeye() {
 
     const GetPrice = () => {
         const params = {
-            headers: {'X-API-KEY': 'c871ef44be2647b88441255cbc8b3c7f'}
+            headers: {'X-API-KEY': process.env.BIRDEYE_API_KEY}
         };
 
         get(process.env.BIRDEYE_BASE_URI, params)

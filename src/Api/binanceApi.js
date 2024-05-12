@@ -28,10 +28,6 @@ async function getAllAssets() {
 
     const fullUrl = url + '?' + completeQueryString;
     console.log('full url', fullUrl);
-/*    const headers = {
-        'X-MBX-APIKEY': 'liRiqlVCgfZC128ousatG8hF4KOiGCH9Z5Xdj562tugY0EOafiN7KjfhOGl6f5Sw',
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }*/
     
     try {
         const response = (await fetch(fullUrl, {
@@ -39,7 +35,7 @@ async function getAllAssets() {
             mode: 'cors',
             cache: 'default',
             headers: {
-                'X-MBX-APIKEY': 'oymZxLRj0l8meBdRGq7BS7BYJm7nM3qKf36wzqf0co6w8lt4SdSeLDzpWzVRIvUb',
+                'X-MBX-APIKEY': process.env.BINANCE_API_KEY,
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }));
@@ -57,4 +53,4 @@ async function getAllAssets() {
     }
 }
 
-export default getWalletInfo;
+export default getAllAssets;

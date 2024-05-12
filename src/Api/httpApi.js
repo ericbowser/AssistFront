@@ -38,6 +38,7 @@ async function post(url, data = {}, SetAnswerAsCallback) {
         body: data,
         redirect: "follow"
     };
+    console.log(requestOptions)
     try {
         const response = await axios.post(url, {...data});
 /*
@@ -47,7 +48,8 @@ async function post(url, data = {}, SetAnswerAsCallback) {
             const content = await response;
             const res = {
                 status: 200,
-                data: content?.data.message.content
+                data: content?.data.choices[0].message.content,
+                sessionId: content.data.id
             }
             console.log('response', res);
             SetAnswerAsCallback(res);

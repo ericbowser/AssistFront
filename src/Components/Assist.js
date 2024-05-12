@@ -12,28 +12,8 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import FormGroup from "react-bootstrap/FormGroup";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {ButtonGroup, ButtonToolbar, Col, Row, SplitButton, ToggleButtonGroup} from "react-bootstrap";
-import _ from 'lodash';
-
-const StyledContainer = styled(Container)`
-    background-color: #ffff;
-    color: white;
-    padding: 8rem;
-    box-shadow: black 5px 3px 3px 5px;
-`;
-
-// const Answer = styled(textarea)`
-//   font-family: monospace; /* Use a monospace font for code */
-//   width: 100%;
-//   height: 300px;
-//   padding: 10px;
-//   margin: 10px 0;
-//   border: 1px solid #ccc;
-//   border-radius: 4px;
-//   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-//   resize: vertical; /* Allow vertical resizing */
-//   overflow: auto; /* Allow scrollbar if necessary */
-// `;
+import {ButtonGroup, Col, Row, SplitButton} from "react-bootstrap";
+import VoiceTranscript from "./VoiceTranscript";
 
 const Assist = () => {
     const [content, setContent] = useState(null);
@@ -45,6 +25,7 @@ const Assist = () => {
     const [messageSaved, setMessageSaved] = useState(false);
     const [code, setCode] = useState('');
     const [language, setLanguage] = useState("javascript");
+    const [voiceTranscript, setVoiceTranscript] = useState(null);
 
     useEffect(() => {
     }, [answer, instructions, status, sessionId, spinner, content, messageSaved, code, language]);
@@ -60,10 +41,7 @@ const Assist = () => {
         if (res.status === 200) {
             if (res.data) {
                 setAnswer(res.data);
-                setSessionId(null);
-                /*
-                setSessionId(response.data.id);
-                */
+                setSessionId(res.sessionId);
             }
 
             setSpinner(false);
@@ -160,9 +138,11 @@ const Assist = () => {
           console.log(res);
       }*/
 
+
     return (
         <Container>
             <Navigation/>
+            <VoiceTranscript setContent={setContent} />
             {spinner &&
                 <div style={{textAlign: 'center'}}>
                     <Spinner animation="border" variant="success"/>
@@ -206,6 +186,7 @@ const Assist = () => {
                                 placeholder="Ask a question"
                                 className="mb-3"
                                 rows={2}
+                                value={content || ''}
                                 onChange={event => QuestionToAsk(event)}
                             />
                         </Col>
@@ -237,8 +218,10 @@ const Assist = () => {
                                 >
                                     <Dropdown.Item eventKey="javascript"
                                                    onClick={() => setLanguage("javascript")}>javascript</Dropdown.Item>
-                                    <Dropdown.Item eventKey="html" onClick={() => setLanguage("html")}>html</Dropdown.Item>
-                                    <Dropdown.Item eventKey="csharp" onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
+                                    <Dropdown.Item eventKey="html"
+                                                   onClick={() => setLanguage("html")}>html</Dropdown.Item>
+                                    <Dropdown.Item eventKey="csharp"
+                                                   onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
                                     <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
                                 </SplitButton>
                                 <CodeEditor
