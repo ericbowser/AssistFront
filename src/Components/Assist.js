@@ -1,8 +1,6 @@
 ﻿import React, {useState, useEffect} from 'react';
-import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import styled from 'styled-components';
 import {post} from '../Api/httpApi';
 import Navigation from "./Navigation";
 import Spinner from 'react-bootstrap/Spinner';
@@ -14,21 +12,22 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {ButtonGroup, Col, Row, SplitButton} from "react-bootstrap";
 import VoiceTranscript from "./VoiceTranscript";
+import ReactMarkdown from 'react-markdown';
+import {SiGmail} from "react-icons/si";
 
 const Assist = () => {
     const [content, setContent] = useState(null);
     const [answer, setAnswer] = useState(null);
-    const [sessionId, setSessionId] = useState(null);
+    const [thread, setThread] = useState(null);
     const [spinner, setSpinner] = useState(false);
-    const [instructions, setInstructions] = useState('');
+    const [instructions, setInstructions] = useState('General development questions');
     const [status, setStatus] = useState('');
     const [messageSaved, setMessageSaved] = useState(false);
     const [code, setCode] = useState('');
-    const [language, setLanguage] = useState("javascript");
-    const [voiceTranscript, setVoiceTranscript] = useState(null);
+    const [language, setLanguage] = useState("markdown");
 
     useEffect(() => {
-    }, [answer, instructions, status, sessionId, spinner, content, messageSaved, code, language]);
+    }, [answer, instructions, status, thread, spinner, content, messageSaved, code, language]);
 
     async function SetAnswerAsCallback(res) {
         setStatus(res.status);
@@ -41,8 +40,11 @@ const Assist = () => {
         if (res.status === 200) {
             if (res.data) {
                 setAnswer(res.data);
-                setSessionId(res.sessionId);
             }
+            if (res.thread) {
+                setThread(res.thread);
+            }
+
 
             setSpinner(false);
         }
@@ -111,10 +113,10 @@ const Assist = () => {
 
     const SaveText = async event => {
         event.preventDefault();
-        if (sessionId && answer) {
+        if (thread && answer) {
             const body = {
                 answer,
-                sessionId: sessionId
+                thread
             };
             const response = await post(process.env.ASSIST_SAVE, body, SaveTextAsCallback);
             console.log('response', response);
@@ -124,31 +126,20 @@ const Assist = () => {
         }
     }
 
-    /*
-      const mapCodeStrings = () => {
-          console.log(code.length);
-          return _.map(code, (snippet, index) => {
-              return (<div>{snippet}</div>);
-          });
-      }
-      */
+    function clear() {
+        setContent(null);
+    }
 
-    /*  const callAnkrApi = async () => {
-          const res = await balances();
-          console.log(res);
-      }*/
-
+    function clearBoth() {
+        setContent(null);
+        setInstructions(null);
+    }
 
     return (
-        <Container>
+        <div className={'container mx-auto '}>
             <Navigation/>
-            <VoiceTranscript setContent={setContent} />
-            {spinner &&
-                <div style={{textAlign: 'center'}}>
-                    <Spinner animation="border" variant="success"/>
-                </div>
-            }
-            <Form.Group style={{marginBottom: '15px', textAlign: 'center'}}>
+            <Form.Group>
+                <VoiceTranscript setContent={setContent}/>
                 <ButtonGroup size="sm">
                     <Button variant='primary'
                             type='submit'
@@ -170,40 +161,48 @@ const Assist = () => {
                         Save Text
                     </Button>
                 </ButtonGroup>
+                {spinner &&
+                    <div style={{textAlign: 'center'}}>
+                        <Spinner animation="border" variant="success"/>
+                    </div>
+                }
                 {messageSaved &&
                     <Alert variant={'success'}>
                         {answer}
                     </Alert>
                 }
             </Form.Group>
-            <Form method='post' onSubmit={handleSubmit}>
-                <Form.Group>
-                    <Row>
-                        <Col smd={6}>
-                            <Form.Control
-                                style={{boxShadow: 'black 2px 2px 2px'}}
-                                as="textarea"
-                                placeholder="Ask a question"
-                                className="mb-3"
-                                rows={2}
-                                value={content || ''}
-                                onChange={event => QuestionToAsk(event)}
-                            />
-                        </Col>
-                        <Col smd={6}>
-                            <Form.Control
-                                value={instructions}
-                                style={{boxShadow: 'black 2px 2px 2px'}}
-                                as="textarea"
-                                placeholder="Instructions for Assist"
-                                className="mb-3"
-                                rows={2}
-                                onChange={event => InstructionsForAssist(event)}
-                            />
-                        </Col>
-                    </Row>
-                </Form.Group>
-            </Form>
+            {thread &&
+                <div className={'text-bg-success text-xxl-start'}>Thread: {thread}</div>
+            }
+            <div>
+                <Form className={'flex flex-col md:flex-row gap-4'}
+                      method='post'
+                      onSubmit={handleSubmit}>
+                    <Form.Group>
+                        <Form.Control
+                            style={{boxShadow: 'black 2px 2px 2px'}}
+                            as="textarea"
+                            placeholder="Ask a question"
+                            className="flex-1 p-2"
+                            rows={2}
+                            value={content || ''}
+                            onChange={event => QuestionToAsk(event)}
+                        />
+                        <Form.Control
+                            value={instructions || ''}
+                            style={{boxShadow: 'black 2px 2px 2px'}}
+                            as="textarea"
+                            placeholder="Instructions for Assist"
+                            className="flex-2 p-2"
+                            rows={2}
+                            onChange={event => InstructionsForAssist(event)}
+                        />
+                        <button onClick={() => clear()}>Clear</button>
+                        <button onClick={() => clearBoth()}>Clear Both</button>
+                    </Form.Group>
+                </Form>
+            </div>
             {!spinner && answer && (
                 <>
                     <FormGroup>
@@ -223,32 +222,49 @@ const Assist = () => {
                                     <Dropdown.Item eventKey="csharp"
                                                    onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
                                     <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
+                                    <Dropdown.Item eventKey="markdown"
+                                                   onClick={() => setLanguage("markdown")}>markdown</Dropdown.Item>
+                                    <Dropdown.Item eventKey="python"
+                                                   onClick={() => setLanguage("python")}>python</Dropdown.Item>
                                 </SplitButton>
-                                <CodeEditor
-                                    value={answer}
-                                    language={language}
-                                    placeholder="Please enter code"
-                                    padding={5}
-                                    style={{
-                                        boxShadow: 'black 2px 2px 2px 2px',
-                                        marginBottom: '50px'
-                                    }}
-                                    data-color-mode={'light'}
-                                />
-
+                                {language === 'markdown' ?
+                                    (<ReactMarkdown>{answer}</ReactMarkdown>)
+                                    :
+                                    (<CodeEditor
+                                            value={answer}
+                                            language={language}
+                                            placeholder="Please enter code"
+                                            padding={5}
+                                            style={{
+                                                boxShadow: 'black 2px 2px 2px 2px',
+                                                marginBottom: '50px'
+                                            }}
+                                            data-color-mode={'light'}
+                                        />
+                                    )}
                             </Col>
                             {code.length > 0 &&
                                 <Col smd={"6"}>
-                                    <SyntaxHighlighter language={language} style={docco}>
-                                        {code}
-                                    </SyntaxHighlighter>
+                                    {language === 'markdown' ?
+                                        (<ReactMarkdown>{code}</ReactMarkdown>)
+                                        : (
+                                            <SyntaxHighlighter language={language} style={docco}>
+                                                {code}
+                                            </SyntaxHighlighter>
+                                        )
+                                    }
                                 </Col>
                             }
                         </Row>
                     </FormGroup>
                 </>
             )}
-        </Container>
+            <footer className="fixed-bottom text-center bg-secondary-subtle">
+                <a href="mailto:ericryanbowser@gmail.com">
+                    Send Email <SiGmail size={20} className={'cursor-pointer'}/>
+                </a>
+            </footer>
+        </div>
     )
 }
 

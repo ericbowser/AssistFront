@@ -12,11 +12,12 @@ function VoiceTranscript({setContent}) {
     } = useSpeechRecognition();
 
     useEffect(() => {
+        console.log(transcript)
         if (transcript) {
             setVoiceTranscript(transcript);
             setContent(transcript);
         }
-    }, [transcript]);
+    }, [transcript, voiceTranscript]);
 
     if (!browserSupportsSpeechRecognition) {
         return <span>Browser doesn't support speech recognition.</span>;
@@ -30,8 +31,8 @@ function VoiceTranscript({setContent}) {
         await SpeechRecognition.stopListening();
     }
 
-    const reset = () => {
-        setVoiceTranscript(null);
+    const reset = async () => {
+        await setVoiceTranscript(null);
     }
 
     return (

@@ -3,8 +3,10 @@ import Button from "react-bootstrap/Button";
 import {get} from '../Api/httpApi';
 import {AgGridReact} from "ag-grid-react";
 import Navigation from "./Navigation";
+/*
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
+*/
 import _ from 'lodash';
 import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
@@ -55,7 +57,7 @@ function Birdeye() {
                 const wantTokens = [];
                 const tokens = _.map(priceData.data.data.tokens, (token, index) => {
                     console.log(token);
-                    if (token.liquidity > 1000 && token.mc > 15000) {
+                    if (token.liquidity > 1000 && token.mc > 15000 && token.v24hChangePercent === null) {
                         wantTokens.push(token);
                     }
                 })
@@ -109,7 +111,7 @@ function Birdeye() {
                     </iframe>)
                 }
                 {rowData && rowData.length > 0 &&
-                    <div className="ag-theme-quartz">
+                    <div className="ag-theme-quartz ag-theme-acmecorp">
                         <div style={{width: '100%', height: '100%', marginBottom: '5%'}}>
                             <AgGridReact
                                 rowData={rowData}

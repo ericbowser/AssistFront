@@ -49,7 +49,7 @@ async function post(url, data = {}, SetAnswerAsCallback) {
             const res = {
                 status: 200,
                 data: content?.data.choices[0].message.content,
-                sessionId: content.data.id
+                thread: content.data.id
             }
             console.log('response', res);
             SetAnswerAsCallback(res);
