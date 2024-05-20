@@ -14,6 +14,7 @@ import {ButtonGroup, Col, Row, SplitButton} from "react-bootstrap";
 import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
+import GenerateImage from '../Api/openAiApi';
 
 const Assist = () => {
     const [content, setContent] = useState(null);
@@ -25,9 +26,21 @@ const Assist = () => {
     const [messageSaved, setMessageSaved] = useState(false);
     const [code, setCode] = useState('');
     const [language, setLanguage] = useState("markdown");
+    const [imageUrl, setImageUrl] = useState(null);
 
     useEffect(() => {
-    }, [answer, instructions, status, thread, spinner, content, messageSaved, code, language]);
+    }, [
+        answer,
+        instructions,
+        status,
+        thread,
+        spinner,
+        content,
+        messageSaved,
+        code,
+        language,
+        imageUrl
+    ]);
 
     async function SetAnswerAsCallback(res) {
         setStatus(res.status);
@@ -134,33 +147,48 @@ const Assist = () => {
         setContent(null);
         setInstructions(null);
     }
+    
+    const getImageUrl = async () => {
+        setSpinner(true);
+        const imageUrl = await GenerateImage(content);
+        console.log(imageUrl);
+        if (imageUrl) {
+            setImageUrl(imageUrl);
+        }
+        setSpinner(false);
+    }
 
     return (
         <div className={'container mx-auto '}>
             <Navigation/>
             <Form.Group>
                 <VoiceTranscript setContent={setContent}/>
-                <ButtonGroup size="sm">
-                    <Button variant='primary'
-                            type='submit'
-                            onClick={handleSubmit}
-                            style={{boxShadow: 'black 2px 2px 2px'}}
-                    >
-                        Submit Question
-                    </Button>
-                    <Button onClick={SetCodeFromAnswer}
-                            variant={'primary'}
-                            style={{boxShadow: 'black 2px 2px 2px'}}
-                    >
-                        Extract Code From Answer
-                    </Button>
-                    <Button onClick={SaveText}
-                            variant={'primary'}
-                            style={{boxShadow: 'black 2px 2px 2px'}}
-                    >
-                        Save Text
-                    </Button>
-                </ButtonGroup>
+                <Button variant='primary'
+                        type='submit'
+                        onClick={handleSubmit}
+                        style={{boxShadow: 'black 2px 2px 2px'}}
+                >
+                    Submit Question
+                </Button>
+                <Button variant='secondary'
+                        type='submit'
+                        onClick={getImageUrl}
+                        style={{boxShadow: 'black 2px 2px 2px'}}
+                >
+                    Generate Image
+                </Button>
+                <Button onClick={SetCodeFromAnswer}
+                        variant={'info'}
+                        style={{boxShadow: 'black 2px 2px 2px'}}
+                >
+                    Extract Code From Answer
+                </Button>
+                <Button onClick={SaveText}
+                        variant={'danger'}
+                        style={{boxShadow: 'black 2px 2px 2px'}}
+                >
+                    Save Text
+                </Button>
                 {spinner &&
                     <div style={{textAlign: 'center'}}>
                         <Spinner animation="border" variant="success"/>
@@ -198,11 +226,14 @@ const Assist = () => {
                             rows={2}
                             onChange={event => InstructionsForAssist(event)}
                         />
-                        <button onClick={() => clear()}>Clear</button>
-                        <button onClick={() => clearBoth()}>Clear Both</button>
+                        <Button variant={'success'} onClick={() => clear()}>Clear</Button>
+                        <Button variant={'warning'} onClick={() => clearBoth()}>Clear Both</Button>
                     </Form.Group>
                 </Form>
             </div>
+            {imageUrl &&
+                <img src={imageUrl} height={250} width={250} alt={'image'} className={'m-5'}/>
+            }
             {!spinner && answer && (
                 <>
                     <FormGroup>
