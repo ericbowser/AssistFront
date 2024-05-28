@@ -3,7 +3,7 @@
 async function GenerateImage(prompt) {
     try {
         const response = await axios.post(
-            'https://api.openai.com/v1/images/generations',
+            process.env.OPENAI_API_IMAGE,
             {
                 prompt: prompt,
                 n: 1,
@@ -18,6 +18,7 @@ async function GenerateImage(prompt) {
         );
 
         const imageUrl = response.data.data[0].url;
+        console.log(response.data);
         console.log("Generated Image URL:", imageUrl);
         return imageUrl;
     } catch (error) {

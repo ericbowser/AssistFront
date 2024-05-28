@@ -14,14 +14,21 @@ function MyLinks() {
     const [myLinks, setMyLinks] = useState([{}]);
     const [isLoaded, setIsLoaded] = useState(false);
     const [linkSaved, setLinkSaved] = useState(false);
+    const [imageUrls, setImageUrls] = useState([]);
 
     // Column Definitions: Defines the columns to be displayed.
+/*
     const [colDefs] = useState([
         {field: "myLinkId"},
         {field: "uri"},
         {field: "uriModifiedOn"},
         {field: "uriCategory"}
     ]);
+*/
+    const [colDefs] = useState([
+        {field: "imageurl"},
+        {field: "prompt"}
+    ]); 
 
     async function getMyLinks() {
         const response = await get("https://localhost:7169/api/getLinks");
@@ -34,6 +41,10 @@ function MyLinks() {
         return response;
     }
 
+    const fetchImageUrls = async () => {
+        await get(process.env.GET_IMAGE_URLS);
+    }
+    
     useEffect(() => {
     }, [myLinks, isLoaded, myLinks, myLink, linkSaved]);
 
@@ -45,7 +56,7 @@ function MyLinks() {
             uriModifiedOn: null
         };
         console.log(body);
-        const response = await post("https://localhost:7169/api/saveLink", body);
+        const response = await post(process.env.LI, body);
         console.log(response)
         /*  .then(res => {
               if (res) {

@@ -15,36 +15,17 @@ async function get(url, params = {}) {
 }
 
 async function post(url, data = {}, SetAnswerAsCallback) {
-   /* // Send a POST request
-    axios({
-        method: 'post',
-        url: '/user/12345',
-        data: {
-            firstName: 'Fred',
-            lastName: 'Flintstone'
-        }
-    });*/
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     console.log('POST body', data);
-    const raw = JSON.stringify({
-        "content": data.content,
-        "instructions": data.instructions || "test"
-    });
     
-    const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: data,
-        redirect: "follow"
-    };
-    console.log(requestOptions)
     try {
         const response = await axios.post(url, {...data});
+        return response.data;
 /*
         const response = await fetch(url, requestOptions);
 */
-        if (response?.status === 200) {
+       /* if (response?.status === 200) {
             const content = await response;
             const res = {
                 status: 200,
@@ -57,7 +38,7 @@ async function post(url, data = {}, SetAnswerAsCallback) {
         } else {
            console.error(response); 
            return null;
-        }
+        }*/
     } catch (err) {
         console.log(err);
         throw err;

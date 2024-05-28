@@ -10,14 +10,15 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import FormGroup from "react-bootstrap/FormGroup";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {ButtonGroup, Col, Row, SplitButton} from "react-bootstrap";
+import {Col, Row, SplitButton} from "react-bootstrap";
 import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
 import GenerateImage from '../Api/openAiApi';
+import {get} from "axios";
 
 const Assist = () => {
-    const [content, setContent] = useState(null);
+    const [content, setContent] = useState('');
     const [answer, setAnswer] = useState(null);
     const [thread, setThread] = useState(null);
     const [spinner, setSpinner] = useState(false);
@@ -27,6 +28,7 @@ const Assist = () => {
     const [code, setCode] = useState('');
     const [language, setLanguage] = useState("markdown");
     const [imageUrl, setImageUrl] = useState(null);
+    const [imageSize, setImageSize] = useState(350);
 
     useEffect(() => {
     }, [
@@ -39,7 +41,8 @@ const Assist = () => {
         messageSaved,
         code,
         language,
-        imageUrl
+        imageUrl,
+        imageSize
     ]);
 
     async function SetAnswerAsCallback(res) {
@@ -57,7 +60,6 @@ const Assist = () => {
             if (res.thread) {
                 setThread(res.thread);
             }
-
 
             setSpinner(false);
         }
@@ -79,13 +81,13 @@ const Assist = () => {
         }
     }
 
-    async function SaveTextAsCallback(response) {
-        if (response.status === 200) {
-            setStatus(response.status);
-            setMessageSaved(true);
-            setSpinner(false);
-        }
-    }
+    /*   async function SaveTextAsCallback(response) {
+           if (response.status === 200) {
+               setStatus(response.status);
+               setMessageSaved(true);
+               setSpinner(false);
+           }
+       }*/
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -124,76 +126,87 @@ const Assist = () => {
         }
     }
 
-    const SaveText = async event => {
-        event.preventDefault();
-        if (thread && answer) {
-            const body = {
-                answer,
-                thread
-            };
-            const response = await post(process.env.ASSIST_SAVE, body, SaveTextAsCallback);
-            console.log('response', response);
-            return response;
-        } else {
-            console.log('no answer or session saved')
-        }
-    }
+    /*  const SaveText = async event => {
+          event.preventDefault();
+          if (thread && answer) {
+              const body = {
+                  answer,
+                  thread
+              };
+              const response = await post(process.env.ASSIST_SAVE, body, SaveTextAsCallback);
+              console.log('response', response);
+              return response;
+          } else {
+              console.log('no answer or session saved')
+          }
+      }*/
 
     function clear() {
         setContent(null);
     }
 
-    function clearBoth() {
-        setContent(null);
-        setInstructions(null);
+    /*  function clearBoth() {
+          setContent(null);
+          setInstructions(null);
+      }*/
+    function clearImage() {
+        setImageUrl(null);
     }
-    
+
     const getImageUrl = async () => {
         setSpinner(true);
         const imageUrl = await GenerateImage(content);
         console.log(imageUrl);
         if (imageUrl) {
             setImageUrl(imageUrl);
+            setCode('');
         }
         setSpinner(false);
+    }
+
+    const handleImageSize = (event) => {
+        const size = event.target.value;
+        setImageSize(size);
+    }
+    
+    const saveImageUrl = async () => {
+        if(imageUrl) {
+            const data = {
+                imageUrl,
+                prompt: content
+            }
+            await post(process.env.ASSIST_SAVE, data);
+        }
     }
 
     return (
         <div className={'container mx-auto '}>
             <Navigation/>
-            <Form.Group>
+            <Form.Group className={'py-3'}>
                 <VoiceTranscript setContent={setContent}/>
-                <Button variant='primary'
+                <Button variant='outline-success'
                         type='submit'
                         onClick={handleSubmit}
-                        style={{boxShadow: 'black 2px 2px 2px'}}
                 >
                     Submit Question
                 </Button>
-                <Button variant='secondary'
+                <Button variant='outline-secondary'
                         type='submit'
                         onClick={getImageUrl}
-                        style={{boxShadow: 'black 2px 2px 2px'}}
                 >
                     Generate Image
                 </Button>
                 <Button onClick={SetCodeFromAnswer}
-                        variant={'info'}
-                        style={{boxShadow: 'black 2px 2px 2px'}}
+                        variant={'outline-primary'}
                 >
                     Extract Code From Answer
                 </Button>
-                <Button onClick={SaveText}
-                        variant={'danger'}
-                        style={{boxShadow: 'black 2px 2px 2px'}}
+                <Button onClick={saveImageUrl}
+                        variant={'outline-dark'}
                 >
-                    Save Text
+                    Save Image Url
                 </Button>
-                {spinner &&
-                    <div style={{textAlign: 'center'}}>
-                        <Spinner animation="border" variant="success"/>
-                    </div>
-                }
+
                 {messageSaved &&
                     <Alert variant={'success'}>
                         {answer}
@@ -203,97 +216,114 @@ const Assist = () => {
             {thread &&
                 <div className={'text-bg-success text-xxl-start'}>Thread: {thread}</div>
             }
-            <div>
-                <Form className={'flex flex-col md:flex-row gap-4'}
-                      method='post'
-                      onSubmit={handleSubmit}>
-                    <Form.Group>
-                        <Form.Control
-                            style={{boxShadow: 'black 2px 2px 2px'}}
-                            as="textarea"
-                            placeholder="Ask a question"
-                            className="flex-1 p-2"
-                            rows={2}
-                            value={content || ''}
-                            onChange={event => QuestionToAsk(event)}
-                        />
-                        <Form.Control
-                            value={instructions || ''}
-                            style={{boxShadow: 'black 2px 2px 2px'}}
-                            as="textarea"
-                            placeholder="Instructions for Assist"
-                            className="flex-2 p-2"
-                            rows={2}
-                            onChange={event => InstructionsForAssist(event)}
-                        />
-                        <Button variant={'success'} onClick={() => clear()}>Clear</Button>
-                        <Button variant={'warning'} onClick={() => clearBoth()}>Clear Both</Button>
-                    </Form.Group>
-                </Form>
-            </div>
             {imageUrl &&
-                <img src={imageUrl} height={250} width={250} alt={'image'} className={'m-5'}/>
+                <div className={'text-bg-success text-xxl-start'}>
+                    {imageUrl}
+                </div>
+            }
+            <Form
+                method='post'
+                onSubmit={handleSubmit}>
+                <Form.Group>
+                    <Form.Control
+                        as="textarea"
+                        placeholder="Ask a question"
+                        rows={2}
+                        value={content || ''}
+                        onChange={event => QuestionToAsk(event)}
+                    />
+                    <Form.Control
+                        value={instructions || ''}
+                        as="textarea"
+                        placeholder="Instructions for Assist"
+                        rows={2}
+                        onChange={event => InstructionsForAssist(event)}
+                    />
+                    <div className={'py-3'}>
+                        <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
+                        <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
+                        <div className={'float-right'}>
+                            <label htmlFor="number-input">Image Size:
+                                <input
+                                    onChange={handleImageSize}
+                                    style={{width: '75px', marginLeft: '15px'}}
+                                    type="number"
+                                    id="number-input"
+                                    placeholder="350"
+                                />
+                            </label>
+                        </div>
+                    </div>
+                </Form.Group>
+            </Form>
+            {spinner &&
+                <div style={{textAlign: 'center'}}>
+                    <Spinner animation="border" variant='dark'/>
+                </div>
+            }
+            {imageUrl &&
+                <img
+                    src={imageUrl}
+                    alt="Generated by OpenAI"
+                    width={imageSize}
+                    className={'py-5'}
+                />
             }
             {!spinner && answer && (
-                <>
-                    <FormGroup>
-                        <Row>
-                            <Col smd={6}>
-                                <SplitButton
-                                    key={language}
-                                    id={`dropdown-split-variants-${language}`}
-                                    variant={'info'}
-                                    title={language || 'Select language'}
-                                    style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
-                                >
-                                    <Dropdown.Item eventKey="javascript"
-                                                   onClick={() => setLanguage("javascript")}>javascript</Dropdown.Item>
-                                    <Dropdown.Item eventKey="html"
-                                                   onClick={() => setLanguage("html")}>html</Dropdown.Item>
-                                    <Dropdown.Item eventKey="csharp"
-                                                   onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
-                                    <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
-                                    <Dropdown.Item eventKey="markdown"
-                                                   onClick={() => setLanguage("markdown")}>markdown</Dropdown.Item>
-                                    <Dropdown.Item eventKey="python"
-                                                   onClick={() => setLanguage("python")}>python</Dropdown.Item>
-                                </SplitButton>
+                <FormGroup style={{paddingBottom: '200px'}}>
+                    <Row>
+                        <Col smd={6}>
+                            <SplitButton
+                                key={language}
+                                id={`dropdown-split-variants-${language}`}
+                                variant={'info'}
+                                title={language || 'Select language'}
+                                style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
+                            >
+                                <Dropdown.Item eventKey="javascript"
+                                               onClick={() => setLanguage("javascript")}>javascript</Dropdown.Item>
+                                <Dropdown.Item eventKey="html"
+                                               onClick={() => setLanguage("html")}>html</Dropdown.Item>
+                                <Dropdown.Item eventKey="csharp"
+                                               onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
+                                <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
+                                <Dropdown.Item eventKey="markdown"
+                                               onClick={() => setLanguage("markdown")}>markdown</Dropdown.Item>
+                                <Dropdown.Item eventKey="python"
+                                               onClick={() => setLanguage("python")}>python</Dropdown.Item>
+                            </SplitButton>
+                            {language === 'markdown' ?
+                                (<ReactMarkdown>{answer}</ReactMarkdown>)
+                                :
+                                (<CodeEditor
+                                        value={answer}
+                                        language={language}
+                                        placeholder="Please enter code"
+                                        padding={5}
+                                        style={{
+                                            marginBottom: '50px'
+                                        }}
+                                        data-color-mode={'light'}
+                                    />
+                                )}
+                        </Col>
+                        {code.length > 0 &&
+                            <Col smd={"6"}>
                                 {language === 'markdown' ?
-                                    (<ReactMarkdown>{answer}</ReactMarkdown>)
-                                    :
-                                    (<CodeEditor
-                                            value={answer}
-                                            language={language}
-                                            placeholder="Please enter code"
-                                            padding={5}
-                                            style={{
-                                                boxShadow: 'black 2px 2px 2px 2px',
-                                                marginBottom: '50px'
-                                            }}
-                                            data-color-mode={'light'}
-                                        />
-                                    )}
+                                    (<ReactMarkdown>{code}</ReactMarkdown>)
+                                    : (
+                                        <SyntaxHighlighter language={language} style={docco}>
+                                            {code}
+                                        </SyntaxHighlighter>
+                                    )
+                                }
                             </Col>
-                            {code.length > 0 &&
-                                <Col smd={"6"}>
-                                    {language === 'markdown' ?
-                                        (<ReactMarkdown>{code}</ReactMarkdown>)
-                                        : (
-                                            <SyntaxHighlighter language={language} style={docco}>
-                                                {code}
-                                            </SyntaxHighlighter>
-                                        )
-                                    }
-                                </Col>
-                            }
-                        </Row>
-                    </FormGroup>
-                </>
+                        }
+                    </Row>
+                </FormGroup>
             )}
-            <footer className="fixed-bottom text-center bg-secondary-subtle">
-                <a href="mailto:ericryanbowser@gmail.com">
-                    Send Email <SiGmail size={20} className={'cursor-pointer'}/>
-                </a>
+            <footer className="fixed-bottom text-center bg-secondary-subtle py-11 pt-10">
+                Send Email <SiGmail size={20} className={'cursor-pointer'}/>
             </footer>
         </div>
     )

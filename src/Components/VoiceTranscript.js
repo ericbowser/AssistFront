@@ -1,6 +1,7 @@
 ﻿import SpeechRecognition, {useSpeechRecognition} from 'react-speech-recognition';
 import {createSpeechlySpeechRecognition} from '@speechly/speech-recognition-polyfill';
 import React, {useEffect, useState} from "react";
+// Check if SpeechRecognition is supported
 
 function VoiceTranscript({setContent}) {
     const [voiceTranscript, setVoiceTranscript] = useState(null);
@@ -36,7 +37,7 @@ function VoiceTranscript({setContent}) {
     }
 
     return (
-        <div>
+        <div className={'py-5'}>
             <p>Microphone: {listening ? 'on' : 'off'}</p>
             <button onClick={startListening}>Start</button>
             <button onClick={stopListening}>Stop</button>

@@ -1,11 +1,11 @@
-import React from 'react'
-import {createRoot} from 'react-dom/client'
+import React from 'react';
+import {createRoot} from 'react-dom/client';
 import App from './App';
 import {
     createBrowserRouter,
     RouterProvider
-} from 'react-router-dom'
-import Assist from './Components/Assist'
+} from 'react-router-dom';
+import Assist from './Components/Assist';
 import MyLinks from "./Components/MyLinks";
 import Birdeye from "./Components/Birdeye";
 
