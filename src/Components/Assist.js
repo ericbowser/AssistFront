@@ -16,6 +16,7 @@ import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
 import GenerateImage from '../Api/openAiApi';
 import {get} from "axios";
+import LANG from '../../docs/languages';
 
 const Assist = () => {
     const [content, setContent] = useState('');
@@ -47,7 +48,6 @@ const Assist = () => {
 
     async function SetAnswerAsCallback(res) {
         setStatus(res.status);
-        console.log('response data', res.data);
 
         if (res.status !== 200) {
             setAnswer(`Server error ${res.status}`);
@@ -99,7 +99,6 @@ const Assist = () => {
                     instructions
                 };
 
-                console.log('body and content', body, content)
                 setSpinner(true);
 
                 await post(url, body, SetAnswerAsCallback);
@@ -156,7 +155,6 @@ const Assist = () => {
     const getImageUrl = async () => {
         setSpinner(true);
         const imageUrl = await GenerateImage(content);
-        console.log(imageUrl);
         if (imageUrl) {
             setImageUrl(imageUrl);
             setCode('');
@@ -168,9 +166,9 @@ const Assist = () => {
         const size = event.target.value;
         setImageSize(size);
     }
-    
+
     const saveImageUrl = async () => {
-        if(imageUrl) {
+        if (imageUrl) {
             const data = {
                 imageUrl,
                 prompt: content
@@ -280,17 +278,15 @@ const Assist = () => {
                                 title={language || 'Select language'}
                                 style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
                             >
-                                <Dropdown.Item eventKey="javascript"
-                                               onClick={() => setLanguage("javascript")}>javascript</Dropdown.Item>
-                                <Dropdown.Item eventKey="html"
-                                               onClick={() => setLanguage("html")}>html</Dropdown.Item>
-                                <Dropdown.Item eventKey="csharp"
-                                               onClick={() => setLanguage("csharp")}>csharp</Dropdown.Item>
-                                <Dropdown.Item eventKey="css" onClick={() => setLanguage("css")}>css</Dropdown.Item>
-                                <Dropdown.Item eventKey="markdown"
-                                               onClick={() => setLanguage("markdown")}>markdown</Dropdown.Item>
-                                <Dropdown.Item eventKey="python"
-                                               onClick={() => setLanguage("python")}>python</Dropdown.Item>
+                                {LANG.map((language, index) => (
+                                        <Dropdown.Item
+                                            key={`${index}${language}`}
+                                            eventKey={language}
+                                            onClick={() => setLanguage(language)}>
+                                            {language}
+                                        </Dropdown.Item>
+                                    )
+                                )}
                             </SplitButton>
                             {language === 'markdown' ?
                                 (<ReactMarkdown>{answer}</ReactMarkdown>)

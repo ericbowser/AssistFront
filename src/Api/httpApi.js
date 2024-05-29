@@ -21,11 +21,10 @@ async function post(url, data = {}, SetAnswerAsCallback) {
     
     try {
         const response = await axios.post(url, {...data});
-        return response.data;
 /*
         const response = await fetch(url, requestOptions);
 */
-       /* if (response?.status === 200) {
+        if (response?.status === 200) {
             const content = await response;
             const res = {
                 status: 200,
@@ -38,7 +37,7 @@ async function post(url, data = {}, SetAnswerAsCallback) {
         } else {
            console.error(response); 
            return null;
-        }*/
+        }
     } catch (err) {
         console.log(err);
         throw err;
