@@ -15,7 +15,6 @@ import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
 import GenerateImage from '../Api/openAiApi';
-import {get} from "axios";
 import LANG from '../../docs/languages';
 
 const Assist = () => {
@@ -81,13 +80,13 @@ const Assist = () => {
         }
     }
 
-    /*   async function SaveTextAsCallback(response) {
+       async function SaveTextAsCallback(response) {
            if (response.status === 200) {
                setStatus(response.status);
                setMessageSaved(true);
                setSpinner(false);
            }
-       }*/
+       }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
