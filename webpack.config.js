@@ -43,19 +43,50 @@ module.exports = {
     },
     module: {
         rules: [{
-            test: /\.(js|jsx)$/,
-            exclude: /node_modules/,
-            use: {
-                loader: 'babel-loader',
-            }
+            test: /\.(gif|png|jpe?g|svg)$/i,
+            use: [
+                'file-loader',
+                {
+                    loader: 'image-webpack-loader',
+                    options: {
+                        bypassOnDebug: true, // webpack@1.x
+                        disable: true, // webpack@2.x and newer
+                    },
+                }
+            ]
+        },
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                }
             },
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                use:
+                    {
+                        loader: 'image-webpack-loader',
+                    }
+                ,
+            }
+            ,
+            {
+                test: /\.(docx|pdf)$/i,
+                use:
+                    ["style-loader", "css-loader"],
+            }
+            ,
             {
                 test: /\.css$/i,
-                use: ["style-loader", "css-loader"],
-            },
+                use:
+                    ["style-loader", "css-loader"],
+            }
+            ,
             {
                 test: /\.txt$/,
-                use: 'raw-loader'
+                use:
+                    'raw-loader'
             }
         ]
     },
@@ -63,9 +94,12 @@ module.exports = {
         new HtmlWebpackPlugin({template: "./public/index.html"}),
         new Dotenv()
     ],
-    performance: {
-        hints: false,
-        maxEntrypointSize: 512000,
-        maxAssetSize: 512000,
-    }
+    performance:
+        {
+            hints: false,
+            maxEntrypointSize:
+                512000,
+            maxAssetSize:
+                512000,
+        }
 }

@@ -12,6 +12,7 @@ import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
 import {Col, Row} from "react-bootstrap";
 import Container from "react-bootstrap/Container";
+
 const birdeyeChain = "?chain=solana";
 const birdeyeBaseUrl = "https://birdeye.so/tv-widget/";
 const params = {
@@ -41,11 +42,8 @@ function Birdeye() {
         {field: "v24hChangePercent", editable: true}
     ]);
 
-    useMemo(() => {
-    }, [token])
-
     useEffect(() => {
-    }, [rowData, isLoaded, loadChart]);
+    }, [rowData, isLoaded, loadChart, token]);
 
     const GetPrice = () => {
         const params = {
@@ -54,14 +52,7 @@ function Birdeye() {
 
         get(process.env.BIRDEYE_BASE_URI, params)
             .then(priceData => {
-                const wantTokens = [];
-                const tokens = _.map(priceData.data.data.tokens, (token, index) => {
-                    console.log(token);
-                    if (token.liquidity > 1000 && token.mc > 15000 && token.v24hChangePercent === null) {
-                        wantTokens.push(token);
-                    }
-                })
-                setRowData(wantTokens);
+                setRowData(priceData.data.data.tokens);
                 setIsLoaded(true);
             })
             .catch(error => {

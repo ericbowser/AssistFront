@@ -16,6 +16,7 @@ import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
 import GenerateImage from '../Api/openAiApi';
 import LANG from '../../docs/languages';
+import baal from '../../images/9451634_0.png'
 
 const Assist = () => {
     const [content, setContent] = useState('');

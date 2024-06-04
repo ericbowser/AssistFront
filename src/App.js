@@ -4,7 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
     return (
-        <Navigation/>
+        <div className={'bg-'}>
+            <Navigation/>
+            
+        </div>
     )
 }
 

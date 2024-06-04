@@ -3,7 +3,11 @@ module.exports = {
   dark: 'class',
   content: [],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        "custom_blue": "#455bba"
+      }
+    },
   },
   plugins: [],
 }
