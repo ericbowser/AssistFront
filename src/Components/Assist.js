@@ -16,7 +16,8 @@ import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
 import GenerateImage from '../Api/openAiApi';
 import LANG from '../../docs/languages';
-import baal from '../../images/9451634_0.png'
+import copy from 'copy-to-clipboard';
+
 
 const Assist = () => {
     const [content, setContent] = useState('');
@@ -45,6 +46,11 @@ const Assist = () => {
         imageUrl,
         imageSize
     ]);
+
+    function copyToClipBoard(text = "test") {
+        copy(text);
+
+    }
 
     async function SetAnswerAsCallback(res) {
         setStatus(res.status);
@@ -81,13 +87,13 @@ const Assist = () => {
         }
     }
 
-       async function SaveTextAsCallback(response) {
-           if (response.status === 200) {
-               setStatus(response.status);
-               setMessageSaved(true);
-               setSpinner(false);
-           }
-       }
+    async function SaveTextAsCallback(response) {
+        if (response.status === 200) {
+            setStatus(response.status);
+            setMessageSaved(true);
+            setSpinner(false);
+        }
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -178,8 +184,10 @@ const Assist = () => {
     }
 
     return (
-        <div className={'container mx-auto '}>
-            <Navigation/>
+        <div className={'container'}>
+            <div className={'text-center'}>
+                <Navigation/>
+            </div>
             <Form.Group className={'py-3'}>
                 <VoiceTranscript setContent={setContent}/>
                 <Button variant='outline-success'
@@ -240,6 +248,12 @@ const Assist = () => {
                     <div className={'py-3'}>
                         <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
                         <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
+                        <Button 
+                            className={'text-black'}
+                            variant={'outline-light'} 
+                            onClick={() => copy(answer || '')}>
+                            Copy to Clipboard
+                        </Button>
                         <div className={'float-right'}>
                             <label htmlFor="number-input">Image Size:
                                 <input
@@ -288,19 +302,23 @@ const Assist = () => {
                                     )
                                 )}
                             </SplitButton>
+                         
                             {language === 'markdown' ?
                                 (<ReactMarkdown>{answer}</ReactMarkdown>)
                                 :
-                                (<CodeEditor
-                                        value={answer}
-                                        language={language}
-                                        placeholder="Please enter code"
-                                        padding={5}
-                                        style={{
-                                            marginBottom: '50px'
-                                        }}
-                                        data-color-mode={'light'}
-                                    />
+                                (<div>
+                                        <CodeEditor
+                                            value={answer}
+                                            language={language}
+                                            placeholder="Please enter code"
+                                            padding={5}
+                                            style={{
+                                                marginBottom: '50px',
+                                                textWrap: 'wrap'
+                                            }}
+                                            data-color-mode={'light'}
+                                        />
+                                    </div>
                                 )}
                         </Col>
                         {code.length > 0 &&
