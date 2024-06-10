@@ -248,9 +248,9 @@ const Assist = () => {
                     <div className={'py-3'}>
                         <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
                         <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
-                        <Button 
+                        <Button
                             className={'text-black'}
-                            variant={'outline-light'} 
+                            variant={'outline-light'}
                             onClick={() => copy(answer || '')}>
                             Copy to Clipboard
                         </Button>
@@ -282,58 +282,50 @@ const Assist = () => {
                 />
             }
             {!spinner && answer && (
-                <FormGroup style={{paddingBottom: '200px'}}>
-                    <Row>
-                        <Col smd={6}>
-                            <SplitButton
-                                key={language}
-                                id={`dropdown-split-variants-${language}`}
-                                variant={'info'}
-                                title={language || 'Select language'}
-                                style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
-                            >
-                                {LANG.map((language, index) => (
-                                        <Dropdown.Item
-                                            key={`${index}${language}`}
-                                            eventKey={language}
-                                            onClick={() => setLanguage(language)}>
-                                            {language}
-                                        </Dropdown.Item>
-                                    )
-                                )}
-                            </SplitButton>
-                         
-                            {language === 'markdown' ?
-                                (<ReactMarkdown>{answer}</ReactMarkdown>)
-                                :
-                                (<div>
-                                        <CodeEditor
-                                            value={answer}
-                                            language={language}
-                                            placeholder="Please enter code"
-                                            padding={5}
-                                            style={{
-                                                marginBottom: '50px',
-                                                textWrap: 'wrap'
-                                            }}
-                                            data-color-mode={'light'}
-                                        />
-                                    </div>
-                                )}
-                        </Col>
-                        {code.length > 0 &&
-                            <Col smd={"6"}>
-                                {language === 'markdown' ?
-                                    (<ReactMarkdown>{code}</ReactMarkdown>)
-                                    : (
-                                        <SyntaxHighlighter language={language} style={docco}>
-                                            {code}
-                                        </SyntaxHighlighter>
-                                    )
-                                }
-                            </Col>
-                        }
-                    </Row>
+                <FormGroup style={{paddingBottom: '200px'}} className={'flex'}>
+                    <SplitButton
+                        key={language}
+                        id={`dropdown-split-variants-${language}`}
+                        variant={'info'}
+                        title={language || 'Select language'}
+                        style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
+                    >
+                        {LANG.map((language, index) => (
+                                <Dropdown.Item
+                                    key={`${index}${language}`}
+                                    eventKey={language}
+                                    onClick={() => setLanguage(language)}>
+                                    {language}
+                                </Dropdown.Item>
+                            )
+                        )}
+                    </SplitButton>
+
+                    {language === 'markdown' ?
+                        (<ReactMarkdown>{answer}</ReactMarkdown>)
+                        :
+                        (<CodeEditor
+                                value={answer}
+                                language={language}
+                                placeholder="Please enter code"
+                                padding={5}
+                                style={{
+                                    marginBottom: '50px',
+                                    textWrap: 'wrap'
+                                }}
+                                data-color-mode={'light'}
+                            />
+                        )}
+                    {language === 'markdown' ? (
+                        <div>
+                            <ReactMarkdown>{code}</ReactMarkdown>
+                        </div>
+                    ) : (
+                        <SyntaxHighlighter language={language} style={docco}>
+                            {code}
+                        </SyntaxHighlighter>
+                    )
+                    }
                 </FormGroup>
             )}
             <footer className="fixed-bottom text-center bg-secondary-subtle py-11 pt-10">
