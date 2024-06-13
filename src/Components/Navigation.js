@@ -1,12 +1,15 @@
 ﻿import React from "react";
 import {Nav, Navbar} from "react-bootstrap";
+/*
 import baal from "../../images/cool_bak.jpg";
+*/
 
 const Navigation = () => {
     return (
-        <Navbar style={{paddingTop: '50px'}}
-                className="flex flex-col text-center justify-evenly">
+        <Navbar className="container flex flex-col text-center justify-evenly">
+{/*
             <img src={baal} alt={'baal'} width={'50'}/>
+*/}
             <Nav>
                 <Navbar.Brand href={"/"} style={{color: "purple", fontWeight: 'bold', paddingLeft: '15px'}}>
                     <h3>Assist Management</h3>

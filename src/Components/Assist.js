@@ -10,7 +10,7 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import FormGroup from "react-bootstrap/FormGroup";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {Col, Row, SplitButton} from "react-bootstrap";
+import {SplitButton} from "react-bootstrap";
 import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
