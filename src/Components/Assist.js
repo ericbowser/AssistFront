@@ -10,7 +10,7 @@ import CodeEditor from '@uiw/react-textarea-code-editor';
 import FormGroup from "react-bootstrap/FormGroup";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {SplitButton} from "react-bootstrap";
+import {Col, Row, SplitButton} from "react-bootstrap";
 import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
@@ -20,7 +20,7 @@ import copy from 'copy-to-clipboard';
 
 
 const Assist = () => {
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(null);
     const [answer, setAnswer] = useState(null);
     const [thread, setThread] = useState(null);
     const [spinner, setSpinner] = useState(false);
@@ -185,11 +185,13 @@ const Assist = () => {
 
     return (
         <div className={'container'}>
-            <div className={'text-center'}>
+            <div className={'text-center text-2xl'}>
                 <Navigation/>
             </div>
-            <Form.Group className={'py-3'}>
+            <div>
                 <VoiceTranscript setContent={setContent}/>
+            </div>
+            <Form.Group className={'py-3'}>
                 <Button variant='outline-success'
                         type='submit'
                         onClick={handleSubmit}
@@ -300,32 +302,37 @@ const Assist = () => {
                             )
                         )}
                     </SplitButton>
-
-                    {language === 'markdown' ?
-                        (<ReactMarkdown>{answer}</ReactMarkdown>)
-                        :
-                        (<CodeEditor
-                                value={answer}
-                                language={language}
-                                placeholder="Please enter code"
-                                padding={5}
-                                style={{
-                                    marginBottom: '50px',
-                                    textWrap: 'wrap'
-                                }}
-                                data-color-mode={'light'}
-                            />
-                        )}
-                    {language === 'markdown' ? (
-                        <div>
-                            <ReactMarkdown>{code}</ReactMarkdown>
-                        </div>
-                    ) : (
-                        <SyntaxHighlighter language={language} style={docco}>
-                            {code}
-                        </SyntaxHighlighter>
-                    )
-                    }
+                    <Row>
+                        <Col>
+                            {language === 'markdown' ?
+                                (<ReactMarkdown>{answer}</ReactMarkdown>)
+                                :
+                                (<CodeEditor
+                                        value={answer}
+                                        language={language}
+                                        placeholder="Please enter code"
+                                        padding={5}
+                                        style={{
+                                            marginBottom: '50px',
+                                            textWrap: 'wrap'
+                                        }}
+                                        data-color-mode={'light'}
+                                    />
+                                )}
+                        </Col>
+                        <Col>
+                            {language === 'markdown' ? (
+                                <div>
+                                    <ReactMarkdown>{code}</ReactMarkdown>
+                                </div>
+                            ) : (
+                                <SyntaxHighlighter language={language} style={docco}>
+                                    {code}
+                                </SyntaxHighlighter>
+                            )
+                            }
+                        </Col>
+                    </Row>
                 </FormGroup>
             )}
             <footer className="fixed-bottom text-center bg-secondary-subtle py-11 pt-10">
