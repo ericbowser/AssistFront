@@ -5,7 +5,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "custom_blue": "#455bba"
+        "custom_blue": "#455bba",
+        "hello-background-image": "url('./src/images/back.png')"
       }
     },
   },

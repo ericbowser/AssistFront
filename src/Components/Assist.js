@@ -15,9 +15,9 @@ import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
 import GenerateImage from '../Api/openAiApi';
-import LANG from '../../docs/languages';
+import LANG from '../docs/languages';
 import copy from 'copy-to-clipboard';
-
+import back from '../images/back.png';
 
 const Assist = () => {
     const [content, setContent] = useState('');
@@ -184,7 +184,7 @@ const Assist = () => {
     }
 
     return (
-        <div className={'container'}>
+        <div className={'container'} >
             <div className={'text-center'}>
                 <Navigation/>
             </div>

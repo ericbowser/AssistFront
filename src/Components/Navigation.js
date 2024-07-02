@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import {Nav, Navbar} from "react-bootstrap";
-import baal from "../../images/cool_bak.jpg";
+import baal from "../images/cool_bak.jpg";
 
 const Navigation = () => {
     return (
