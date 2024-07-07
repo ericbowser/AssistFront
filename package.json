@@ -25,7 +25,7 @@
     "@types/react-syntax-highlighter": "^15.5.11",
     "@uiw/react-textarea-code-editor": "^2.1.1",
     "ag-grid-react": "^31.1.1",
-    "axios": "^1.6.8",
+    "axios": "^1.7.0",
     "bootstrap": "^5.3.3",
     "copy-to-clipboard": "^3.3.3",
     "dotenv": "^16.4.5",
