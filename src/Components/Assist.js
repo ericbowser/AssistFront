@@ -184,7 +184,7 @@ const Assist = () => {
     }
 
     return (
-        <div className={'container'} >
+        <div className={'p-20 text-black container'}>
             <div className={'text-center'}>
                 <Navigation/>
             </div>
@@ -245,16 +245,18 @@ const Assist = () => {
                         rows={2}
                         onChange={event => InstructionsForAssist(event)}
                     />
-                    <div className={'py-3'}>
-                        <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
-                        <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
-                        <Button
-                            className={'text-black'}
-                            variant={'outline-light'}
-                            onClick={() => copy(answer || '')}>
-                            Copy to Clipboard
-                        </Button>
-                        <div className={'float-right'}>
+                    <Row>
+                        <Col md={10}>
+                            <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
+                            <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
+                            <Button
+                                className={'text-black'}
+                                variant={'outline-light'}
+                                onClick={() => copy(answer || '')}>
+                                Copy to Clipboard
+                            </Button>
+                        </Col>
+                        <Col md={2}>
                             <label htmlFor="number-input">Image Size:
                                 <input
                                     onChange={handleImageSize}
@@ -264,8 +266,8 @@ const Assist = () => {
                                     placeholder="350"
                                 />
                             </label>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </Form.Group>
             </Form>
             {spinner &&
@@ -300,32 +302,38 @@ const Assist = () => {
                             )
                         )}
                     </SplitButton>
+                    <Row>
+                        <Col>
 
-                    {language === 'markdown' ?
-                        (<ReactMarkdown>{answer}</ReactMarkdown>)
-                        :
-                        (<CodeEditor
-                                value={answer}
-                                language={language}
-                                placeholder="Please enter code"
-                                padding={5}
-                                style={{
-                                    marginBottom: '50px',
-                                    textWrap: 'wrap'
-                                }}
-                                data-color-mode={'light'}
-                            />
-                        )}
-                    {language === 'markdown' ? (
-                        <div>
-                            <ReactMarkdown>{code}</ReactMarkdown>
-                        </div>
-                    ) : (
-                        <SyntaxHighlighter language={language} style={docco}>
-                            {code}
-                        </SyntaxHighlighter>
-                    )
-                    }
+                            {language === 'markdown' ?
+                                (<ReactMarkdown>{answer}</ReactMarkdown>)
+                                :
+                                (<CodeEditor
+                                        value={answer}
+                                        language={language}
+                                        placeholder="Please enter code"
+                                        padding={5}
+                                        style={{
+                                            marginBottom: '50px',
+                                            textWrap: 'wrap'
+                                        }}
+                                        data-color-mode={'light'}
+                                    />
+                                )}
+                        </Col>
+                    </Row>
+                    <Col>
+                        {language === 'markdown' ? (
+                            <div>
+                                <ReactMarkdown>{code}</ReactMarkdown>
+                            </div>
+                        ) : (
+                            <SyntaxHighlighter language={language} style={docco}>
+                                {code}
+                            </SyntaxHighlighter>
+                        )
+                        }
+                    </Col>
                 </FormGroup>
             )}
             <footer className="fixed-bottom text-center bg-secondary-subtle py-11 pt-10">

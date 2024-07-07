@@ -8,6 +8,7 @@ import {
 import Assist from './Components/Assist';
 import MyLinks from "./Components/MyLinks";
 import Birdeye from "./Components/Birdeye";
+import '../src/output.css';
 
 const router = createBrowserRouter([
     {
