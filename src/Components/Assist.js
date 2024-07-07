@@ -15,12 +15,12 @@ import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
 import GenerateImage from '../Api/openAiApi';
-import LANG from '../../docs/languages';
+import LANG from '../docs/languages';
 import copy from 'copy-to-clipboard';
-
+import back from '../images/back.png';
 
 const Assist = () => {
-    const [content, setContent] = useState(null);
+    const [content, setContent] = useState('');
     const [answer, setAnswer] = useState(null);
     const [thread, setThread] = useState(null);
     const [spinner, setSpinner] = useState(false);
@@ -184,14 +184,12 @@ const Assist = () => {
     }
 
     return (
-        <div className={'container'}>
-            <div className={'text-center text-2xl'}>
+        <div className={'p-20 text-black container'}>
+            <div className={'text-center'}>
                 <Navigation/>
             </div>
-            <div>
-                <VoiceTranscript setContent={setContent}/>
-            </div>
             <Form.Group className={'py-3'}>
+                <VoiceTranscript setContent={setContent}/>
                 <Button variant='outline-success'
                         type='submit'
                         onClick={handleSubmit}
@@ -247,16 +245,18 @@ const Assist = () => {
                         rows={2}
                         onChange={event => InstructionsForAssist(event)}
                     />
-                    <div className={'py-3'}>
-                        <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
-                        <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
-                        <Button
-                            className={'text-black'}
-                            variant={'outline-light'}
-                            onClick={() => copy(answer || '')}>
-                            Copy to Clipboard
-                        </Button>
-                        <div className={'float-right'}>
+                    <Row>
+                        <Col md={10}>
+                            <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
+                            <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
+                            <Button
+                                className={'text-black'}
+                                variant={'outline-light'}
+                                onClick={() => copy(answer || '')}>
+                                Copy to Clipboard
+                            </Button>
+                        </Col>
+                        <Col md={2}>
                             <label htmlFor="number-input">Image Size:
                                 <input
                                     onChange={handleImageSize}
@@ -266,8 +266,8 @@ const Assist = () => {
                                     placeholder="350"
                                 />
                             </label>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </Form.Group>
             </Form>
             {spinner &&
@@ -304,6 +304,7 @@ const Assist = () => {
                     </SplitButton>
                     <Row>
                         <Col>
+
                             {language === 'markdown' ?
                                 (<ReactMarkdown>{answer}</ReactMarkdown>)
                                 :
@@ -320,19 +321,19 @@ const Assist = () => {
                                     />
                                 )}
                         </Col>
-                        <Col>
-                            {language === 'markdown' ? (
-                                <div>
-                                    <ReactMarkdown>{code}</ReactMarkdown>
-                                </div>
-                            ) : (
-                                <SyntaxHighlighter language={language} style={docco}>
-                                    {code}
-                                </SyntaxHighlighter>
-                            )
-                            }
-                        </Col>
                     </Row>
+                    <Col>
+                        {language === 'markdown' ? (
+                            <div>
+                                <ReactMarkdown>{code}</ReactMarkdown>
+                            </div>
+                        ) : (
+                            <SyntaxHighlighter language={language} style={docco}>
+                                {code}
+                            </SyntaxHighlighter>
+                        )
+                        }
+                    </Col>
                 </FormGroup>
             )}
             <footer className="fixed-bottom text-center bg-secondary-subtle py-11 pt-10">

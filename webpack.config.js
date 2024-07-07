@@ -2,6 +2,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const dotenv = require('dotenv').config();
 const Dotenv = require('dotenv-webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 console.log('Node env: ', process.env.NODE_ENV)
 console.log('Hosted port: ', process.env.PORT)
@@ -78,14 +79,19 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({template: "./public/index.html"}),
-        new Dotenv()
+        new Dotenv(),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'server',
+            analyzerHost: '127.0.0.1',
+            analyzerPort: 8888  // Use a different port for each instance
+        })
     ],
     performance:
         {
             hints: false,
             maxEntrypointSize:
-                512000,
+                312000,
             maxAssetSize:
-                512000,
+                312000,
         }
 }
