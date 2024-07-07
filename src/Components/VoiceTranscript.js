@@ -1,11 +1,13 @@
 ﻿import SpeechRecognition, {useSpeechRecognition} from 'react-speech-recognition';
 import {createSpeechlySpeechRecognition} from '@speechly/speech-recognition-polyfill';
 import React, {useEffect, useState} from "react";
+import '../output.css';
+
 // Check if SpeechRecognition is supported
 
 function VoiceTranscript({setContent}) {
     const [voiceTranscript, setVoiceTranscript] = useState(null);
-
+    const [isListening, setIsListening] = useState(false);
     const {
         transcript,
         listening,
@@ -13,8 +15,24 @@ function VoiceTranscript({setContent}) {
     } = useSpeechRecognition();
 
     useEffect(() => {
+        let timer;
+        if (isListening) {
+            SpeechRecognition.startListening({continuous: true});
+            timer = setTimeout(() => {
+                SpeechRecognition.stopListening();
+                setIsListening(false);
+            }, 25000);  // Convert seconds to milliseconds
+        }
+
+        return () => {
+            clearTimeout(timer);
+            SpeechRecognition.stopListening();
+        }
+    }, [isListening]);
+
+    useEffect(() => {
         console.log(transcript)
-        if (transcript) {
+        if (transcript && isListening) {
             setVoiceTranscript(transcript);
             setContent(transcript);
         }
@@ -25,11 +43,12 @@ function VoiceTranscript({setContent}) {
     }
 
     const startListening = async () => {
-        await SpeechRecognition.startListening();
+        setIsListening(true);
     }
 
     const stopListening = async () => {
-        await SpeechRecognition.stopListening();
+        setVoiceTranscript(null);
+        setIsListening(false);
     }
 
     const reset = async () => {
@@ -38,10 +57,20 @@ function VoiceTranscript({setContent}) {
 
     return (
         <div className={'py-5'}>
-            <p>Microphone: {listening ? 'on' : 'off'}</p>
-            <button onClick={startListening}>Start</button>
-            <button onClick={stopListening}>Stop</button>
-            <button onClick={reset}>Reset</button>
+            <div className={'font-serif font-semibold'}>
+                Microphone: {listening
+                ? <p className={'paragraph-transcript-on'}>on</p>
+                : <p className={'paragraph-transcript-off'}>off</p>}
+            </div>
+            <button className={'button-style'} type="button" onClick={startListening}>
+                Start
+            </button>
+            <button className={'button-style m-3'} type={'button'} onClick={stopListening}>
+                Stop
+            </button>
+            <button className={'button-style m-3'} type="button" onClick={reset}>
+                Reset
+            </button>
         </div>
     )
 }

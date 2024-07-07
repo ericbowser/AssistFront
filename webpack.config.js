@@ -45,16 +45,11 @@ module.exports = {
     module: {
         rules: [{
             test: /\.(gif|png|jpe?g|svg)$/i,
-            use: [
-                'file-loader',
-                {
-                    loader: 'image-webpack-loader',
-                    options: {
-                        bypassOnDebug: true, // webpack@1.x
-                        disable: true, // webpack@2.x and newer
-                    },
-                }
-            ]
+            loader: 'file-loader',
+            options: {
+                bypassOnDebug: true, // webpack@1.x
+                disable: true, // webpack@2.x and newer
+            }
         },
             {
                 test: /\.(js|jsx)$/,
@@ -63,15 +58,6 @@ module.exports = {
                     loader: 'babel-loader',
                 }
             },
-            {
-                test: /\.(gif|png|jpe?g|svg)$/i,
-                use:
-                    {
-                        loader: 'image-webpack-loader',
-                    }
-                ,
-            }
-            ,
             {
                 test: /\.(docx|pdf)$/i,
                 use:

@@ -1,3 +1,30 @@
 ﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.button-style {
+    background-color: lightseagreen;
+    color: white;
+    height: 33px;
+    width: 75px;
+    border-radius: 10%;
+    border: black 2px solid;
+}
+
+.paragraph-transcript-on {
+    background-color: green;
+    color: white;
+    height: 50px;
+    width: 75px;
+    border: black 2px solid;
+    padding: 10px;
+}
+
+.paragraph-transcript-off {
+    background-color: red;
+    color: white;
+    height: 50px;
+    width: 75px;
+    border: black 2px solid;
+    padding: 10px;
+}
