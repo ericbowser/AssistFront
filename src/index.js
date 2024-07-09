@@ -5,9 +5,11 @@ import {
     createBrowserRouter,
     RouterProvider
 } from 'react-router-dom';
-import Assist from './Components/Assist';
-import MyLinks from "./Components/MyLinks";
-import Birdeye from "./Components/Birdeye";
+import Assist from './components/Assist';
+/*
+import MyLinks from "./components/MyLinks";
+import Birdeye from "./components/Birdeye";
+*/
 import '../src/output.css';
 
 const router = createBrowserRouter([
@@ -17,18 +19,22 @@ const router = createBrowserRouter([
             <Assist/>
         )
     },
+/*
     {
         path: '/myLinks',
         element: (
             <MyLinks/>
         )
     },
+*/
+/*
     {
         path: '/birdeye',
         element: (
             <Birdeye/>
         )
     },
+*/
     {
         path: '/',
         element: (

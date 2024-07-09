@@ -4,8 +4,7 @@ import baal from "../images/cool_bak.jpg";
 
 const Navigation = () => {
     return (
-        <Navbar style={{paddingTop: '50px'}}
-                className="flex flex-col text-center justify-evenly">
+        <Navbar className="container-sm flex flex-col text-center m-48">
             <img src={baal} alt={'baal'} width={'50'}/>
             <Nav>
                 <Navbar.Brand href={"/"} style={{color: "purple", fontWeight: 'bold', paddingLeft: '15px'}}>
