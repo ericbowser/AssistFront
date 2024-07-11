@@ -4,7 +4,7 @@ import baal from "../images/cool_bak.jpg";
 
 const Navigation = () => {
     return (
-        <Navbar className="container-sm flex flex-col text-center m-48">
+        <Navbar className="container-sm flex flex-col text-center">
             <img src={baal} alt={'baal'} width={'50'}/>
             <Nav>
                 <Navbar.Brand href={"/"} style={{color: "purple", fontWeight: 'bold', paddingLeft: '15px'}}>

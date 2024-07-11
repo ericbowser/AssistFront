@@ -1,12 +1,11 @@
 ﻿const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const dotenv = require('dotenv').config();
 const Dotenv = require('dotenv-webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 console.log('Node env: ', process.env.NODE_ENV)
 console.log('Hosted port: ', process.env.PORT)
-console.log('birdeye base uri: ', dotenv.parsed.BIRDEYE_BASE_URI)
+console.log('birdeye base uri: ', process.env.BIRDEYE_BASE_URI)
 
 const port = process.env.PORT || 3000
 const environment = process.env.NODE_ENV || 'production'
@@ -79,12 +78,12 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({template: "./public/index.html"}),
-        new Dotenv(),
-        new BundleAnalyzerPlugin({
+        new Dotenv()
+     /*   new BundleAnalyzerPlugin({
             analyzerMode: 'server',
             analyzerHost: '127.0.0.1',
             analyzerPort: 8888  // Use a different port for each instance
-        })
+        })*/
     ],
     performance:
         {

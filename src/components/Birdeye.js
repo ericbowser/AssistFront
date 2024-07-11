@@ -1,6 +1,6 @@
 ﻿import React, {useEffect, useMemo, useState} from "react";
 import Button from "react-bootstrap/Button";
-import {get} from '../Api/httpApi';
+import {get} from '../api/httpApi';
 import {AgGridReact} from "ag-grid-react";
 import Navigation from "./Navigation";
 /*

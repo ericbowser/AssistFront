@@ -1,15 +1,18 @@
 {
   "https": false,
-  "name": "assist-front",
+  "name": "node",
   "version": "1.0.0",
   "description": "React.js Assist Front End",
   "main": "index.js",
   "scripts": {
-    "run": "docker run -p 32635:32635 --env-file .env assist-front",
-    "front": "webpack-dev-server --mode=production",
+    "run:docker": "docker run -p 32635:32635 --env-file .env assist-front",
+    "build:docker": "docker build -t assist-front .",
+    "build": "webpack --mode=production",
+    "start": "react-scripts start",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
-    "webpack": "webpack-dev-server --mode=development",
+    "webpack": "webpack-dev-server --mode=production",
+    "serve": "serve",
     "clean": "rm node_modules/ -R && npm install",
     "tail": "npx tailwindcss -i ./src/input.css -o ./src/output.css",
     "tail:watch": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch"
@@ -37,11 +40,13 @@
     "react-markdown": "^9.0.1",
     "react-router": "^6.22.3",
     "react-router-dom": "^6.22.3",
+    "react-scripts": "^5.0.1",
     "react-scroll": "^1.9.0",
     "react-speech-recognition": "^3.10.0",
     "react-syntax-highlighter": "^15.5.0"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.19",
     "@babel/core": "^7.23.7",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.23.7",

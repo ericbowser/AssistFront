@@ -1,7 +1,7 @@
 ﻿import React, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import {post} from '../Api/httpApi';
+import {post} from '../api/httpApi';
 import Navigation from "./Navigation";
 import Spinner from 'react-bootstrap/Spinner';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -14,12 +14,10 @@ import {Col, Row, SplitButton} from "react-bootstrap";
 import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
-import GenerateImage from '../Api/openAiApi';
+import GenerateImage from '../api/openAiApi';
 import LANG from '../docs/languages';
 import copy from 'copy-to-clipboard';
 import {Element, scroller} from 'react-scroll';
-import '../output.css';
-import '../input.css';
 
 const Assist = () => {
     const [content, setContent] = useState('');
@@ -112,7 +110,7 @@ const Assist = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const url = process.env.ASSIST_URL;
+            const url = 'http://localhost:32636/askAssist';
             if (content) {
                 const body = {
                     content,
@@ -243,8 +241,7 @@ const Assist = () => {
             }
             <Form
                 method='post'
-                onSubmit={handleSubmit}
-                className={'pb-xxl-4'}>
+                onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Control
                         as="textarea"
@@ -299,13 +296,13 @@ const Assist = () => {
                 />
             }
             {!spinner && answer && (
-                <FormGroup style={{paddingTop: '20px', paddingBottom: '20px'}} className={'flex'}>
+                <FormGroup >
                     <SplitButton
                         key={language}
                         id={`dropdown-split-variants-${language}`}
                         variant={'info'}
                         title={language || 'Select language'}
-                        style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
+                        className={'p-20 m-20'}
                     >
                         {LANG.map((language, index) => (
                                 <Dropdown.Item
@@ -348,7 +345,7 @@ const Assist = () => {
                     </Element>
                 </FormGroup>
             )}
-            <footer className="fixed-bottom text-center bg-secondary-subtle py-11 pt-10">
+            <footer className="fixed-bottom text-center bg-secondary-subtle">
                 Send Email <SiGmail size={20} className={'cursor-pointer'}/>
             </footer>
         </div>

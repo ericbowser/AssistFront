@@ -6,10 +6,6 @@ import {
     RouterProvider
 } from 'react-router-dom';
 import Assist from './components/Assist';
-/*
-import MyLinks from "./components/MyLinks";
-import Birdeye from "./components/Birdeye";
-*/
 import '../src/output.css';
 
 const router = createBrowserRouter([
@@ -38,7 +34,10 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: (
-            <App/>
+            <div className={'bg-amber-100'}>
+                <App/>
+                
+            </div>
         )
     }
 ])
