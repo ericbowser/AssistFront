@@ -5,9 +5,7 @@ import '../src/output.css';
 
 function App() {
     return (
-        <div className={'bg-amber-100'}>
-            <Navigation/>
-        </div>
+        <Navigation/>
     )
 }
 

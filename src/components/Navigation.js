@@ -1,21 +1,23 @@
 ﻿import React from "react";
 import {Nav, Navbar} from "react-bootstrap";
-import baal from "../images/cool_bak.jpg";
+import '../output.css';
+import {Link} from "react-router-dom";
 
 const Navigation = () => {
     return (
-        <Navbar className="container-sm flex flex-col text-center">
-            <img src={baal} alt={'baal'} width={'50'}/>
+        <Navbar className="container-sm mb-xxl-5 text-3xl bolder justify-between text-center bg-custom-image shadow-pink-800 shadow-2xl">
             <Nav>
-                <Navbar.Brand href={"/"} style={{color: "purple", fontWeight: 'bold', paddingLeft: '15px'}}>
-                    <h3>Assist Management</h3>
-                </Navbar.Brand>
-                <Nav.Link href={"/askAssist"} style={{color: "lightcoral", fontWeight: 'bold'}}>
-                    <h5>Ask Assist</h5>
+                <Link to={"/"} className={'text-center m-2 pr-20'}>
+                    <h3 className={'pl-96 text-2xl text-white font-extrabold text-center '}>Assist Management</h3>
+                </Link>
+                <Nav.Link href={"/askAssist"}>
+                    <h3 className={'text-2xl text-white font-extrabold text-center'}>Ask Assist</h3>
                 </Nav.Link>
+{/*
                 <Nav.Link href={"/birdeye"} style={{color: "lightcoral", fontWeight: 'bold'}}>
                     <h5>Birdeye</h5>
                 </Nav.Link>
+*/}
             </Nav>
         </Navbar>
     );

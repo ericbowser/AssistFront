@@ -9,7 +9,9 @@ module.exports = {
     ],
     theme: {
         extend: {
-            colors: {}
+            backgroundImage: {
+                'custom-image': "url('./images/back.png')",
+            }
         },
     },
     plugins: [

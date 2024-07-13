@@ -15,29 +15,26 @@ const router = createBrowserRouter([
             <Assist/>
         )
     },
-/*
-    {
-        path: '/myLinks',
-        element: (
-            <MyLinks/>
-        )
-    },
-*/
-/*
-    {
-        path: '/birdeye',
-        element: (
-            <Birdeye/>
-        )
-    },
-*/
+    /*
+        {
+            path: '/myLinks',
+            element: (
+                <MyLinks/>
+            )
+        },
+    */
+    /*
+        {
+            path: '/birdeye',
+            element: (
+                <Birdeye/>
+            )
+        },
+    */
     {
         path: '/',
         element: (
-            <div className={'bg-amber-100'}>
-                <App/>
-                
-            </div>
+            <App/>
         )
     }
 ])

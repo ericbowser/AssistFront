@@ -20,7 +20,9 @@ import copy from 'copy-to-clipboard';
 import {Element, scroller} from 'react-scroll';
 
 const Assist = () => {
-    const [content, setContent] = useState('');
+    const [openAiQuestion, setOpenAiQuestion] = useState('');
+    const [claudeQuestion, setClaudeQuestion] = useState('');
+    const [askingAi, setAskingAi] = useState(null);
     const [answer, setAnswer] = useState(null);
     const [thread, setThread] = useState(null);
     const [spinner, setSpinner] = useState(false);
@@ -51,11 +53,13 @@ const Assist = () => {
         instructions,
         status,
         thread,
-        content,
+        openAiQuestion,
+        claudeQuestion,
         messageSaved,
         language,
         imageSize,
-        imageUrl
+        imageUrl,
+        askingAi
     ]);
 
     function copyToClipBoard(text = "test") {
@@ -111,9 +115,9 @@ const Assist = () => {
         event.preventDefault();
         try {
             const url = 'http://localhost:32636/askAssist';
-            if (content) {
+            if (openAiQuestion || claudeQuestion) {
                 const body = {
-                    content,
+                    content: openAiQuestion || claudeQuestion,
                     instructions
                 };
 
@@ -129,10 +133,18 @@ const Assist = () => {
         }
     };
 
-    const QuestionToAsk = async (event) => {
+    const QuestionToAskOpenAi = async (event) => {
         if (event?.target?.value) {
             const content = event.target.value;
-            setContent(content);
+            setOpenAiQuestion(content);
+            setAskingAi('OpenAi');
+        }
+    }
+    const QuestionToAskClaude = async (event) => {
+        if (event?.target?.value) {
+            const content = event.target.value;
+            setClaudeQuestion(content);
+            setAskingAi('Claude');
         }
     }
 
@@ -159,7 +171,9 @@ const Assist = () => {
       }*/
 
     function clear() {
-        setContent(null);
+        setOpenAiQuestion(null);
+        setClaudeQuestion(null);
+        setAskingAi(null);
     }
 
     /*  function clearBoth() {
@@ -201,7 +215,9 @@ const Assist = () => {
                 <Navigation/>
             </div>
             <Form.Group className={'py-3'}>
+{/*
                 <VoiceTranscript setContent={setContent}/>
+*/}
                 <Button variant='outline-success'
                         type='submit'
                         onClick={handleSubmit}
@@ -243,21 +259,39 @@ const Assist = () => {
                 method='post'
                 onSubmit={handleSubmit}>
                 <Form.Group>
-                    <Form.Control
-                        as="textarea"
-                        placeholder="Ask a question"
-                        rows={2}
-                        value={content || ''}
-                        onChange={event => QuestionToAsk(event)}
-                    />
-                    <Form.Control
-                        value={instructions || ''}
-                        as="textarea"
-                        placeholder="Instructions for Assist"
-                        rows={2}
-                        onChange={event => InstructionsForAssist(event)}
-                    />
                     <Row>
+                        <Col md={4}>
+                            <Form.Control
+                                as="textarea"
+                                placeholder="Ask OpenAI"
+                                rows={4}
+                                disabled={askingAi === 'Claude'}
+                                value={openAiQuestion || ''}
+                                onChange={event => QuestionToAskOpenAi(event)}
+                            />
+                        </Col>
+                        <Col md={4}>
+                            <Form.Control
+                                as="textarea"
+                                placeholder="Ask Claude"
+                                rows={4}
+                                disabled={askingAi === 'OpenAi'}
+                                value={claudeQuestion || ''}
+                                onChange={event => QuestionToAskClaude(event)}
+                            />
+                        </Col>
+                        <Col md={4}>
+                            <Form.Control
+                                value={instructions || ''}
+                                as="textarea"
+                                placeholder="Instructions for Assist"
+                                rows={4}
+                                onChange={event => InstructionsForAssist(event)}
+                            />
+
+                        </Col>
+                    </Row>
+                    <Row className={'py-3'}>
                         <Col md={10}>
                             <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
                             <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
@@ -296,24 +330,31 @@ const Assist = () => {
                 />
             }
             {!spinner && answer && (
-                <FormGroup >
-                    <SplitButton
-                        key={language}
-                        id={`dropdown-split-variants-${language}`}
-                        variant={'info'}
-                        title={language || 'Select language'}
-                        className={'p-20 m-20'}
-                    >
-                        {LANG.map((language, index) => (
-                                <Dropdown.Item
-                                    key={`${index}${language}`}
-                                    eventKey={language}
-                                    onClick={() => setLanguage(language)}>
-                                    {language}
-                                </Dropdown.Item>
-                            )
-                        )}
-                    </SplitButton>
+                <div className={'text-md-start bold border-black shadow-sm p-4 bg-white rounded px-8 inset text-black'}>
+                    <Row className={'py-4'}>
+                        <Col md={5} >
+                            <p>Specify a language to parse code snippets:</p>
+                        </Col>
+                        <Col md={7}>
+                            <SplitButton
+                                key={language}
+                                id={`dropdown-split-variants-${language}`}
+                                variant={'success'}
+                                title={language || 'Select language'}
+                            >
+                                {LANG.map((language, index) => (
+                                        <Dropdown.Item
+                                            key={`${index}${language}`}
+                                            eventKey={language}
+                                            onClick={() => setLanguage(language)}>
+                                            {language}
+                                        </Dropdown.Item>
+                                    )
+                                )}
+                            </SplitButton>
+                        </Col>
+                    </Row>
+
                     {language === 'markdown' ?
                         (
                             <ReactMarkdown>{answer}</ReactMarkdown>
@@ -343,7 +384,7 @@ const Assist = () => {
                         )
                         }
                     </Element>
-                </FormGroup>
+                </div>
             )}
             <footer className="fixed-bottom text-center bg-secondary-subtle">
                 Send Email <SiGmail size={20} className={'cursor-pointer'}/>
