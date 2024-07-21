@@ -1,7 +1,7 @@
 ﻿import React, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import {post} from '../Api/httpApi';
+import {post} from '../api/httpApi';
 import Navigation from "./Navigation";
 import Spinner from 'react-bootstrap/Spinner';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -14,13 +14,16 @@ import {Col, Row, SplitButton} from "react-bootstrap";
 import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
 import {SiGmail} from "react-icons/si";
-import GenerateImage from '../Api/openAiApi';
+import GenerateImage from '../api/openAiApi';
 import LANG from '../docs/languages';
 import copy from 'copy-to-clipboard';
-import back from '../images/back.png';
+import {Element, scroller} from 'react-scroll';
+import {setContext} from "@sentry/react";
 
 const Assist = () => {
-    const [content, setContent] = useState('');
+    const [openAiQuestion, setOpenAiQuestion] = useState('');
+    const [claudeQuestion, setClaudeQuestion] = useState('');
+    const [askingAi, setAskingAi] = useState(null);
     const [answer, setAnswer] = useState(null);
     const [thread, setThread] = useState(null);
     const [spinner, setSpinner] = useState(false);
@@ -32,19 +35,32 @@ const Assist = () => {
     const [imageUrl, setImageUrl] = useState(null);
     const [imageSize, setImageSize] = useState(350);
 
+    const scrollToElement = () => {
+        scroller.scrollTo('GeneratedImage', {
+            duration: 500,
+            delay: 0,
+            smooth: 'easeInOutQuart'
+        });
+    };
+
+    useEffect(() => {
+        if (code) {
+            scrollToElement();
+        }
+    }, [answer, spinner, code]);
+
     useEffect(() => {
     }, [
-        answer,
         instructions,
         status,
         thread,
-        spinner,
-        content,
+        openAiQuestion,
+        claudeQuestion,
         messageSaved,
-        code,
         language,
+        imageSize,
         imageUrl,
-        imageSize
+        askingAi
     ]);
 
     function copyToClipBoard(text = "test") {
@@ -71,7 +87,7 @@ const Assist = () => {
         }
     }
 
-    const SetCodeFromAnswer = () => {
+    const setCodeFromAnswer = () => {
         if (answer) {
             const codeBlockRegex = /```([\s\S]*?)```/g;
             let codeString = [];
@@ -84,6 +100,7 @@ const Assist = () => {
             }
 
             setCode(codeString.join(''));
+            scrollToElement();
         }
     }
 
@@ -98,10 +115,10 @@ const Assist = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const url = process.env.ASSIST_URL;
-            if (content) {
+            const url = 'http://localhost:32636/askAssist';
+            if (openAiQuestion || claudeQuestion) {
                 const body = {
-                    content,
+                    content: openAiQuestion || claudeQuestion,
                     instructions
                 };
 
@@ -117,10 +134,18 @@ const Assist = () => {
         }
     };
 
-    const QuestionToAsk = async (event) => {
+    const QuestionToAskOpenAi = async (event) => {
         if (event?.target?.value) {
             const content = event.target.value;
-            setContent(content);
+            setOpenAiQuestion(content);
+            setAskingAi('OpenAi');
+        }
+    }
+    const QuestionToAskClaude = async (event) => {
+        if (event?.target?.value) {
+            const content = event.target.value;
+            setClaudeQuestion(content);
+            setAskingAi('Claude');
         }
     }
 
@@ -147,7 +172,9 @@ const Assist = () => {
       }*/
 
     function clear() {
-        setContent(null);
+        setOpenAiQuestion(null);
+        setClaudeQuestion(null);
+        setAskingAi(null);
     }
 
     /*  function clearBoth() {
@@ -162,7 +189,7 @@ const Assist = () => {
         setSpinner(true);
         const imageUrl = await GenerateImage(content);
         if (imageUrl) {
-            setImageUrl(imageUrl);
+            await setImageUrl(imageUrl);
             setCode('');
         }
         setSpinner(false);
@@ -184,15 +211,19 @@ const Assist = () => {
     }
 
     return (
-        <div className={'p-20 text-black container'}>
-            <div className={'text-center'}>
+        <div className={'text-black container'}>
+            <div>
                 <Navigation/>
             </div>
-            <Form.Group className={'py-3'}>
+            <Form.Group>
+                <VoiceTranscript setContent={setClaudeQuestion}/>
+                {/*
                 <VoiceTranscript setContent={setContent}/>
-                <Button variant='outline-success'
+*/}
+                <Button id={'submitquestion'}
+                        variant='outline-success'
                         type='submit'
-                        onClick={handleSubmit}
+                        onClick={e => handleSubmit(e)}
                 >
                     Submit Question
                 </Button>
@@ -202,7 +233,7 @@ const Assist = () => {
                 >
                     Generate Image
                 </Button>
-                <Button onClick={SetCodeFromAnswer}
+                <Button onClick={setCodeFromAnswer}
                         variant={'outline-primary'}
                 >
                     Extract Code From Answer
@@ -231,21 +262,39 @@ const Assist = () => {
                 method='post'
                 onSubmit={handleSubmit}>
                 <Form.Group>
-                    <Form.Control
-                        as="textarea"
-                        placeholder="Ask a question"
-                        rows={2}
-                        value={content || ''}
-                        onChange={event => QuestionToAsk(event)}
-                    />
-                    <Form.Control
-                        value={instructions || ''}
-                        as="textarea"
-                        placeholder="Instructions for Assist"
-                        rows={2}
-                        onChange={event => InstructionsForAssist(event)}
-                    />
                     <Row>
+                        <Col md={4}>
+                            <Form.Control
+                                as="textarea"
+                                placeholder="Ask OpenAI"
+                                rows={4}
+                                disabled={askingAi === 'Claude'}
+                                value={openAiQuestion || ''}
+                                onChange={event => QuestionToAskOpenAi(event)}
+                            />
+                        </Col>
+                        <Col md={4}>
+                            <Form.Control
+                                as="textarea"
+                                placeholder="Ask Claude"
+                                rows={4}
+                                disabled={askingAi === 'OpenAi'}
+                                value={claudeQuestion || ''}
+                                onChange={event => QuestionToAskClaude(event)}
+                            />
+                        </Col>
+                        <Col md={4}>
+                            <Form.Control
+                                value={instructions || ''}
+                                as="textarea"
+                                placeholder="Instructions for Assist"
+                                rows={4}
+                                onChange={event => InstructionsForAssist(event)}
+                            />
+
+                        </Col>
+                    </Row>
+                    <Row className={'py-3'}>
                         <Col md={10}>
                             <Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
                             <Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
@@ -280,49 +329,53 @@ const Assist = () => {
                     src={imageUrl}
                     alt="Generated by OpenAI"
                     width={imageSize}
-                    className={'py-5'}
+                    className={'m-150'}
                 />
             }
             {!spinner && answer && (
-                <FormGroup style={{paddingBottom: '200px'}} className={'flex'}>
-                    <SplitButton
-                        key={language}
-                        id={`dropdown-split-variants-${language}`}
-                        variant={'info'}
-                        title={language || 'Select language'}
-                        style={{boxShadow: 'black 2px 2px 5px 2px', marginLeft: '15px'}}
-                    >
-                        {LANG.map((language, index) => (
-                                <Dropdown.Item
-                                    key={`${index}${language}`}
-                                    eventKey={language}
-                                    onClick={() => setLanguage(language)}>
-                                    {language}
-                                </Dropdown.Item>
-                            )
-                        )}
-                    </SplitButton>
-                    <Row>
-                        <Col>
-
-                            {language === 'markdown' ?
-                                (<ReactMarkdown>{answer}</ReactMarkdown>)
-                                :
-                                (<CodeEditor
-                                        value={answer}
-                                        language={language}
-                                        placeholder="Please enter code"
-                                        padding={5}
-                                        style={{
-                                            marginBottom: '50px',
-                                            textWrap: 'wrap'
-                                        }}
-                                        data-color-mode={'light'}
-                                    />
+                <div className={'text-md-start bold border-black shadow-sm bg-white rounded px-8 inset text-black'}>
+                    <Row className={'py-4'}>
+                        <Col md={5} >
+                            <p>Specify a language to parse code snippets:</p>
+                        </Col>
+                        <Col md={7}>
+                            <SplitButton
+                                key={language}
+                                id={`dropdown-split-variants-${language}`}
+                                variant={'success'}
+                                title={language || 'Select language'}
+                            >
+                                {LANG.map((language, index) => (
+                                        <Dropdown.Item
+                                            key={`${index}${language}`}
+                                            eventKey={language}
+                                            onClick={() => setLanguage(language)}>
+                                            {language}
+                                        </Dropdown.Item>
+                                    )
                                 )}
+                            </SplitButton>
                         </Col>
                     </Row>
-                    <Col>
+
+                    {language === 'markdown' ?
+                        (
+                            <ReactMarkdown>{answer}</ReactMarkdown>
+                        )
+                        :
+                        (<CodeEditor
+                                value={answer}
+                                language={language}
+                                placeholder="Please enter code"
+                                padding={5}
+                                style={{
+                                    marginBottom: '50px',
+                                    textWrap: 'wrap'
+                                }}
+                                data-color-mode={'light'}
+                            />
+                        )}
+                    <Element name="GeneratedImage" className="element">
                         {language === 'markdown' ? (
                             <div>
                                 <ReactMarkdown>{code}</ReactMarkdown>
@@ -333,10 +386,10 @@ const Assist = () => {
                             </SyntaxHighlighter>
                         )
                         }
-                    </Col>
-                </FormGroup>
+                    </Element>
+                </div>
             )}
-            <footer className="fixed-bottom text-center bg-secondary-subtle py-11 pt-10">
+            <footer className="mt-8 fixed-bottom text-center bg-secondary-subtle">
                 Send Email <SiGmail size={20} className={'cursor-pointer'}/>
             </footer>
         </div>

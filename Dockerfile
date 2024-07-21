@@ -1,38 +1,31 @@
-# syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
+# Use an official Node runtime as the base image
+FROM node:16
 
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
+# Set the working directory in the container
+WORKDIR /app
 
-ARG NODE_VERSION=20.12.2
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-FROM node:${NODE_VERSION}-alpine
+# Install dependencies
+RUN npm install
 
-# Use production node environment by default.
-ENV NODE_ENV production
-
-
-WORKDIR /usr/src/app
-
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
-# into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
-
-# Run the application as a non-root user.
-USER node
-
-# Copy the rest of the source files into the image.
+# Copy the rest of the application code
 COPY . .
 
-# Expose the port that the application listens on.
-EXPOSE 3005
+RUN npx tailwindcss build
 
-# Run the application.
-CMD nodemon
+# Set a default port (can be overridden when running the container)
+ENV PORT=32635
+ENV NODE_ENV=production
+ENV ASSIST_URL=http://localhost:32636/askAssist
+
+# Build the application (including TailwindCSS processing)
+RUN npm run build
+
+# Expose the port the app runs on
+EXPOSE 32635
+
+# Command to run the application
+CMD ["sh", "-c", "npx react-scripts start --port $PORT"]

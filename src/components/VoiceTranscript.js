@@ -1,5 +1,4 @@
 ﻿import SpeechRecognition, {useSpeechRecognition} from 'react-speech-recognition';
-import {createSpeechlySpeechRecognition} from '@speechly/speech-recognition-polyfill';
 import React, {useEffect, useState} from "react";
 import '../output.css';
 

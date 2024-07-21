@@ -1,7 +1,7 @@
 ﻿import React, {useEffect, useState} from 'react';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import {get, post} from "../Api/httpApi";
+import {get, post} from "../api/httpApi";
 import {AgGridReact} from 'ag-grid-react'; // AG Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css";
@@ -41,10 +41,6 @@ function MyLinks() {
         return response;
     }
 
-    const fetchImageUrls = async () => {
-        await get(process.env.GET_IMAGE_URLS);
-    }
-    
     useEffect(() => {
     }, [myLinks, isLoaded, myLinks, myLink, linkSaved]);
 
