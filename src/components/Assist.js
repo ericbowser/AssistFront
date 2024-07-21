@@ -389,9 +389,6 @@ const Assist = () => {
                     </Element>
                 </div>
             )}
-            <footer className="mt-8 fixed-bottom text-center bg-secondary-subtle">
-                Send Email <SiGmail size={20} className={'cursor-pointer'}/>
-            </footer>
         </div>
     )
 }
