@@ -18,6 +18,7 @@ import GenerateImage from '../api/openAiApi';
 import LANG from '../docs/languages';
 import copy from 'copy-to-clipboard';
 import {Element, scroller} from 'react-scroll';
+import {setContext} from "@sentry/react";
 
 const Assist = () => {
     const [openAiQuestion, setOpenAiQuestion] = useState('');
@@ -210,17 +211,19 @@ const Assist = () => {
     }
 
     return (
-        <div className={'p-20 text-black container'}>
-            <div className={'text-center'}>
+        <div className={'text-black container'}>
+            <div>
                 <Navigation/>
             </div>
-            <Form.Group className={'py-3'}>
-{/*
+            <Form.Group>
+                <VoiceTranscript setContent={setClaudeQuestion}/>
+                {/*
                 <VoiceTranscript setContent={setContent}/>
 */}
-                <Button variant='outline-success'
+                <Button id={'submitquestion'}
+                        variant='outline-success'
                         type='submit'
-                        onClick={handleSubmit}
+                        onClick={e => handleSubmit(e)}
                 >
                     Submit Question
                 </Button>
@@ -330,7 +333,7 @@ const Assist = () => {
                 />
             }
             {!spinner && answer && (
-                <div className={'text-md-start bold border-black shadow-sm p-4 bg-white rounded px-8 inset text-black'}>
+                <div className={'text-md-start bold border-black shadow-sm bg-white rounded px-8 inset text-black'}>
                     <Row className={'py-4'}>
                         <Col md={5} >
                             <p>Specify a language to parse code snippets:</p>
@@ -386,7 +389,7 @@ const Assist = () => {
                     </Element>
                 </div>
             )}
-            <footer className="fixed-bottom text-center bg-secondary-subtle">
+            <footer className="mt-8 fixed-bottom text-center bg-secondary-subtle">
                 Send Email <SiGmail size={20} className={'cursor-pointer'}/>
             </footer>
         </div>

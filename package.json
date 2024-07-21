@@ -43,7 +43,8 @@
     "react-scripts": "^5.0.1",
     "react-scroll": "^1.9.0",
     "react-speech-recognition": "^3.10.0",
-    "react-syntax-highlighter": "^15.5.0"
+    "react-syntax-highlighter": "^15.5.0",
+    "tailwindcss": "^3.4.4"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
@@ -68,7 +69,6 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "style-loader": "^3.3.4",
-    "tailwindcss": "^3.4.4",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.2"

@@ -9,8 +9,13 @@ module.exports = {
     ],
     theme: {
         extend: {
+            colors: {
+                white: '#ffffff',
+                green: '#008000',
+                turquoise: '#40e0d0',
+            },
             backgroundImage: {
-                'custom-image': "url('./images/back.png')",
+                'custom-image': "url('./images/cool_bak.jpg')",
             }
         },
     },
