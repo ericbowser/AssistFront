@@ -1,11 +1,9 @@
 ﻿const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 console.log('Node env: ', process.env.NODE_ENV)
 console.log('Hosted port: ', process.env.PORT)
-console.log('birdeye base uri: ', process.env.BIRDEYE_BASE_URI)
 
 const port = process.env.PORT || 3000
 const environment = process.env.NODE_ENV || 'production'
@@ -25,7 +23,7 @@ module.exports = {
         historyApiFallback: true,
         open: true,
         port: port,
-        host: 'localhost'
+        host: process.env.HOST
     },
     mode: environment,
     resolve: {

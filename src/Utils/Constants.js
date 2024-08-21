@@ -1,4 +1,10 @@
-const LANG = [
+const Model = {
+    OpenAi: 'OpenAi',
+    Gemini: 'Gemini',
+    Claude: 'Claude'
+}
+
+const Lang = [
     'JavaScript',
     'TypeScript',
     'Python',
@@ -21,4 +27,4 @@ const LANG = [
     'YAML'
 ];
 
-export default LANG;
+export {Lang, Model};

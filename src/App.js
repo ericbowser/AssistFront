@@ -5,7 +5,10 @@ import '../src/output.css';
 
 function App() {
     return (
-        <Navigation/>
+      <div className={'bg-black'}>
+          <Navigation/>
+          
+      </div>
     )
 }
 

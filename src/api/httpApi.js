@@ -11,28 +11,25 @@ async function get(url, params = {}) {
     }
 }
 
-async function post(url, data = {}, SetAnswerAsCallback) {
+async function post(url, data = {}) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     console.log('POST body', data);
     
     try {
         const response = await axios.post(url, {...data});
-/*
-        const response = await fetch(url, requestOptions);
-*/
         if (response?.status === 200) {
             const content = await response;
+            console.log(content);
             const res = {
                 status: 200,
-                data: content?.data.choices[0].message.content,
+                data: content?.data,
                 thread: content.data.id
             }
             console.log('response', res);
-            SetAnswerAsCallback(res);
             return res;
         } else {
-           console.error(response); 
+           console.error(response);
            return null;
         }
     } catch (err) {
