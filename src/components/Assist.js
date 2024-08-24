@@ -20,7 +20,7 @@ import {setContext} from "@sentry/react";
 
 const Assist = () => {
 	const [question, setQuestion] = useState('');
-	const [answer, setAnswer] = useState('');
+	const [answer, setAnswer] = useState(null);
 	const [askingAi, setAskingAi] = useState(null);
 	const [thread, setThread] = useState(null);
 	const [spinner, setSpinner] = useState(false);
@@ -51,6 +51,7 @@ const Assist = () => {
 		instructions,
 		status,
 		thread,
+		answer,
 		question,
 		messageSaved,
 		language,
@@ -127,20 +128,24 @@ const Assist = () => {
 				setSpinner(true);
 				
 				console.log('url: ', url);
-				const response = await post(url, body);
-				if (response.status === 200) {
-					setStatus(response.status);
-					setThread(response.data.thread);
-					setAnswer(response.data.data)
-					setMessageSaved(true);
-					setSpinner(false);
-				} else if (!response || response.status !== 200) {
-					setAnswer(`Server error ${response.status}`);
-				}
+				await post(url, body)
+					.then(response => {
+						if (response.status === 200) {
+							console.log('response thread: ', response.thread);
+							console.log('response answer: ', response.answer);
+							setStatus(response.status);
+							setThread(response.thread);
+							setAnswer(response.answer);
+							setMessageSaved(true);
+							setSpinner(false);
+						}
+					});
+			} else if (!response || response.status !== 200) {
+				setAnswer(`Server error ${response.status}`);
 			}
 			
-			setSpinner(false);
-		} catch (err) {
+		} catch
+			(err) {
 			console.log(err)
 			setAnswer(err);
 		}
@@ -220,124 +225,136 @@ const Assist = () => {
 			<div>
 				<Navigation/>
 			</div>
-			<Form.Group>
-				{/*
+			<div className={'m-10'}>
+				<Form.Group>
+					{/*
                 <VoiceTranscript setContent={setContent}/>
 */}
-				<Button id={'submitquestion'}
-				        variant='outline-success'
-				        type='submit'
-				        onClick={e => handleSubmit(e)}
-				>
-					Submit Question
-				</Button>
-				<Button variant='outline-secondary'
-				        type='submit'
-				        onClick={getImageUrl}
-				>
-					Generate Image
-				</Button>
-				<Button onClick={setCodeFromAnswer}
-				        variant={'outline-primary'}
-				>
-					Extract Code From Answer
-				</Button>
-				<Button onClick={saveImageUrl}
-				        variant={'outline-dark'}
-				>
-					Save Image Url
-				</Button>
-				
-				{messageSaved &&
+					<Button id={'submitquestion'}
+					        variant='outline-success'
+					        type='submit'
+					        onClick={e => handleSubmit(e)}
+					>
+						Submit Question
+					</Button>
+					<Button variant='outline-secondary'
+					        type='submit'
+					        onClick={getImageUrl}
+					>
+						Generate Image
+					</Button>
+					<Button onClick={setCodeFromAnswer}
+					        variant={'outline-primary'}
+					>
+						Extract Code From Answer
+					</Button>
+					<Button onClick={saveImageUrl}
+					        variant={'outline-dark'}
+					>
+						Save Image Url
+					</Button>
+					
+					{/*	{messageSaved &&
 					<Alert variant={'success'}>
 						{answer}
 					</Alert>
-				}
-			</Form.Group>
-			{thread &&
-				<div className={'text-bg-success text-xxl-start'}>Thread: {thread}</div>
-			}
-			{imageUrl &&
-				<div className={'text-bg-success text-xxl-start'}>
-					{imageUrl}
-				</div>
-			}
-			<Form
-				method='post'
-				onSubmit={handleSubmit}>
-				<Form.Group>
-					<Row>
-						<Col md={4}>
-							<Form.Control
-								as="textarea"
-								placeholder="Ask OpenAI"
-								rows={4}
-								value={question || ''}
-								onChange={event => QuestionToAsk(event)}
-							/>
-						</Col>
-						<Col md={4}>
-							<Form.Control
-								value={instructions || ''}
-								as="textarea"
-								placeholder="Instructions for Assist"
-								rows={4}
-								onChange={event => InstructionsForAssist(event)}
-							/>
-						
-						</Col>
-					</Row>
-					<Row className={'py-3'}>
-						<Col md={8}>
-							<Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
-							<Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
-							<Button
-								className={'text-black'}
-								variant={'outline-light'}
-								onClick={() => copy(answer || '')}>
-								Copy to Clipboard
-							</Button>
-						</Col>
-						<Col md={4}>
-							<label htmlFor="number-input">Image Size:
-								<input
-									onChange={handleImageSize}
-									style={{width: '75px', marginLeft: '15px'}}
-									type="number"
-									id="number-input"
-									placeholder="350"
-								/>
-							</label>
-						</Col>
-					</Row>
-					<div className={'flex flex-row mt-2'}>
-						<Button
-							className={'mr-2'}
-							variant={'outline-primary'}
-							onClick={() => handleModelChange(Model.Claude)}>
-							Ask Claude
-						</Button>
-						<Button
-							className={'mr-2'}
-							variant={'outline-secondary'}
-							onClick={() => handleModelChange(Model.OpenAi)}>
-							Ask Open AI
-						</Button>
-						<Button
-							className={'mr-2'}
-							variant={'outline-success'}
-							onClick={() => handleModelChange(Model.Gemini)}>
-							Ask Gemini
-						</Button>
-					</div>
+				}*/}
 				</Form.Group>
-			</Form>
-			{spinner &&
+				{thread &&
+					<div className={'text-bg-success text-xxl-start my-2'}>Thread: {thread}</div>
+				}
+				{imageUrl &&
+					<div className={'text-bg-success text-xxl-start'}>
+						{imageUrl}
+					</div>
+				}
+				<Form
+					method='post'
+					onSubmit={handleSubmit}>
+					<Form.Group>
+						<Row>
+							<Col md={4}>
+								<Form.Control
+									as="textarea"
+									placeholder="Ask Question"
+									rows={4}
+									value={question || ''}
+									onChange={event => QuestionToAsk(event)}
+								/>
+							</Col>
+							<Col md={4}>
+								<Form.Control
+									value={instructions || ''}
+									as="textarea"
+									placeholder="Instructions for Assist"
+									rows={4}
+									onChange={event => InstructionsForAssist(event)}
+								/>
+							
+							</Col>
+						</Row>
+						<Row className={'py-3'}>
+							<Col md={8}>
+								<Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
+								<Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
+								<Button
+									className={'text-black'}
+									variant={'outline-light'}
+									onClick={() => copy(answer || undefined)}>
+									Copy to Clipboard
+								</Button>
+							</Col>
+							<Col md={4}>
+								<label htmlFor="number-input">Image Size:
+									<input
+										onChange={handleImageSize}
+										style={{width: '75px', marginLeft: '15px'}}
+										type="number"
+										id="number-input"
+										placeholder="350"
+									/>
+								</label>
+							</Col>
+						</Row>
+						{askingAi && (
+							<div className={'w-25 h-20'}>
+								<Alert title={'Model Enabled'} variant={'success'}>{`Currently ${askingAi} is enabled`}</Alert>
+							</div>
+						)}
+						<div className={'flex flex-row mt-2'}>
+							<Button
+								className={'mr-2'}
+								variant={'outline-primary'}
+								disabled={askingAi && askingAi !== Model.Claude}
+								onClick={() => handleModelChange(Model.Claude)}>
+								Ask Claude
+							</Button>
+							<Button
+								className={'mr-2'}
+								variant={'outline-secondary'}
+								disabled={askingAi && askingAi !== Model.OpenAi}
+								onClick={() => handleModelChange(Model.OpenAi)}>
+								Ask Open AI
+							</Button>
+							<Button
+								className={'mr-2'}
+								variant={'outline-info'}
+								disabled={askingAi && askingAi !== Model.Gemini}
+								onClick={() => handleModelChange(Model.Gemini)}>
+								Ask Gemini
+							</Button>
+						</div>
+					</Form.Group>
+				</Form>
+			</div>
+			{
+				spinner &&
 				<div style={{textAlign: 'center'}}>
 					<Spinner animation="border" variant='dark'/>
 				</div>
 			}
-			{imageUrl &&
+			{
+				imageUrl &&
 				<img
 					src={imageUrl || ''}
 					alt="Generated by OpenAI"
@@ -345,63 +362,65 @@ const Assist = () => {
 					className={'m-150'}
 				/>
 			}
-			{!spinner && answer && (
-				<div className={'text-md-start bold border-black shadow-sm bg-white rounded px-8 inset text-black'}>
-					<Row className={'py-4'}>
-						<Col md={5}>
-							<p>Specify a language to parse code snippets:</p>
-						</Col>
-						<Col md={7}>
-							<SplitButton
-								key={language}
-								id={`dropdown-split-variants-${language}`}
-								variant={'success'}
-								title={language || 'Select language'}
-							>
-								{Lang.map((language, index) => (
-										<Dropdown.Item
-											key={`${index}${language}`}
-											eventKey={language}
-											onClick={() => setLanguage(language)}>
-											{language}
-										</Dropdown.Item>
-									)
-								)}
-							</SplitButton>
-						</Col>
-					</Row>
-					
-					{language === 'markdown' ?
-						(
-							<ReactMarkdown>{answer}</ReactMarkdown>
-						)
-						:
-						(<CodeEditor
-								value={answer}
-								language={language}
-								placeholder="Please enter code"
-								padding={5}
-								style={{
-									marginBottom: '50px',
-									textWrap: 'wrap'
-								}}
-								data-color-mode={'light'}
-							/>
-						)}
-					<Element name="GeneratedImage" className="element">
-						{language === 'markdown' ? (
-							<div>
-								<ReactMarkdown>{code}</ReactMarkdown>
-							</div>
-						) : (
-							<SyntaxHighlighter language={language} style={docco}>
-								{code}
-							</SyntaxHighlighter>
-						)
-						}
-					</Element>
-				</div>
-			)}
+			{
+				!spinner && answer && (
+					<div className={'text-md-start bold border-black shadow-sm bg-white rounded px-8 inset text-black'}>
+						<Row className={'py-4'}>
+							<Col md={5}>
+								<p>Specify a language to parse code snippets:</p>
+							</Col>
+							<Col md={7}>
+								<SplitButton
+									key={language}
+									id={`dropdown-split-variants-${language}`}
+									variant={'success'}
+									title={language || 'Select language'}
+								>
+									{Lang.map((language, index) => (
+											<Dropdown.Item
+												key={`${index}${language}`}
+												eventKey={language}
+												onClick={() => setLanguage(language)}>
+												{language}
+											</Dropdown.Item>
+										)
+									)}
+								</SplitButton>
+							</Col>
+						</Row>
+						
+						{language === 'markdown' ?
+							(
+								<ReactMarkdown>{answer}</ReactMarkdown>
+							)
+							:
+							(<CodeEditor
+									value={answer || undefined}
+									language={language}
+									placeholder="Please enter code"
+									padding={5}
+									style={{
+										marginBottom: '50px',
+										textWrap: 'wrap'
+									}}
+									data-color-mode={'light'}
+								/>
+							)}
+						<Element name="GeneratedImage" className="element">
+							{language === 'markdown' ? (
+								<div>
+									<ReactMarkdown>{code}</ReactMarkdown>
+								</div>
+							) : (
+								<SyntaxHighlighter language={language} style={docco}>
+									{code}
+								</SyntaxHighlighter>
+							)
+							}
+						</Element>
+					</div>
+				)
+			}
 		</div>
 	)
 }

@@ -20,14 +20,17 @@ async function post(url, data = {}) {
         const response = await axios.post(url, {...data});
         if (response?.status === 200) {
             const content = await response;
-            console.log(content);
-            const res = {
-                status: 200,
-                data: content?.data,
-                thread: content.data.id
+            console.log('response: ', content);
+            if(content) {
+                const response = {
+                    status: 200,
+                    answer: content.data.answer,
+                    thread: content.data.thread
+                };
+                return response;
+            } else {
+                return null;
             }
-            console.log('response', res);
-            return res;
         } else {
            console.error(response);
            return null;
