@@ -15,7 +15,7 @@ module.exports = {
                 turquoise: '#40e0d0',
             },
             backgroundImage: {
-                'custom-image': "url('./images/cool_bak.jpg')",
+                'custom-image': "url('./src/background.png')",
             }
         },
     },

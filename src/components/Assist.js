@@ -8,7 +8,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Alert from "react-bootstrap/Alert";
 import CodeEditor from '@uiw/react-textarea-code-editor';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import {docco, atelierForestLight} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Col, Row, SplitButton} from "react-bootstrap";
 import VoiceTranscript from "./VoiceTranscript";
 import ReactMarkdown from 'react-markdown';
@@ -221,44 +221,47 @@ const Assist = () => {
 	}
 	
 	return (
-		<div className={'text-black container'}>
+		<div className={'bg-red-300 h-screen w-full'}>
 			<div>
 				<Navigation/>
 			</div>
-			<div className={'m-10'}>
+			<div className={'m-10 bg-gradient text-xxl-start'}>
 				<Form.Group>
 					{/*
                 <VoiceTranscript setContent={setContent}/>
 */}
-					<Button id={'submitquestion'}
-					        variant='outline-success'
-					        type='submit'
-					        onClick={e => handleSubmit(e)}
-					>
-						Submit Question
-					</Button>
-					<Button variant='outline-secondary'
-					        type='submit'
-					        onClick={getImageUrl}
-					>
-						Generate Image
-					</Button>
-					<Button onClick={setCodeFromAnswer}
-					        variant={'outline-primary'}
-					>
-						Extract Code From Answer
-					</Button>
-					<Button onClick={saveImageUrl}
-					        variant={'outline-dark'}
-					>
-						Save Image Url
-					</Button>
-					
-					{/*	{messageSaved &&
-					<Alert variant={'success'}>
-						{answer}
-					</Alert>
-				}*/}
+					<div className={'mb-6'}>
+						
+						<Button id={'submitquestion'}
+						        className={'mr-2'}
+						        variant='success'
+						        type='submit'
+						        onClick={e => handleSubmit(e)}
+						>
+							Submit Question
+						</Button>
+						<Button id={'imageUrl'}
+						        className={'mr-2'}
+						        variant='secondary'
+						        type='submit'
+						        onClick={getImageUrl}
+						>
+							Generate Image
+						</Button>
+						<Button className={'mr-2'}
+										id={'setCode'}
+						        onClick={setCodeFromAnswer}
+						        variant={'primary'}
+						>
+							Extract Code From Answer
+						</Button>
+						<Button className={'mr-2'}
+										onClick={saveImageUrl}
+						        variant={'dark'}
+						>
+							Save Image Url
+						</Button>
+					</div>
 				</Form.Group>
 				{thread &&
 					<div className={'text-bg-success text-xxl-start my-2'}>Thread: {thread}</div>
@@ -269,12 +272,14 @@ const Assist = () => {
 					</div>
 				}
 				<Form
+					className={'border-white border-2 p-6 shadow-md shadow-blue-700'}
 					method='post'
 					onSubmit={handleSubmit}>
 					<Form.Group>
 						<Row>
-							<Col md={4}>
+							<Col md={8}>
 								<Form.Control
+									className={'mr-2'}
 									as="textarea"
 									placeholder="Ask Question"
 									rows={4}
@@ -295,11 +300,21 @@ const Assist = () => {
 						</Row>
 						<Row className={'py-3'}>
 							<Col md={8}>
-								<Button variant={'outline-dark'} onClick={() => clear()}>Clear Question</Button>
-								<Button variant={'outline-dark'} onClick={() => clearImage()}>Clear Image</Button>
 								<Button
-									className={'text-black'}
-									variant={'outline-light'}
+									className={'mr-2'}
+									variant={'primary'}
+									onClick={() => clear()}>
+										Clear Question
+								</Button>
+								<Button
+									className={'mr-2'}
+									variant={'secondary'}
+									onClick={() => clearImage()}>
+										Clear Image
+								</Button>
+								<Button
+									className={'mr-2'}
+									variant={'light'}
 									onClick={() => copy(answer || undefined)}>
 									Copy to Clipboard
 								</Button>
@@ -324,21 +339,21 @@ const Assist = () => {
 						<div className={'flex flex-row mt-2'}>
 							<Button
 								className={'mr-2'}
-								variant={'outline-primary'}
+								variant={'primary'}
 								disabled={askingAi && askingAi !== Model.Claude}
 								onClick={() => handleModelChange(Model.Claude)}>
 								Ask Claude
 							</Button>
 							<Button
 								className={'mr-2'}
-								variant={'outline-secondary'}
+								variant={'secondary'}
 								disabled={askingAi && askingAi !== Model.OpenAi}
 								onClick={() => handleModelChange(Model.OpenAi)}>
 								Ask Open AI
 							</Button>
 							<Button
 								className={'mr-2'}
-								variant={'outline-info'}
+								variant={'info'}
 								disabled={askingAi && askingAi !== Model.Gemini}
 								onClick={() => handleModelChange(Model.Gemini)}>
 								Ask Gemini
@@ -350,7 +365,7 @@ const Assist = () => {
 			{
 				spinner &&
 				<div style={{textAlign: 'center'}}>
-					<Spinner animation="border" variant='dark'/>
+					<Spinner animation="border" variant='light'/>
 				</div>
 			}
 			{
@@ -364,7 +379,7 @@ const Assist = () => {
 			}
 			{
 				!spinner && answer && (
-					<div className={'text-md-start bold border-black shadow-sm bg-white rounded px-8 inset text-black'}>
+					<div className={'text-white text-md-start bold border-black shadow-sm bg-black rounded px-8 inset'}>
 						<Row className={'py-4'}>
 							<Col md={5}>
 								<p>Specify a language to parse code snippets:</p>
@@ -403,7 +418,7 @@ const Assist = () => {
 										marginBottom: '50px',
 										textWrap: 'wrap'
 									}}
-									data-color-mode={'light'}
+									data-color-mode={'dark'}
 								/>
 							)}
 						<Element name="GeneratedImage" className="element">
@@ -412,7 +427,7 @@ const Assist = () => {
 									<ReactMarkdown>{code}</ReactMarkdown>
 								</div>
 							) : (
-								<SyntaxHighlighter language={language} style={docco}>
+								<SyntaxHighlighter language={language} style={atelierForestLight}>
 									{code}
 								</SyntaxHighlighter>
 							)

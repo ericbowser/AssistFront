@@ -12,7 +12,9 @@ const router = createBrowserRouter([
     {
         path: '/askAssist',
         element: (
-            <Assist/>
+          <div className={'bg-black container'}>
+              <Assist/>
+          </div>
         )
     },
     /*
@@ -34,7 +36,9 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: (
-            <App/>
+          <div className={'bg-body-tertiary'}>
+              <App/>
+          </div>
         )
     }
 ])
