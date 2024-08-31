@@ -18,9 +18,8 @@ async function GenerateImage(prompt) {
             }
         );
 
-        const imageUrl = response.data.imageUrl;
-        console.log("Generated Image URL:", imageUrl);
-        return imageUrl;
+        console.log("Generated Image URL:", response);
+        return await response.data.image;
     } catch (error) {
         console.error('Error generating image:', error);
     }
