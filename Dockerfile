@@ -16,11 +16,17 @@ COPY . .
 
 RUN npx tailwindcss build
 
+# ENV ENV_FILE=.env
 # Set a default port (can be overridden when running the container)
-ENV PORT=32635
-ENV NODE_ENV=production
-ENV ASSIST_URL=http://localhost:32636/askAssist
-
+#ENV PORT=32635
+#ENV NODE_ENV=production
+#ENV HOST=127.0.0.1
+#ENV ASSIST_URL=http://localhost:32635
+#ENV GEMINI_ASSIST_URL=http://localhost:32636/askGemini
+#ENV OPENAI_ASSIST_URL=http://localhost:32636/askAssist
+#ENV CLAUDE_ASSIST_URL=http://localhost:32636/askClaude
+#ENV OPENAI_API_IMAGE=https://api.openai.com/v2/images/generations
+#
 # Build the application (including TailwindCSS processing)
 RUN npm run build
 
@@ -28,4 +34,4 @@ RUN npm run build
 EXPOSE 32635
 
 # Command to run the application
-CMD ["sh", "-c", "npx react-scripts start --port $PORT"]
+CMD ["npm", "run", "webpack"]

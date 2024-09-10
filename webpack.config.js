@@ -1,6 +1,8 @@
 ﻿const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const dotenv = require('dotenv').config();
+console.log(dotenv);
 
 console.log('Node env: ', process.env.NODE_ENV)
 console.log('Hosted port: ', process.env.PORT)
@@ -76,7 +78,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({template: "./public/index.html"}),
-        new Dotenv()
+        new Dotenv({path: '.env', systemvars: true})
      /*   new BundleAnalyzerPlugin({
             analyzerMode: 'server',
             analyzerHost: '127.0.0.1',
