@@ -12,27 +12,11 @@ const router = createBrowserRouter([
     {
         path: '/askAssist',
         element: (
-          <div className={'container-sm'}>
+          <div className={'container-sm bg-custom-image h-screen w-full'}>
               <Assist/>
           </div>
         )
     },
-    /*
-        {
-            path: '/myLinks',
-            element: (
-                <MyLinks/>
-            )
-        },
-    */
-    /*
-        {
-            path: '/birdeye',
-            element: (
-                <Birdeye/>
-            )
-        },
-    */
     {
         path: '/',
         element: (

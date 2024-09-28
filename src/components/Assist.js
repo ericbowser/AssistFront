@@ -8,11 +8,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Alert from "react-bootstrap/Alert";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {
-    docco,
-    atelierForestLight,
-    atelierCaveDark,
-    ascetic,
-    agate,
     far
 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Col, Row, SplitButton} from "react-bootstrap";
@@ -22,13 +17,15 @@ import {Lang, Model} from '../Utils/Constants';
 import copy from 'copy-to-clipboard';
 import {Element, scroller} from 'react-scroll';
 import {Image} from 'react-bootstrap';
-import {setContext} from "@sentry/react";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // import styles
 
 const Assist = () => {
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState(null);
     const [askingAi, setAskingAi] = useState(null);
     const [thread, setThread] = useState(null);
+    const [embedding, setEmbedding] = useState([]);
     const [spinner, setSpinner] = useState(false);
     const [instructions, setInstructions] = useState('General development questions');
     const [status, setStatus] = useState('');
@@ -38,6 +35,8 @@ const Assist = () => {
     const [imageUrl, setImageUrl] = useState(null);
     const [imageSize, setImageSize] = useState(350);
     const [action, setAction] = useState(null);
+    const [assistant, setAssistant] = useState(false);
+    const [text, setText] = useState(false);
 
     const scrollToElement = () => {
         scroller.scrollTo('CodeBlock', {
@@ -63,7 +62,6 @@ const Assist = () => {
 
     useEffect(() => {
     }, [
-        instructions,
         status,
         thread,
         answer,
@@ -73,7 +71,10 @@ const Assist = () => {
         imageSize,
         imageUrl,
         askingAi,
-        action
+        action,
+        embedding,
+        assistant,
+        text
     ]);
 
     function copyToClipBoard(text = "test") {
@@ -120,8 +121,12 @@ const Assist = () => {
                 console.log('ClaudeAssist Url: ', process.env.CLAUDE_ASSIST_URL);
                 return 'http://localhost:32636/askClaude';
             case Model.OpenAi:
-                console.log('OpenAi Url: ', process.env.OPENAI_ASSIST_URL);
-                return 'http://localhost:32636/askAssist';
+                console.log('open ai url: ', config.parsed.OPENAI_ASSIST_URL);
+                const assistUrl = assistant === 'checked'
+                    ? 'http://localhost:32636/askAssist'
+                    : 'http://localhost:32636/askChat';
+                console.log('url', assistUrl);
+                return assistUrl;
             case Model.Gemini:
                 console.log('Gemini Url: ', process.env.GEMINI_ASSIST_URL);
                 return process.env.GEMINI_ASSIST_URL;
@@ -138,18 +143,22 @@ const Assist = () => {
             const url = decideUrl();
             if (question) {
                 const body = {
-                    content: question,
-                    instructions
+                    content: question
                 };
 
                 setSpinner(true);
 
                 console.log('url: ', url);
+                console.log('content : ', body.content);
                 await post(url, body)
                     .then(response => {
                         if (response.status === 200) {
                             console.log('response thread: ', response.thread);
                             console.log('response answer: ', response.answer);
+                            console.log('response vectors: ', response.vectors);
+                            /*
+                                                        setEmbedding(response.vectors);
+                            */
                             setStatus(response.status);
                             setThread(response.thread);
                             setAnswer(response.answer);
@@ -168,10 +177,14 @@ const Assist = () => {
         }
     };
 
+    const MarkupText = async (event) => {
+        if (event) {
+            setText(event);
+        }
+    }
     const QuestionToAsk = async (event) => {
-        if (event?.target?.value) {
-            const content = event.target.value;
-            setQuestion(content);
+        if (event.target.value) {
+            setQuestion(event.target.value);
         }
     }
 
@@ -223,13 +236,13 @@ const Assist = () => {
         setImageSize(size);
     }
 
-    const saveImageUrl = async () => {
-        if (imageUrl) {
+    const saveEmbedding = async () => {
+        if (embedding.length > 0) {
             const data = {
-                imageUrl,
+                embedding,
                 prompt: content
             }
-            await post(process.env.ASSIST_SAVE, data);
+            await post(process.env.ASSIST_EMBED, data);
         }
     }
 
@@ -289,10 +302,10 @@ const Assist = () => {
                         <Col md={'2'}>
 
                             <Button className={'mr-2'}
-                                    onClick={saveImageUrl}
+                                    onClick={saveEmbedding}
                                     variant={'dark'}
                             >
-                                Save Image Url
+                                Save Embedding
                             </Button>
                         </Col>
                     </Row>
@@ -309,27 +322,39 @@ const Assist = () => {
                     className={'border-white border-2 p-6 shadow-md shadow-blue-700'}
                     method='post'>
                     <Form.Group>
-                        <Row>
-                            <Col md={8}>
-                                <Form.Control
-                                    className={'mr-2'}
-                                    as="textarea"
-                                    placeholder="Ask Question"
-                                    rows={4}
-                                    value={question || ''}
-                                    disabled={askingAi === null || askingAi === ''}
-                                    onChange={event => QuestionToAsk(event)}
-                                />
+                        <Row className={'mb-3 p-1'}>
+                            <ReactQuill
+                                value={question}
+                                className={'p-3'}
+                                onChange={event => {
+                                    console.log('value', event);
+                                    setText(event);
+                                }
+                                }/>
+                        </Row>
+                        <Row className={'py-3'}>
+                            <Col md={'7'} className={'p-2'}>
+                                <div>
+                                    <Form.Control
+                                        as="textarea"
+                                        placeholder="Ask Question"
+                                        rows={4}
+                                        value={question || ''}
+                                        disabled={askingAi === null || askingAi === ''}
+                                        onChange={event => QuestionToAsk(event)}
+                                    />
+                                </div>
                             </Col>
-                            <Col md={4}>
-                                <Form.Control
-                                    value={instructions || ''}
-                                    as="textarea"
-                                    placeholder="Instructions for Assist"
-                                    rows={4}
-                                    onChange={event => InstructionsForAssist(event)}
-                                />
-
+                            <Col md={'5'} className={'p-2'}>
+                                <div>
+                                    <Form.Control
+                                        as="textarea"
+                                        placeholder="Instructions"
+                                        rows={4}
+                                        value={question || ''}
+                                        onChange={event => InstructionsForAssist(event)}
+                                    />
+                                </div>
                             </Col>
                         </Row>
                         <Row className={'py-3'}>
@@ -371,19 +396,39 @@ const Assist = () => {
                                 </div>
                             )}
                         </Row>
-                        <Button id={'submitquestion'}
-                                className={'mr-2'}
-                                variant='success'
-                                disabled={askingAi === null || askingAi === '' || action === 'submitQuestion'}
-                                type='submit'
-                                onClick={async (e) => {
-                                    await setAction('askQuestion');
-                                    await handleSubmit(e);
-                                    await setAction(null);
-                                }}
-                        >
-                            Submit Question
-                        </Button>
+                        <Row>
+                            <Col md={6}>
+                                <Button id={'submitquestion'}
+                                        className={'mr-2'}
+                                        variant='success'
+                                        disabled={askingAi === null || askingAi === '' || action === 'submitQuestion'}
+                                        type='submit'
+                                        onClick={async (e) => {
+                                            await setAction('askQuestion');
+                                            await handleSubmit(e);
+                                            await setAction(null);
+                                        }}
+                                >
+                                    Submit Question
+                                </Button>
+                            </Col>
+                            <Col md={6}>
+                                {askingAi === Model.OpenAi && (
+                                    <Form.Check>
+                                        <span>Turn on Assistant</span>
+                                        <Form.Check // prettier-ignore
+                                            onChange={() => {
+                                                setAssistant('checked')
+                                            }}
+                                            value={assistant || false}
+                                            type="switch"
+                                            id="custom-switch"
+                                        />
+                                    </Form.Check>
+                                )
+                                }
+                            </Col>
+                        </Row>
                         <Button id={'imageUrl'}
                                 className={'mr-2'}
                                 variant='secondary'
@@ -459,7 +504,8 @@ const Assist = () => {
             }
             <footer className="justify-center items-center text-center navbar-gradient flex flex-col">
                 <div className="container mx-auto text-center">
-                    <p className="text-sm"><span>© 2024 E.R.B <a>https://erb-think.com/</a>. All rights reserved.</span></p>
+                    <p className="text-sm"><span>© 2024 E.R.B <a>https://erb-think.com/</a>. All rights reserved.</span>
+                    </p>
                 </div>
             </footer>
         </div>

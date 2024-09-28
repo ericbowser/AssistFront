@@ -8,4 +8,4 @@ dist/
 .env*
 .flaskenv*
 !.env.project
-!.env.vault
+!.env.vault.codiumai

@@ -4,11 +4,11 @@ const Dotenv = require('dotenv-webpack');
 const dotenv = require('dotenv').config();
 console.log(dotenv);
 
-console.log('Node env: ', process.env.NODE_ENV)
-console.log('Hosted port: ', process.env.PORT)
+console.log('Node env: ', dotenv.parsed.NODE_ENV)
+console.log('Hosted port: ', dotenv.parsed.PORT)
 
-const port = process.env.PORT || 3000
-const environment = process.env.NODE_ENV || 'production'
+const port = dotenv.parsed.PORT || 3000
+const environment = dotenv.parsed.NODE_ENV || 'production'
 
 module.exports = {
     entry: './src/index.js',
@@ -30,6 +30,8 @@ module.exports = {
     mode: environment,
     resolve: {
         fallback: {
+            buffer: require.resolve("buffer/"),
+            vm: require.resolve("vm/"),
             os: require.resolve("os-browserify/browser"),
             path: require.resolve("path-browserify"),
             crypto: require.resolve("crypto-browserify"),
@@ -42,14 +44,15 @@ module.exports = {
         extensions: [".jsx", ".js"]
     },
     module: {
-        rules: [{
-            test: /\.(gif|png|jpe?g|svg)$/i,
-            loader: 'file-loader',
-            options: {
-                bypassOnDebug: true, // webpack@1.x
-                disable: true, // webpack@2.x and newer
-            }
-        },
+        rules: [
+            {
+                test: /\.(gif|png|jpe?g|svg)$/i,
+                loader: 'file-loader',
+                options: {
+                    bypassOnDebug: true, // webpack@1.x
+                    disable: true, // webpack@2.x and newer
+                }
+            },
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
@@ -79,11 +82,11 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({template: "./public/index.html"}),
         new Dotenv({path: '.env', systemvars: true})
-     /*   new BundleAnalyzerPlugin({
-            analyzerMode: 'server',
-            analyzerHost: '127.0.0.1',
-            analyzerPort: 8888  // Use a different port for each instance
-        })*/
+        /*   new BundleAnalyzerPlugin({
+               analyzerMode: 'server',
+               analyzerHost: '127.0.0.1',
+               analyzerPort: 8888  // Use a different port for each instance
+           })*/
     ],
     performance:
         {

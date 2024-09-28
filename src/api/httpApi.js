@@ -25,8 +25,10 @@ async function post(url, data = {}) {
                 const response = {
                     status: 200,
                     answer: content.data.answer,
-                    thread: content.data.thread
+                    thread: content.data.thread,
+                    vectors: content.data.vectors
                 };
+                console.log('response', response);
                 return response;
             } else {
                 return null;

@@ -34,4 +34,4 @@ RUN npm run build
 EXPOSE 32635
 
 # Command to run the application
-CMD ["npm", "run", "webpack"]
+CMD ["webpack-dev-server"]
