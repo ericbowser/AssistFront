@@ -15,15 +15,16 @@ import ReactMarkdown from 'react-markdown';
 import GenerateImage from '../api/openAiApi';
 import {Lang, Model} from '../Utils/Constants';
 import copy from 'copy-to-clipboard';
-import {Element, scroller} from 'react-scroll';
+import {Element, onsolucroller, scroller} from 'react-scroll';
 import {Image} from 'react-bootstrap';
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // import styles
+import 'react-quill/dist/quill.snow.css';
+import Offcanvas from "react-bootstrap/Offcanvas"; // import styles
 
 const Assist = () => {
     const [question, setQuestion] = useState('');
     const [answer, setAnswer] = useState(null);
-    const [askingAi, setAskingAi] = useState(null);
+    const [askingAi, setAskingAi] = useState(Model.OpenAi);
     const [thread, setThread] = useState(null);
     const [embedding, setEmbedding] = useState([]);
     const [spinner, setSpinner] = useState(false);
@@ -37,9 +38,10 @@ const Assist = () => {
     const [action, setAction] = useState(null);
     const [assistant, setAssistant] = useState(false);
     const [text, setText] = useState(false);
+    const [top, setTop] = useState(false);
 
-    const scrollToElement = () => {
-        scroller.scrollTo('CodeBlock', {
+    const scrollToElement = (element = '') => {
+        scroller.scrollTo(element, {
             duration: 500,
             delay: 0,
             smooth: 'easeInOutQuart'
@@ -55,10 +57,22 @@ const Assist = () => {
     };
 
     useEffect(() => {
-        if (code) {
-            scrollToElement();
+        if (answer) {
+            scrollToElement('MarkDown')
         }
-    }, [answer, spinner, code]);
+    }, [answer]);
+
+    useEffect(() => {
+        if (code) {
+            scrollToElement('CodeBlock');
+        }
+    }, [code, spinner]);
+
+    useEffect(() => {
+        if (top) {
+            scrollToElement('Top');
+        }
+    }, [top]);
 
     useEffect(() => {
     }, [
@@ -84,8 +98,6 @@ const Assist = () => {
 
     async function SetAnswerAsCallback(res) {
         setStatus(res.status);
-
-
         if (res.status === 200) {
             if (res.data) {
                 setAnswer(res.data);
@@ -111,7 +123,8 @@ const Assist = () => {
             }
 
             setCode(codeString.join(''));
-            scrollToElement();
+
+            scrollToElement('CodeBlock');
         }
     }
 
@@ -121,7 +134,6 @@ const Assist = () => {
                 console.log('ClaudeAssist Url: ', process.env.CLAUDE_ASSIST_URL);
                 return 'http://localhost:32636/askClaude';
             case Model.OpenAi:
-                console.log('open ai url: ', config.parsed.OPENAI_ASSIST_URL);
                 const assistUrl = assistant === 'checked'
                     ? 'http://localhost:32636/askAssist'
                     : 'http://localhost:32636/askChat';
@@ -142,6 +154,7 @@ const Assist = () => {
         try {
             const url = decideUrl();
             if (question) {
+                setCode(null);
                 const body = {
                     content: question
                 };
@@ -183,8 +196,9 @@ const Assist = () => {
         }
     }
     const QuestionToAsk = async (event) => {
-        if (event.target.value) {
-            setQuestion(event.target.value);
+        if (event) {
+            setQuestion(event);
+            setLanguage('HTML');
         }
     }
 
@@ -214,6 +228,7 @@ const Assist = () => {
         setQuestion(null);
         setQuestion(null);
         setAskingAi(null);
+        setCode(null);
     }
 
     function clearImage() {
@@ -252,17 +267,22 @@ const Assist = () => {
     }
 
     return (
-        <div className={'h-screen w-full'}>
+        <div className={'container-md h-screen'}>
+            <Offcanvas>
+                
+            </Offcanvas>
             <div>
                 <Navigation/>
             </div>
             <Alert title={'SelectModel'} variant={'info'}>Select a Model Before Asking a Question</Alert>
-            <div className={'m-10'}>
+            <div className={'h-auto'}>
+                <Element id={'Top'}/>
                 {spinner && (
                     <Spinner
-                        variant={'primary'}
-                        className={'text-center'}
-                        size={50}/>
+                        variant={'danger'}
+                        className={'text-center m-20'}
+                        size={100}
+                    />
                 )
                 }
                 <Form.Group>
@@ -290,15 +310,6 @@ const Assist = () => {
                                 )}
                             </SplitButton>
                         </Col>
-                        <Col md={'6'}>
-                            <Button className={'mx-9'}
-                                    id={'setCode'}
-                                    onClick={setCodeFromAnswer}
-                                    variant={'primary'}
-                            >
-                                Extract Code From Answer
-                            </Button>
-                        </Col>
                         <Col md={'2'}>
 
                             <Button className={'mr-2'}
@@ -319,7 +330,7 @@ const Assist = () => {
                     </Alert>
                 }
                 <Form
-                    className={'border-white border-2 p-6 shadow-md shadow-blue-700'}
+                    className={'p-6 shadow-md shadow-blue-700'}
                     method='post'>
                     <Form.Group>
                         <Row className={'mb-3 p-1'}>
@@ -327,12 +338,13 @@ const Assist = () => {
                                 value={question}
                                 className={'p-3'}
                                 onChange={event => {
-                                    console.log('value', event);
                                     setText(event);
+                                    QuestionToAsk(event);
                                 }
                                 }/>
                         </Row>
                         <Row className={'py-3'}>
+                            {/*
                             <Col md={'7'} className={'p-2'}>
                                 <div>
                                     <Form.Control
@@ -345,7 +357,9 @@ const Assist = () => {
                                     />
                                 </div>
                             </Col>
-                            <Col md={'5'} className={'p-2'}>
+*/}
+                            {/*
+                            <Col className={'p-2'}>
                                 <div>
                                     <Form.Control
                                         as="textarea"
@@ -356,6 +370,7 @@ const Assist = () => {
                                     />
                                 </div>
                             </Col>
+*/}
                         </Row>
                         <Row className={'py-3'}>
                             <Col md={8}>
@@ -370,12 +385,6 @@ const Assist = () => {
                                     variant={'secondary'}
                                     onClick={() => clearImage()}>
                                     Clear Image
-                                </Button>
-                                <Button
-                                    className={'mr-2'}
-                                    variant={'light'}
-                                    onClick={() => copy(answer || undefined)}>
-                                    Copy to Clipboard
                                 </Button>
                             </Col>
                             <Col md={4}>
@@ -403,47 +412,48 @@ const Assist = () => {
                                         variant='success'
                                         disabled={askingAi === null || askingAi === '' || action === 'submitQuestion'}
                                         type='submit'
-                                        onClick={async (e) => {
-                                            await setAction('askQuestion');
-                                            await handleSubmit(e);
-                                            await setAction(null);
+                                        onClick={(e) => {
+                                            setAction('askQuestion');
+                                            handleSubmit(e).then(() => setAction(null));
                                         }}
                                 >
                                     Submit Question
                                 </Button>
+                                <Button id={'imageUrl'}
+                                        className={'mr-2'}
+                                        variant='secondary'
+                                        onClick={async (e) => {
+                                            await setAction('generateImage');
+                                            await getImageUrl(e)
+                                            await scrollToImage();
+                                        }}
+                                >
+                                    Generate Image
+                                </Button>
                             </Col>
                             <Col md={6}>
                                 {askingAi === Model.OpenAi && (
-                                    <Form.Check>
+                                    <div>
                                         <span>Turn on Assistant</span>
                                         <Form.Check // prettier-ignore
-                                            onChange={() => {
-                                                setAssistant('checked')
-                                            }}
                                             value={assistant || false}
                                             type="switch"
                                             id="custom-switch"
-                                        />
-                                    </Form.Check>
-                                )
-                                }
+                                            onChange={() => {
+                                                setAssistant('checked')
+                                            }}
+                                        >
+
+                                        </Form.Check>
+                                    </div>
+                                )}
                             </Col>
                         </Row>
-                        <Button id={'imageUrl'}
-                                className={'mr-2'}
-                                variant='secondary'
-                                onClick={async (e) => {
-                                    await setAction('generateImage');
-                                    await getImageUrl(e);
-                                    scrollToImage();
-                                }}
-                        >
-                            Generate Image
-                        </Button>
                     </Form.Group>
                 </Form>
             </div>
-            {spinner &&
+            {
+                spinner &&
                 <div style={{textAlign: 'center'}}>
                     <Spinner animation="border" variant='light'/>
                 </div>
@@ -457,13 +467,13 @@ const Assist = () => {
                     />
                 }
             </Element>
-            {!spinner && answer && (
-                <div>
-                    <Row className={'bolder shadow-2xl border-1 border-amber-700 p-4 pb-10'}>
-                        <Col md={5}>
+            {
+                !spinner && answer && (
+                    <Row className={'text-white bolder'}>
+                        <Col md={3}>
                             <p>Specify a language to parse code snippets:</p>
                         </Col>
-                        <Col md={7}>
+                        <Col md={5}>
                             <SplitButton
                                 key={language}
                                 id={`dropdown-split-variants-${language}`}
@@ -481,17 +491,48 @@ const Assist = () => {
                                 )}
                             </SplitButton>
                         </Col>
-                        <Col>
-                            <ReactMarkdown>{answer}</ReactMarkdown>
+                        <Col md={'4'}>
+                            <Button className={'mx-9'}
+                                    id={'setCode'}
+                                    onClick={setCodeFromAnswer}
+                                    variant={'primary'}
+                            >
+                                Extract Code From Answer
+                            </Button>
                         </Col>
+                        {answer && (
+                            <div className={'mt-96'}>
+
+                                <Element id={'MarkDown'}>
+                                    <Col>
+                                        <div className={'text-black text-xl bold mt-20 py-22'}>
+                                            <Button
+                                                className={'mr-2'}
+                                                variant={'light'}
+                                                onClick={() => copy(answer || undefined)}>
+                                                Copy to Clipboard
+                                            </Button>
+                                            <ReactMarkdown>
+                                                {answer}
+                                            </ReactMarkdown>
+                                        </div>
+                                    </Col>
+                                </Element>
+
+                            </div>
+                        )}
                     </Row>
 
-                </div>
-            )}
-            {!spinner && answer && code &&
+                )
+            }
+            {
+                question && code &&
                 <Element id={'CodeBlock'}>
 
                     <Row className={' m-1'}>
+                        <Button onClick={() => setTop(true)}>
+                            Top
+                        </Button>
                         <Col>
                             <SyntaxHighlighter
                                 language={language}
@@ -500,9 +541,11 @@ const Assist = () => {
                             </SyntaxHighlighter>
                         </Col>
                     </Row>
+
                 </Element>
             }
-            <footer className="justify-center items-center text-center navbar-gradient flex flex-col">
+            <footer
+                className="justify-center items-center text-center navbar-gradient flex flex-col position-relative w-auto">
                 <div className="container mx-auto text-center">
                     <p className="text-sm"><span>© 2024 E.R.B <a>https://erb-think.com/</a>. All rights reserved.</span>
                     </p>
