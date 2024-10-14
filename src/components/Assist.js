@@ -8,18 +8,22 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Alert from "react-bootstrap/Alert";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {
-    far
+    far,
+    docco,
+    github
 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import {Col, Row, SplitButton} from "react-bootstrap";
-import ReactMarkdown from 'react-markdown';
+import Markdown from 'react-markdown';
 import GenerateImage from '../api/openAiApi';
-import {Lang, Model} from '../Utils/Constants';
+import {Lang, Model} from '../utils/constants';
 import copy from 'copy-to-clipboard';
-import {Element, onsolucroller, scroller} from 'react-scroll';
+import {Element, scroller} from 'react-scroll';
 import {Image} from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import Offcanvas from "react-bootstrap/Offcanvas"; // import styles
+import {decideUrl} from '../utils/assistUtils';
+import remarkGfm from "remark-gfm";
+import AssistForm from "./AssistantForm";
 
 const Assist = () => {
     const [question, setQuestion] = useState('');
@@ -91,25 +95,6 @@ const Assist = () => {
         text
     ]);
 
-    function copyToClipBoard(text = "test") {
-        copy(text);
-
-    }
-
-    async function SetAnswerAsCallback(res) {
-        setStatus(res.status);
-        if (res.status === 200) {
-            if (res.data) {
-                setAnswer(res.data);
-            }
-            if (res.thread) {
-                setThread(res.thread);
-            }
-
-            setSpinner(false);
-        }
-    }
-
     const setCodeFromAnswer = () => {
         if (answer) {
             const codeBlockRegex = /```([\s\S]*?)```/g;
@@ -128,31 +113,11 @@ const Assist = () => {
         }
     }
 
-    function decideUrl() {
-        switch (askingAi) {
-            case Model.Claude:
-                console.log('ClaudeAssist Url: ', process.env.CLAUDE_ASSIST_URL);
-                return 'http://localhost:32636/askClaude';
-            case Model.OpenAi:
-                const assistUrl = assistant === 'checked'
-                    ? 'http://localhost:32636/askAssist'
-                    : 'http://localhost:32636/askChat';
-                console.log('url', assistUrl);
-                return assistUrl;
-            case Model.Gemini:
-                console.log('Gemini Url: ', process.env.GEMINI_ASSIST_URL);
-                return process.env.GEMINI_ASSIST_URL;
-            default:
-                console.log('Default: ', process.env.OPENAI_ASSIST_URL);
-                return process.env.OPENAI_ASSIST_URL;
-        }
-    }
-
     const handleSubmit = async (event) => {
         if (action === 'generateImage') return;
         event.preventDefault();
         try {
-            const url = decideUrl();
+            const url = decideUrl(askingAi, assistant);
             if (question) {
                 setCode(null);
                 const body = {
@@ -166,23 +131,16 @@ const Assist = () => {
                 await post(url, body)
                     .then(response => {
                         if (response.status === 200) {
-                            console.log('response thread: ', response.thread);
-                            console.log('response answer: ', response.answer);
-                            console.log('response vectors: ', response.vectors);
-                            /*
-                                                        setEmbedding(response.vectors);
-                            */
                             setStatus(response.status);
                             setThread(response.thread);
                             setAnswer(response.answer);
                             setMessageSaved(true);
                             setSpinner(false);
+                        } else if (!response || response.status !== 200) {
+                            setAnswer(`Server error ${response.status}`);
                         }
                     });
-            } else if (!response || response.status !== 200) {
-                setAnswer(`Server error ${response.status}`);
             }
-
         } catch
             (err) {
             console.log(err)
@@ -190,39 +148,12 @@ const Assist = () => {
         }
     };
 
-    const MarkupText = async (event) => {
-        if (event) {
-            setText(event);
-        }
-    }
     const QuestionToAsk = async (event) => {
         if (event) {
             setQuestion(event);
             setLanguage('HTML');
         }
     }
-
-    const InstructionsForAssist = event => {
-        if (event?.target?.value) {
-            const instructions = event.target.value;
-            setInstructions(instructions);
-        }
-    }
-
-    /*  const SaveText = async event => {
-                event.preventDefault();
-                if (thread && answer) {
-                        const body = {
-                                answer,
-                                thread
-                        };
-                        const response = await post(process.env.ASSIST_SAVE, body, SaveTextAsCallback);
-                        console.log('response', response);
-                        return response;
-                } else {
-                        console.log('no answer or session saved')
-                }
-        }*/
 
     function clear() {
         setQuestion(null);
@@ -261,16 +192,8 @@ const Assist = () => {
         }
     }
 
-    const handleModelChange = async (model = '') => {
-        console.log('setting model to ', model);
-        setAskingAi(model);
-    }
-
     return (
         <div className={'container-md h-screen'}>
-            <Offcanvas>
-                
-            </Offcanvas>
             <div>
                 <Navigation/>
             </div>
@@ -311,7 +234,6 @@ const Assist = () => {
                             </SplitButton>
                         </Col>
                         <Col md={'2'}>
-
                             <Button className={'mr-2'}
                                     onClick={saveEmbedding}
                                     variant={'dark'}
@@ -329,10 +251,50 @@ const Assist = () => {
                         {imageUrl}
                     </Alert>
                 }
-                <Form
+                {/*  setQuestion,
+                setText,
+                question,
+                clear,
+                clearImage,
+                handleImageSize,
+                askingAi,
+                assistant,
+                setAssistant,
+                action,
+                setAction,
+                handleSubmit,
+                getImageUrl,
+                scrollToImage*/}
+              {/*  <AssistForm
+                    action={action}
+                    answer={answer}
+                    assistant={assistant}
+                    askingAi={askingAi}
+                    clear={clear}
+                    clearImage={clearImage}
+                    code={code}
+                    handleSubmit={handleSubmit}
+                    getImageUrl={getImageUrl}
+                    handleImageSize={handleImageSize}
+                    imageSize={imageSize}
+                    language={language}
+                    setQuestion={setQuestion}
+                    setAssistant={setAssistant}
+                    scrollToImage={scrollToImage}
+                />*/}
+                   <Form
                     className={'p-6 shadow-md shadow-blue-700'}
                     method='post'>
                     <Form.Group>
+                        <Button className={'m-2'}
+                                variant={'outline-info'}
+                                onClick={() => setQuestion('Generate few JavaScript Snippets')}>
+                            A few JavaScript Snippets
+                        </Button>
+                        <Button variant={'outline-info'}
+                                onClick={() => setQuestion('Generate few C# snippets')}>
+                            A few C# Snippets
+                        </Button>
                         <Row className={'mb-3 p-1'}>
                             <ReactQuill
                                 value={question}
@@ -342,35 +304,6 @@ const Assist = () => {
                                     QuestionToAsk(event);
                                 }
                                 }/>
-                        </Row>
-                        <Row className={'py-3'}>
-                            {/*
-                            <Col md={'7'} className={'p-2'}>
-                                <div>
-                                    <Form.Control
-                                        as="textarea"
-                                        placeholder="Ask Question"
-                                        rows={4}
-                                        value={question || ''}
-                                        disabled={askingAi === null || askingAi === ''}
-                                        onChange={event => QuestionToAsk(event)}
-                                    />
-                                </div>
-                            </Col>
-*/}
-                            {/*
-                            <Col className={'p-2'}>
-                                <div>
-                                    <Form.Control
-                                        as="textarea"
-                                        placeholder="Instructions"
-                                        rows={4}
-                                        value={question || ''}
-                                        onChange={event => InstructionsForAssist(event)}
-                                    />
-                                </div>
-                            </Col>
-*/}
                         </Row>
                         <Row className={'py-3'}>
                             <Col md={8}>
@@ -454,8 +387,11 @@ const Assist = () => {
             </div>
             {
                 spinner &&
-                <div style={{textAlign: 'center'}}>
-                    <Spinner animation="border" variant='light'/>
+                <div className={'text-center p-40'}>
+                    <Spinner animation="border"
+                             variant='dark'
+                             size={100}
+                    />
                 </div>
             }
             <Element id={'ImageUrl'}>
@@ -501,42 +437,37 @@ const Assist = () => {
                             </Button>
                         </Col>
                         {answer && (
-                            <div className={'mt-96'}>
-
-                                <Element id={'MarkDown'}>
-                                    <Col>
-                                        <div className={'text-black text-xl bold mt-20 py-22'}>
-                                            <Button
-                                                className={'mr-2'}
-                                                variant={'light'}
-                                                onClick={() => copy(answer || undefined)}>
-                                                Copy to Clipboard
-                                            </Button>
-                                            <ReactMarkdown>
-                                                {answer}
-                                            </ReactMarkdown>
-                                        </div>
-                                    </Col>
-                                </Element>
-
-                            </div>
+                            <Element id={'MarkDown'}>
+                                <div className={'bg-gray-700'}>
+                                    <Button
+                                        className={'m-10'}
+                                        variant={'outline-danger'}
+                                        onClick={() => copy(answer || undefined)}>
+                                        Copy to Clipboard
+                                    </Button>
+                                    <Markdown
+                                        className={'text-white text-xl color-white overflow-x-auto block p-10'}
+                                        remarkPlugins={[remarkGfm]}
+                                    >
+                                        {answer}
+                                    </Markdown>
+                                </div>
+                            </Element>
                         )}
                     </Row>
-
                 )
             }
-            {
-                question && code &&
+            {question && code &&
                 <Element id={'CodeBlock'}>
 
                     <Row className={' m-1'}>
-                        <Button onClick={() => setTop(true)}>
+                        <Button onClick={() => scrollToElement('Top')}>
                             Top
                         </Button>
                         <Col>
                             <SyntaxHighlighter
                                 language={language}
-                                style={far}>
+                                style={docco}>
                                 {code}
                             </SyntaxHighlighter>
                         </Col>

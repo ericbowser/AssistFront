@@ -6,6 +6,9 @@ import {
     RouterProvider
 } from 'react-router-dom';
 import Assist from './components/Assist';
+/*
+import GetUrlInfo from './components/GetUrlInfo';
+*/
 import '../src/output.css';
 
 const router = createBrowserRouter([
@@ -17,6 +20,14 @@ const router = createBrowserRouter([
           </div>
         )
     },
+   /* {
+        path: '/getUrlInfo',
+        element: (
+            <div>
+                <GetUrlInfo/>
+            </div>
+        )
+    },*/
     {
         path: '/',
         element: (

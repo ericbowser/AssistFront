@@ -12,6 +12,9 @@ const Navigation = () => {
                 <Nav.Link href={"/askAssist"}>
                     <h3 className={'text-2xl text-white font-extrabold pl-4'}>Ask Assist</h3>
                 </Nav.Link>
+                <Nav.Link href={"/getUrlInfo"}>
+                    <h3 className={'text-2xl text-white font-extrabold pl-4'}>Get Url Info</h3>
+                </Nav.Link>
             </div>
         </nav>
     );

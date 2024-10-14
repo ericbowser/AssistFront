@@ -13,3 +13,6 @@ dist/
 !.env.project
 !.env.vault.codiumai
 !.env.vault
+
+.codiumai
+.codium
