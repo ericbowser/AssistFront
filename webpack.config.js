@@ -80,7 +80,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({template: "./public/index.html"}),
-        new Dotenv(path.resolve(__dirname, "..."))
+        new Dotenv(path.resolve(__dirname, ".env")),
         /*   new BundleAnalyzerPlugin({
                analyzerMode: 'server',
                analyzerHost: '127.0.0.1',

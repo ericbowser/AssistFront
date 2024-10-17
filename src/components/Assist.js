@@ -60,6 +60,7 @@ const Assist = () => {
         });
     };
 
+    
     useEffect(() => {
         if (answer) {
             scrollToElement('MarkDown')
@@ -193,7 +194,7 @@ const Assist = () => {
     }
 
     return (
-        <div className={'container-md h-screen'}>
+        <div className={'container w-fit'}>
             <div>
                 <Navigation/>
             </div>
@@ -447,7 +448,7 @@ const Assist = () => {
                                     </Button>
                                     <Markdown
                                         className={'text-white text-xl color-white overflow-x-auto block p-10'}
-                                        remarkPlugins={[remarkGfm]}
+                                        remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
                                     >
                                         {answer}
                                     </Markdown>
