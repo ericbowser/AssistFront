@@ -194,7 +194,7 @@ const Assist = () => {
     }
 
     return (
-        <div className={'container w-fit'}>
+        <div className={'container w-fit h-max'}>
             <div>
                 <Navigation/>
             </div>

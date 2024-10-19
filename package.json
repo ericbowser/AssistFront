@@ -5,7 +5,7 @@
   "description": "React.js Assist Front End",
   "main": "index.js",
   "scripts": {
-    "run:docker": "docker run -p 32635:32635 --env-file .env assist-front",
+    "run:docker": "docker run -p 32635:32635 --env-file .env ericbowser/assist-front:latest",
     "build:docker": "docker build -t assist-front .",
     "build": "webpack --mode=production",
     "start": "node scripts/start.js",
