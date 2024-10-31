@@ -17,11 +17,11 @@ RUN npm install -D webpack-cli webpack dotenv
 CMD ["npm", "run", "build"]
 CMD ["npm",  "run", "tail"]
 
-COPY . .
 COPY package*.json ./app/
 
 # Expose the port that the application listens on.
 EXPOSE 32635
 RUN npx dotenv-vault@latest pull
+COPY . /app
 
 CMD ["npm", "run", "webpack"]
