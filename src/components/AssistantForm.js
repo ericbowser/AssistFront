@@ -11,21 +11,23 @@ import {decideUrl} from "../utils/assistUtils";
 import {post} from "../api/httpApi";
 
 const AssistForm = ({
-                      askingAi = Model.OpenAi, setAskingAi = () => {
-  }
-                    }) => {
+    askingAi = Model.OpenAi,
+    setAskingAi,
+    setLanguage,
+    setAnswer,
+    setThread
+  }) => {
+
   const [question, setQuestion] = useState('');
   const [action, setAction] = useState(null);
   const [assistant, setAssistant] = useState(false);
-  const [answer, setAnswer] = useState(null);
-  const [thread, setThread] = useState(null);
   const [messageSaved, setMessageSaved] = useState(false);
   const [code, setCode] = useState(null);
   const [spinner, setSpinner] = useState(false);
   const [text, setText] = useState(false);
 
   useEffect(() => {
-  }, [code, thread, messageSaved, assistant, text]);
+  }, [code, messageSaved, assistant, text]);
 
   const handleSubmit = async (event) => {
     if (action === 'generateImage') return;
@@ -45,7 +47,6 @@ const AssistForm = ({
         await post(url, body)
           .then(response => {
             if (response.status === 200) {
-              setStatus(response.status);
               setThread(response.thread);
               setAnswer(response.answer);
               setMessageSaved(true);
@@ -73,15 +74,13 @@ const AssistForm = ({
     setCode(null);
   }
 
-
-
-
   const QuestionToAsk = async (event) => {
     if (event) {
       setQuestion(event);
       setLanguage('HTML');
     }
   }
+
   const getImageUrl = async () => {
     setSpinner(true);
     const imageUrl = await GenerateImage(question);
@@ -98,12 +97,6 @@ const AssistForm = ({
     setImageSize(size);
   }
 
-  useEffect(() => {
-    if (answer) {
-      scrollToElement('MarkDown')
-    }
-  }, [answer]);
-
   return (
     <div>
       {spinner && (
@@ -113,12 +106,6 @@ const AssistForm = ({
           size={100}
         />)
       }
-      {spinner && <div className={'text-center p-40'}>
-        <Spinner animation="border"
-                 variant='dark'
-                 size={100}
-        />
-      </div>}
       {spinner && <div className={'text-center p-40'}>
         <Spinner animation="border"
                  variant='dark'
@@ -178,25 +165,25 @@ const AssistForm = ({
           <Row>
             <Col md={6}>
               <Button id={'submitquestion'}
-                      className={'mr-2'}
-                      variant='success'
-                      disabled={askingAi === null || askingAi === '' || action === 'submitQuestion'}
-                      type='submit'
-                      onClick={(e) => {
-                        setAction('askQuestion');
-                        handleSubmit(e).then(() => setAction(null));
-                      }}
+                className={'mr-2'}
+                variant='success'
+                disabled={askingAi === null || askingAi === '' || action === 'submitQuestion'}
+                type='submit'
+                onClick={(e) => {
+                  setAction('askQuestion');
+                  handleSubmit(e).then(() => setAction(null));
+                }}
               >
                 Submit Question
               </Button>
               <Button id={'imageUrl'}
-                      className={'mr-2'}
-                      variant='secondary'
-                      onClick={async (e) => {
-                        await setAction('generateImage');
-                        await getImageUrl(e)
-                        await scrollToImage();
-                      }}
+                className={'mr-2'}
+                variant='secondary'
+                onClick={async (e) => {
+                  await setAction('generateImage');
+                  await getImageUrl(e)
+                  await scrollToImage();
+                }}
               >
                 Generate Image
               </Button>
