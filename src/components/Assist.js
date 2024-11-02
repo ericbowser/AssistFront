@@ -1,246 +1,41 @@
 ﻿import React, {useState, useEffect} from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import {post} from '../api/httpApi';
-import Navigation from "./Navigation";
-import Spinner from 'react-bootstrap/Spinner';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Alert from "react-bootstrap/Alert";
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import {
-  far, docco, github
-} from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import {Col, Row, SplitButton} from "react-bootstrap";
-import Markdown from 'react-markdown';
-import {Lang, Model} from '../utils/constants';
-import copy from 'copy-to-clipboard';
-import {Element, scroller} from 'react-scroll';
-import {Image} from 'react-bootstrap';
-import 'react-quill/dist/quill.snow.css';
-import remarkGfm from "remark-gfm";
-import AssistForm from "./AssistantForm";
+import AssistQuestionForm from "./AssistQuestionForm";
+import AssistModel from "./AssistModel";
 
 const Assist = () => {
   const [answer, setAnswer] = useState(null);
-  const [askingAi, setAskingAi] = useState(Model.OpenAi);
   const [thread, setThread] = useState(null);
   const [messageSaved, setMessageSaved] = useState(false);
-  const [code, setCode] = useState(null);
-  const [language, setLanguage] = useState("markdown");
-  const [imageUrl, setImageUrl] = useState(null);
-  const [imageSize, setImageSize] = useState(350);
   const [top, setTop] = useState(false);
   const [embedding, setEmbedding] = useState([]);
-
-  const scrollToElement = (element = '') => {
-    scroller.scrollTo(element, {
-      duration: 500, delay: 0, smooth: 'easeInOutQuart'
-    });
-  };
+  const [spinner, setSpinner] = useState(false);
+  const [code, setCode] = useState(null);
+  const [question, setQuestion] = useState(null);
 
   useEffect(() => {
-    if (answer) {
-      scrollToElement('MarkDown')
-    }
-  }, [answer]);
+  }, [spinner, thread, answer, question]);
 
-  const saveEmbedding = async () => {
-    if (embedding.length > 0) {
-      const data = {
-        embedding,
-        prompt: content
-      }
-      await post(process.env.ASSIST_EMBED, data);
-    }
-  }
-  const scrollToImage = () => {
-    scroller.scrollTo('ImageUrl', {
-      duration: 500, delay: 0, smooth: 'easeInOutQuart'
-    });
-  };
-
-
-  useEffect(() => {
-    if (code) {
-      scrollToElement('CodeBlock');
-    }
-  }, [code]);
-
-  useEffect(() => {
-    if (top) {
-      scrollToElement('Top');
-    }
-  }, [top]);
-
-  useEffect(() => {
-  }, [thread, messageSaved, language, askingAi]);
-
-  const setCodeFromAnswer = () => {
-    if (answer) {
-      const codeBlockRegex = /```([\s\S]*?)```/g;
-      let codeString = [];
-      let match = '';
-
-      while ((match = codeBlockRegex.exec(answer)) !== null) {
-        // Remove the backticks and any language specifier from each code block.
-        const matched = match[0].replace(/^```\w*\n?|```$/g, '');
-        codeString.push(matched);
-      }
-
-      setCode(codeString.join(''));
-
-      scrollToElement('CodeBlock');
-    }
-  }
-  const handleImageSize = (event) => {
-    const size = event.target.value;
-    setImageSize(size);
-  }
-
-  useEffect(() => {
-    if (answer) {
-      scrollToElement('MarkDown')
-    }
-  }, [answer]);
-
-  return (<div className={'container w-fit h-max'}>
-    <div>
-      <Navigation/>
-    </div>
-    <Element id={'Top'}/>
-    <Alert
-      title={'SelectModel'}
-      variant={'warning'}>
-      Select a Model Before Asking a Question
-    </Alert>
-    <div className={'h-auto'}>
-      <Form.Group>
-        <Row>
-          <Col md={'4'}>
-            <SplitButton
-              className={'w-35 text-right h-fit'}
-              key={askingAi || null}
-              id={`dropdown-split-variants-${askingAi}`}
-              variant={'info'}
-              title={'Select Model'}
-            >
-              {[Model.Gemini, Model.Claude, Model.OpenAi].map((model, index) => {
-                console.log(model);
-                return (<Dropdown.Item
-                  key={`${index}${model}`}
-                  eventKey={model}
-                  title={model}
-                  onClick={() => setAskingAi(model)}>
-                  {model}
-                </Dropdown.Item>)
-              })}
-            </SplitButton>
-          </Col>
-          <Col md={'2'}>
-            <Button className={'mr-2'}
-                    onClick={saveEmbedding}
-                    variant={'dark'}
-            >
-              Save Embedding
-            </Button>
-          </Col>
-        </Row>
-      </Form.Group>
-      {thread && <Alert className={'my-2'}>Thread: {thread}</Alert>}
-      {imageUrl && <Alert className={'m-2'}>
-        {imageUrl}
-      </Alert>}
-      {askingAi && (
-        <div className={'w-75 h-20 my-2'}>
-          <Alert title={'Model Enabled'}
-                 variant={'success'}>{`Currently ${askingAi} is enabled`}</Alert>
-        </div>)}
-      <AssistForm
-        setAskingAi={setAskingAi}
-        setLanguage={setLanguage}
-        setAnswer={setAnswer}
+  return (
+    <section className={'main text-2xl text-black font-extrabold'}>
+      <section className={'side-bar'}>
+        <AssistModel/>
+      </section>
+      <div className={'input-container'}>
+      <AssistQuestionForm
+        setSpinner={setSpinner}
+        setCode={setCode}
         setThread={setThread}
+        setAnswer={setAnswer}
       />
-    </div>
-    <Element id={'ImageUrl'}>
-      {imageUrl &&
-        <Image src={imageUrl || ''}
-               alt="Generated by OpenAI"
-               width={imageSize}
-               className={'my-24'}
-        />}
-    </Element>
-    {answer && (
-      <Row className={'text-white bolder'}>
-        <Col md={3}>
-          <p>Specify a language to parse code snippets:</p>
-        </Col>
-        <Col md={5}>
-          <SplitButton
-            key={language}
-            id={`dropdown-split-variants-${language}`}
-            variant={'success'}
-            title={language || 'Select language'}
-          >
-            {Lang.map((language, index) => (<Dropdown.Item
-              key={`${index}${language}`}
-              eventKey={language}
-              onClick={() => setLanguage(language)}>
-              {language}
-            </Dropdown.Item>))}
-          </SplitButton>
-        </Col>
-        <Col md={'4'}>
-          <Button className={'mx-9'}
-                  id={'setCode'}
-                  onClick={setCodeFromAnswer}
-                  variant={'primary'}
-          >
-            Extract Code From Answer
-          </Button>
-        </Col>
-        {answer && (
-          <Element id={'MarkDown'}>
-            <div className={'bg-gray-700'}>
-              <Button
-                className={'m-10'}
-                variant={'outline-danger'}
-                onClick={() => copy(answer || undefined)}>
-                Copy to Clipboard
-              </Button>
-              <Markdown
-                className={'text-white text-xl color-white overflow-x-auto block p-10'}
-                remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
-              >
-                {answer}
-              </Markdown>
-            </div>
-          </Element>)}
-      </Row>)}
-    {code && (
-      <Element id={'CodeBlock'}>
-        <Row className={' m-1'}>
-          <Button onClick={() => scrollToElement('Top')}>
-            Top
-          </Button>
-          <Col>
-            <SyntaxHighlighter
-              language={language}
-              style={docco}>
-              {code}
-            </SyntaxHighlighter>
-          </Col>
-        </Row>
-      </Element>
-    )}
-    <footer
-      className="justify-center items-center text-center navbar-gradient flex flex-col position-relative w-auto">
-      <div className="container mx-auto text-center">
-        <p className="text-sm"><span>© 2024 E.R.B <a>https://erb-think.com/</a>. All rights reserved.</span>
-        </p>
       </div>
-    </footer>
-  </div>)
-}
+      {answer && (
+        <section className={'output-container'}>
+          <textarea>{answer}</textarea>
+        </section>
+      )}
+    </section>
+  )
+};
+
 
 export default Assist;

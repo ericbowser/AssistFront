@@ -53,10 +53,9 @@ function GetUrlInfo() {
     }
 
     return (
-        <div className={'get-url-info'}>
-
+        <section className={'bg-custom-image'}>
             <div
-                className='mt-2 py-8 text-3xl font-medium text-teal-600 text-center font-burtons dark:text-white dark:bg-gray-800'>
+                className='mt-2 py-8 font-burtons'>
                 <form className={'p-20'}>
                     <label className={'px-3'} htmlFor={'url'} id={'url'} title={'url'}>
                         Input crawl url:
@@ -91,7 +90,7 @@ function GetUrlInfo() {
                     </div>
                 </form>
             </div>
-        </div>
+        </section>
     )
 }
 
