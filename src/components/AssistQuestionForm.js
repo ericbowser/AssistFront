@@ -12,7 +12,7 @@ const AssistQuestionForm = ({
                               setLanguage,
                               setAnswer,
                               setThread,
-                              setSpinner
+                              setSpinner,
                             }) => {
 
   const [question, setQuestion] = useState('');
@@ -59,6 +59,7 @@ const AssistQuestionForm = ({
         await post(url, body)
           .then(response => {
             if (response.status === 200) {
+              console.log('answer', response.answer);
               setThread(response.thread);
               setAnswer(response.answer);
               setSpinner(false);
@@ -99,7 +100,7 @@ const AssistQuestionForm = ({
             }
           }/>
         <button id={'submitquestion'}
-                className={'accordion-button'}
+                className={'m-2 p-2 bg-blue-500 text-white'}
                 disabled={askingAi === null || askingAi === ''}
                 type='submit'
                 onClick={(e) => {

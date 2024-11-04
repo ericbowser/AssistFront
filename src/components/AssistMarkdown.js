@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import remarkGfm from "remark-gfm";
 
 const AssistMarkdown = ({answer, scrollToElement, setCode}) => {
   const [language, setLanguage] = useState("markdown");

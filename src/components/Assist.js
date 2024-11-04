@@ -1,6 +1,8 @@
 ﻿import React, {useState, useEffect} from 'react';
 import AssistQuestionForm from "./AssistQuestionForm";
 import AssistModel from "./AssistModel";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const Assist = () => {
   const [answer, setAnswer] = useState(null);
@@ -16,23 +18,32 @@ const Assist = () => {
   }, [spinner, thread, answer, question]);
 
   return (
-    <section className={'main text-2xl text-black font-extrabold'}>
-      <section className={'side-bar'}>
+    <section className={'main'}>
+      <section className={'side-bar-left'}>
         <AssistModel/>
       </section>
-      <div className={'input-container'}>
-      <AssistQuestionForm
-        setSpinner={setSpinner}
-        setCode={setCode}
-        setThread={setThread}
-        setAnswer={setAnswer}
-      />
-      </div>
-      {answer && (
-        <section className={'output-container'}>
-          <textarea>{answer}</textarea>
-        </section>
-      )}
+      <section className={'input-container'}>
+        <AssistQuestionForm
+          setSpinner={setSpinner}
+          setCode={setCode}
+          setThread={setThread}
+          setAnswer={setAnswer}
+        />
+      </section>
+      <section className={'output-container'}>
+        {answer && (
+          <div className={'markdown-container'}>
+            <Markdown
+              remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
+            >
+              {answer}
+            </Markdown>
+          </div>
+          )}
+      </section>
+      <section className={'side-bar-right'}>
+
+      </section>
     </section>
   )
 };

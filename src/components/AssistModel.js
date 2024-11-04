@@ -7,10 +7,9 @@ import Alert from "react-bootstrap/Alert";
 const AssistModel = () => {
   const [askingAi, setAskingAi] = useState(Model.OpenAi);
   return (
-    <section>
-      <form>
+      <form className={'pt-4'}>
         <SplitButton
-          className={'w-35 text-right h-fit'}
+          className={'m-2 w-fit bg-blue-500 text-white'}
           key={askingAi || null}
           id={`dropdown-split-variants-${askingAi}`}
           variant={'info'}
@@ -29,7 +28,6 @@ const AssistModel = () => {
           })}
         </SplitButton>
       </form>
-    </section>
   );
 };
 
