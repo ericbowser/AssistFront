@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {postUrlData} from "../api/httpApi";
 import {isValidUrl} from "../utils/assistUtils";
+import background from './circle-scatter-haikei.svg'
 
 console.log(process.env.GETFILEINFO_URL);
 
@@ -53,33 +54,34 @@ function GetUrlInfo() {
     }
 
     return (
-        <section className={'bg-custom-image'}>
-            <div
-                className='mt-2 py-8 font-burtons'>
+      <div className={'h-screen w-screen bg-cover bg-center text-white text-2xl'}
+           style={{backgroundImage: `url(${background})`}}>
+          <div>
                 <form className={'p-20'}>
                     <label className={'px-3'} htmlFor={'url'} id={'url'} title={'url'}>
                         Input crawl url:
                     </label>
                     <input type="text"
+                           className={'text-black '}
                            value={url}
+                           size={50}
                            placeholder={'Url'}
                            onChange={e => setUrl(e.target.value)}/>
                     {urls && urls.length > 0 &&
-                        <div>
-                            {urls.map(url => {
+                      <div>
+                            {urls.map((url, index) => {
                                 return (
-                                    <div>
-                                        {url}
-
-                                    </div>
-
+                                  <div key={`${url}${index}`}>
+                                      <a href={url}>
+                                          {url}
+                                      </a>
+                                  </div>
                                 )
                             })
                             }
                         </div>
                     }
                     <div>
-
                         <button
                             className={'rounded-md text-black border-black border-2 bg-info shadow-xl shadow-amber-900 p-2 m-20'}
                             type={'submit'}
@@ -90,7 +92,7 @@ function GetUrlInfo() {
                     </div>
                 </form>
             </div>
-        </section>
+      </div>
     )
 }
 

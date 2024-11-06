@@ -7,11 +7,11 @@
   "scripts": {
     "run:docker": "docker run -p 32635:32635 --env-file .env ericbowser/assist-front:latest",
     "build:docker": "docker build -t assist-front .",
-    "build": "webpack --mode=production",
+    "build": "webpack --mode=development",
     "start": "node scripts/start.js",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
-    "webpack": "webpack-dev-server --mode=production",
+    "webpack": "webpack-dev-server --mode=development",
     "serve": "serve",
     "clean": "rm node_modules/ -R && npm install",
     "tail": "npx tailwindcss -i ./src/input.css -o ./src/output.css",
@@ -37,10 +37,11 @@
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "react-quill": "^2.0.0",
+    "react-richtext": "^1.1.0",
     "react-router": "^6.22.3",
     "react-router-dom": "^6.22.3",
     "react-scroll": "^1.9.0",
-    "react-syntax-highlighter": "^15.5.0",
+    "react-syntax-highlighter": "^15.6.1",
     "tailwindcss": "^3.0.2"
   },
   "devDependencies": {
@@ -112,9 +113,5 @@
     "last 1 chrome version",
     "last 1 firefox version",
     "last 1 safari version"
-  ],
-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610",
-  "eslintConfig": {
-    "extends": "react-app"
-  }
+  ]
 }

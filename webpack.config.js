@@ -75,6 +75,13 @@ module.exports = {
                 test: /\.txt$/,
                 use:
                     'raw-loader'
+            },
+            {
+                test: /\.svg$/,
+                use:  ['@svgr/webpack'],
+                issuer: {
+                    and: [ '/\\.(js|ts|jsx|tsx)x?$/' ]
+                }
             }
         ]
     },

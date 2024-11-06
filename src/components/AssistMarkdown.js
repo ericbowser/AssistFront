@@ -1,5 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import remarkGfm from "remark-gfm";
+import SplitButton from "react-bootstrap/SplitButton";
+import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
+import {Lang} from "../utils/constants";
 
 const AssistMarkdown = ({answer, scrollToElement, setCode}) => {
   const [language, setLanguage] = useState("markdown");
@@ -38,10 +42,9 @@ const AssistMarkdown = ({answer, scrollToElement, setCode}) => {
           {language}
         </Dropdown.Item>))}
       </SplitButton>
-      <Button className={'mx-9'}
+      <Button className={'button-style'}
               id={'setCode'}
               onClick={setCodeFromAnswer}
-              variant={'primary'}
       >
         Extract Code From Answer
       </Button>
@@ -51,11 +54,12 @@ const AssistMarkdown = ({answer, scrollToElement, setCode}) => {
             <div className={'bg-gray-700'}>
               <Button
                 className={'m-10'}
-                variant={'outline-danger'}
+                variant={'primary'}
                 onClick={() => copy(answer || undefined)}>
                 Copy to Clipboard
               </Button>
               <Markdown
+                language={language}
                 className={'text-white text-xl color-white overflow-x-auto block p-10'}
                 remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
               >

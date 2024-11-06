@@ -1,13 +1,20 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Element, scroller} from "react-scroll";
-import {Image} from "react-bootstrap";
+import Image from "react-bootstrap/Image";
+import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import GenerateImage from "../api/openAiApi";
+import Form from "react-bootstrap/Form";
+/*
+import FormControl from "react-bootstrap/FormControl";
+import FormLabel from "react-bootstrap/FormLabel";
+*/
 
-const AssistImage = ({setSpinner}) => {
+const AssistImage = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [imageSize, setImageSize] = useState(350);
+  const [spinner, setSpinner] = useState(false);
 
   const scrollToImage = () => {
     scroller.scrollTo('ImageUrl', {
@@ -26,6 +33,7 @@ const AssistImage = ({setSpinner}) => {
     console.log('image url:', imageUrl);
     if (imageUrl) {
       await setImageUrl(imageUrl);
+      scrollToImage();
       /*
             setCode('');
       */
@@ -38,7 +46,8 @@ const AssistImage = ({setSpinner}) => {
   }
 
   return (
-    <form>
+    <React.Fragment>
+      <Form>
         {imageUrl && (
           <Alert className={'m-2'}>
             {imageUrl}
@@ -52,15 +61,16 @@ const AssistImage = ({setSpinner}) => {
                    className={'my-24'}
             />}
         </Element>
-        <label htmlFor="number-input">Image Size:
-          <input
+        <Form.Label title={'ImageSize'} htmlFor={'ImageSize'} column={0}>Image Size:
+          <Form.Control
             onChange={handleImageSize}
             style={{width: '75px', marginLeft: '15px'}}
             type="number"
+            as={'input'}
             id="number-input"
             placeholder="350"
           />
-        </label>
+        </Form.Label>
         <Button id={'imageUrl'}
                 className={'mr-2'}
                 variant='secondary'
@@ -71,7 +81,9 @@ const AssistImage = ({setSpinner}) => {
         >
           Generate Image
         </Button>
-    </form>
+      </Form>
+      <Spinner animation="border" role="status" hidden={!spinner}/>
+    </React.Fragment>
   )
 }
 

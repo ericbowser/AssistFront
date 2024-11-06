@@ -2,6 +2,7 @@
 module.exports = {
     dark: 'class',
     content: [
+      './src/*.svg',
         './src/**/*.js',
         './src/api/*.js',
         './src/*.js',
@@ -15,7 +16,6 @@ module.exports = {
                 turquoise: '#40e0d0',
             },
             backgroundImage: {
-                'custom-image': "url('../src/images/blob-scene.svg')",
             }
         },
     },

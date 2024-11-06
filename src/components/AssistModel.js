@@ -4,15 +4,17 @@ import {Model} from "../utils/constants";
 import Dropdown from "react-bootstrap/Dropdown";
 import Alert from "react-bootstrap/Alert";
 
-const AssistModel = () => {
-  const [askingAi, setAskingAi] = useState(Model.OpenAi);
+const AssistModel = ({setModel, model = Model.OpenAi}) => {
+  const [askingAi, setAskingAi] = useState(model);
   return (
-      <form className={'pt-4'}>
+      <form>
+        <label className={'text-white p-4'}>
+          Select a model to assist you:
+        </label>
         <SplitButton
-          className={'m-2 w-fit bg-blue-500 text-white'}
           key={askingAi || null}
           id={`dropdown-split-variants-${askingAi}`}
-          variant={'info'}
+          variant={'success'}
           title={askingAi || 'Select Model'}
         >
           {[Model.Gemini, Model.Claude, Model.OpenAi].map((model, index) => {
@@ -22,7 +24,10 @@ const AssistModel = () => {
                 key={`${index}${model}`}
                 eventKey={askingAi}
                 title={model}
-                onClick={() => setAskingAi(model)}>
+                onClick={() => {
+                  setAskingAi(model)
+                  setModel(model);
+                }}>
                 {model}
               </Dropdown.Item>)
           })}

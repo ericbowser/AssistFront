@@ -2,70 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    color: #e6f50a;
+    height: 100vh;
+    width: 100vw;
+}
+
 
 .button-style {
-    background-color: #4CAF50;
-    color: white;
-    height: auto;
-    width: auto;
-    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 35px;
+    width: 100px;
+    margin: 20px;
+    padding: 4px;
+    background-color: #0606d3;
+    color: rgba(248, 244, 10, 0.15);
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: #7b88b0;
+}
+
+.side-bar-left {
+    background-color: #011101;
+    height: 100vh;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: flex-start;
+    left: 0;
 }
 
 .input-container {
+    background-color: #0c0101;
+    color: #ffffff;
+    font-size: x-large;
+    position: absolute;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    width: calc(100% - 400px); /* Adjust width to account for sidebar */
-    margin-left: 200px; /* Align to the right of the sidebar */
-    margin-right: 200px;
-    height: auto;
-    position: absolute;
+    width: calc(100vw - 350px);
+    margin-left: 200px;
+    margin-right: 150px;
+    margin-bottom: 20px;
     bottom: 0;
 }
 
 .output-container {
-    display: flex;
-    color: black;
-    font-size: 12px;
-    flex-direction: column;
-    justify-content: space-between;
-    width: calc(100% - 400px); /* Adjust width to account for sidebar */
-    margin-left: 200px; /* Align to the right of the sidebar */
-    margin-right: 200px;
-    overflow-y: scroll;
-    height: calc(100vh - 300px);
-    position: absolute;
+    background-color: #775353;
+    color: white;
+    p {
+        color: #f65d06;
+    }
+    code {
+        color: #94ef97;
+        span {
+            color: #f6b6b6;
+        }
+
+    }
+    h1 {
+        color: #07560b;
+    }
+    h2 {
+        color: #0d277e;
+    }
+    h3 {
+        color: #fa0c0c;
+    }
     padding: 10px;
-    border: black 2px inset;
-    box-shadow: black 2px 2px 2px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    height: calc(100vh - 150px); /* Adjust height to fit within the viewport */
+    width: calc(100vw - 350px);
+    margin-left: 200px;
+    margin-right: 150px;
     top: 0;
+    overflow-y: auto;
 }
+
 .markdown-container {
-    padding: 20px;
-    background-color: #f9f9f9;
+    color: #ededf8;
+    padding: 4px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.markdown-container h1,
-.markdown-container h2,
-.markdown-container h3,
-.markdown-container h4,
-.markdown-container h5,
-.markdown-container h6 {
-    color: #333;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-.markdown-container p {
-    color: #555;
-    line-height: 1.6;
-    margin-bottom: 20px;
 }
 
 .markdown-container a {
-    color: #1e90ff;
+    color: #ffffff;
     text-decoration: none;
 }
 
@@ -82,70 +117,48 @@
 .markdown-container blockquote {
     margin: 20px 0;
     padding: 10px 20px;
-    background-color: #f1f1f1;
     border-left: 5px solid #ccc;
 }
 
 .markdown-container code {
-    background-color: #f4f4f4;
     padding: 2px 4px;
     border-radius: 4px;
     font-family: 'Courier New', Courier, monospace;
 }
 
 .markdown-container pre {
-    background-color: #f4f4f4;
     padding: 10px;
     border-radius: 8px;
-    overflow-x: auto;
 }
 
 .history {
 
 }
 
-.main {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100%;
-}
-
-.side-bar-left {
-    background-color: #282123;
-    height: 100vh;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    justify-content: space-between;
-    left: 0;
-}
 
 
 .side-bar-right {
-    background-color: #282123;
+    background-color: #011101;
     height: 100vh;
-    width: 200px;
+    width: 150px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-end;
     position: absolute;
     right: 0;
 }
 
 /* Custom Quill theme based on the snow theme */
 .ql-container {
-    padding: 5px;
     border: 2px inset black;
     width: 100%;
-    height: 300px;
+    height: 100%;
+    overflow-y: scroll;
     flex-grow: 1;
 }
 
 .ql-editor {
     min-height: 100px;
-    max-height: 500px;
-    overflow-y: auto;
+    max-height: 300px;
 }
 
