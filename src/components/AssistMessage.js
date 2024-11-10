@@ -25,9 +25,9 @@ const AssistMessage = (
   }, [question, spinner, history]);
 
 
-    function clear() {
-      setQuestion(null);
-    }
+  function clear() {
+    setQuestion(null);
+  }
 
   const setCurrentHistory = (response) => {
     setThread(response.thread);
@@ -98,25 +98,22 @@ const AssistMessage = (
           onClick={(e) => {
             handleSubmit(e);
           }}
-          >
-            Submit
-          </Button>
+        >
+          Submit
+        </Button>
         {model === Model.OpenAi && (
           <FormCheck // prettier-ignore
-                value={isChecked === true ? 'checked' : 'unchecked'}
-                type="switch"
-                id="custom-switch"
-                label={'Assistant'}
-                onChange={() => {
-                  setIsChecked(!isChecked);
-                }}
-
+            value={isChecked === true ? 'checked' : 'unchecked'}
+            type="switch"
+            id="custom-switch"
+            label={'Assistant'}
+            onChange={() => {
+              setIsChecked(!isChecked);
+            }}
           />
         )}
       </div>
-
       <textarea
-        className={'bg-black text-white h-full w-full'}
         rows={5}
         value={question || ''}
         onChange={(event) => setQuestion(event.target.value)}>

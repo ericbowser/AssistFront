@@ -3,14 +3,14 @@ import {SplitButton} from "react-bootstrap";
 import {Model} from "../utils/constants";
 import Dropdown from "react-bootstrap/Dropdown";
 import Alert from "react-bootstrap/Alert";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import Button from "react-bootstrap/Button";
+import AssistHistory from "./AssistHistory";
 
 const AssistModel = ({history, setModel, model = Model.OpenAi}) => {
   const [askingAi, setAskingAi] = useState(model);
   const [showHistory, setShowHistory] = useState(false);
   return (
-      <form>
+      <div>
         <label className={'text-white p-4'}>
           Select a model to assist you:
         </label>
@@ -48,40 +48,12 @@ const AssistModel = ({history, setModel, model = Model.OpenAi}) => {
           })
         )}
         {showHistory && (
-          <Offcanvas show={showHistory} onHide={() => setShowHistory(!showHistory)} className={'bg-black text-white'}>
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title>History</Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
-              {history && history.length > 0 && history.map((item, index) => {
-                return (
-                  <div key={`${item.question.substring(0, 10)}${index}`}>
-                    <Alert variant={'light'}>{item.question}</Alert>
-                    <Alert variant={'dark'}>{item.answer}</Alert>
-                  </div>
-                )
-              })}
-            </Offcanvas.Body>
-          </Offcanvas>
+          <AssistHistory
+            history={history}
+            showHistory={showHistory}>
+          </AssistHistory>
         )}
-     {/*   {history && history.length > 0 && (
-          <Offcanvas show={showHistory} onHide={() => setShowHistory(!showHistory)} className={'bg-black text-white'}>
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title>History</Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>
-              {history && history.length > 0 && history.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <p>{item.question}</p>
-                    <p>{item.answer}</p>
-                  </div>
-                )
-              })}
-            </Offcanvas.Body>
-          </Offcanvas>
-        )}*/}
-      </form>
+      </div>
   );
 };
 

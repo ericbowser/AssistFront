@@ -3,10 +3,8 @@ import AssistMessage from "./AssistMessage";
 import AssistModel from "./AssistModel";
 import {Model} from "../utils/constants";
 import Markdown from "react-markdown";
-import AssistHistory from "./AssistHistory";
 import remarkGfm from "remark-gfm";
 import {forEach} from "lodash";
-import Button from "react-bootstrap/Button";
 import AssistImage from "./AssistImage";
 
 const Assist = () => {
@@ -33,8 +31,7 @@ const Assist = () => {
 
   return (
     <React.Fragment>
-
-      <section className={'main'}>
+      <section className={'main '}>
         <section className={'output-container p-10'}>
           {current && (
             <Markdown
@@ -55,36 +52,21 @@ const Assist = () => {
             setThread={setThread}
           />
         </section>
-        {/*
-        <section className={'side-bar-right'}>
-
-        </section>
-*/}
         <section className={'side-bar-left'}>
           <AssistModel
             history={history}
             setModel={setModel}
             model={model}
           />
-
         </section>
         <section className={'side-bar-right'}>
           <AssistImage>
 
           </AssistImage>
         </section>
-          {/*     {history && history.length > 0 && (
-          <AssistHistory
-            showHistory={showHistory}
-            thread={thread}
-            history={history}/>
-        )
-        }*/}
-
-        </section>
-
+      </section>
     </React.Fragment>
-)
+  )
 };
 
 
