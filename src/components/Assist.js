@@ -5,83 +5,86 @@ import {Model} from "../utils/constants";
 import Markdown from "react-markdown";
 import AssistHistory from "./AssistHistory";
 import remarkGfm from "remark-gfm";
+import {forEach} from "lodash";
+import Button from "react-bootstrap/Button";
+import AssistImage from "./AssistImage";
 
 const Assist = () => {
-  /*
-    const [element, setElement] = useState(false);
-    const [code, setCode] = useState(null);
-  */
   const [thread, setThread] = useState(null);
-  const [history, setHistory] = useState(null);
-  const [current, setCurrent] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
   const [model, setModel] = useState(Model.OpenAi);
   const [language, setLanguage] = useState('HTML');
-
+  const [current, setCurrent] = useState(null);
 
   useEffect(() => {
-    if (history && history.length > 0) {
-      console.log("history length", history.length);
-      console.log("history currrent", history[0]);
-      history.forEach((item, index) => {
-        console.log(`item and ${index}`, item, index);
-      });
-    } else {
-      console.log("history is empty");
+  }, [thread, model, language, showHistory]);
+
+  useEffect(() => {
+    if (current) {
+      console.log("current response", current);
     }
-  }, [thread, history, model, language]);
-
-  useEffect(() => {
-  }, [current]);
+    if (history && history.length > 0) {
+      forEach(history, (item, index) => {
+        console.log(`history item ${index}: `, item, index);
+      });
+    }
+  }, [current, history]);
 
   return (
     <React.Fragment>
 
       <section className={'main'}>
-        <section className={'output-container'}>
+        <section className={'output-container p-10'}>
           {current && (
-              <Markdown
-                className={'markdown'}
-                language={language}
-                remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
-              >
-                {current}
-              </Markdown>
+            <Markdown
+              className={'markdown'}
+              language={language}
+              remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
+            >
+              {current}
+            </Markdown>
           )}
         </section>
         <section className={'input-container'}>
           <AssistMessage
-            setThread={setThread}
-            setHistory={setHistory}
+            model={model}
             history={history}
+            setHistory={setHistory}
             setCurrent={setCurrent}
+            setThread={setThread}
           />
         </section>
+        {/*
         <section className={'side-bar-right'}>
-       {/*   <Button variant={'outline-primary'}
-                  onClick={() =>
-                    setQuestion('Generate few JavaScript Snippets')}
-          >
-            A few JavaScript Snippets
-          </Button>
-          <Button variant={'outline-danger'} onClick={() => setQuestion('Generate few C# snippets')}>
-            A few C# Snippets
-          </Button>*/}
+
         </section>
+*/}
         <section className={'side-bar-left'}>
           <AssistModel
+            history={history}
             setModel={setModel}
             model={model}
           />
-          {history && history.length > 0 && (
-            <AssistHistory history={history}/>
-          )
-          }
+
+        </section>
+        <section className={'side-bar-right'}>
+          <AssistImage>
+
+          </AssistImage>
+        </section>
+          {/*     {history && history.length > 0 && (
+          <AssistHistory
+            showHistory={showHistory}
+            thread={thread}
+            history={history}/>
+        )
+        }*/}
+
         </section>
 
-      </section>
-
     </React.Fragment>
-  )
+)
 };
 
 

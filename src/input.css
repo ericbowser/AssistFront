@@ -26,45 +26,46 @@ nav {
 }
 
 .main {
-    display: flex;
-    flex-direction: column;
     position: relative;
-    width: 100vw;
     height: 100vh;
+    width: 100%;
     background-color: #7b88b0;
 }
 
 .side-bar-left {
-    background-color: #011101;
+    box-shadow: #e6f50a 0px 0px 10px;
     height: 100vh;
-    width: 200px;
-    display: flex;
-    flex-direction: column;
+    max-width: 200px;
     position: absolute;
-    justify-content: flex-start;
+    overflow-x: scroll;
     left: 0;
 }
 
+.side-bar-right {
+    background-color: #011101;
+    height: 100vh;
+    position: absolute;
+    max-width: 150px;
+    right: 0;
+}
+
 .input-container {
-    background-color: #0c0101;
+    background-color: #5b986c;
+    box-shadow: #e6f50a 0px 0px 10px;
     color: #ffffff;
     font-size: x-large;
     position: absolute;
     display: flex;
     flex-direction: column;
-    width: calc(100vw - 350px);
     margin-left: 200px;
     margin-right: 150px;
-    margin-bottom: 20px;
+    padding: 25px;
+    width: calc(100% - 350px);
+    height: auto;
     bottom: 0;
 }
 
 .output-container {
-    background-color: #775353;
-    color: white;
-    p {
-        color: #f65d06;
-    }
     code {
         color: #94ef97;
         span {
@@ -73,34 +74,40 @@ nav {
 
     }
     h1 {
-        color: #07560b;
+        color: #b3e3c9;
     }
     h2 {
-        color: #0d277e;
+        color: #073cec;
     }
     h3 {
-        color: #fa0c0c;
+        color: rgb(250, 168, 2);
+    }
+    strong {
+        color: #800000;
+    }
+    p {
+        color: #ffffff;
     }
     padding: 10px;
+    margin-bottom: 2px;
     display: flex;
     flex-direction: column;
     position: absolute;
-    height: calc(100vh - 150px); /* Adjust height to fit within the viewport */
-    width: calc(100vw - 350px);
-    margin-left: 200px;
-    margin-right: 150px;
-    top: 0;
+    height: calc(100vh - 220px); /* Adjust height to fit within the viewport */
+    width: calc(100% - 350px);
+    margin-left: 204px;
     overflow-y: auto;
+    top: 0;
 }
 
 .markdown-container {
-    color: #ededf8;
-    padding: 4px;
+    height: 150px;
+    padding: 15px;
     border-radius: 8px;
 }
 
 .markdown-container a {
-    color: #ffffff;
+    padding: 5px;
     text-decoration: none;
 }
 
@@ -137,28 +144,15 @@ nav {
 
 
 
-.side-bar-right {
-    background-color: #011101;
-    height: 100vh;
-    width: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    position: absolute;
-    right: 0;
-}
 
 /* Custom Quill theme based on the snow theme */
 .ql-container {
+    padding: 5px;
     border: 2px inset black;
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    flex-grow: 1;
 }
 
 .ql-editor {
-    min-height: 100px;
+    min-height: 150px;
     max-height: 300px;
 }
 

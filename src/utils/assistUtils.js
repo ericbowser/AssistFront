@@ -15,7 +15,7 @@ export function decideUrl(askingAi, assistant) {
         case Model.Claude:
             return process.env.CLAUDE_ASSIST_URL;
         case Model.OpenAi:
-            const assistUrl = assistant === 'checked'
+            const assistUrl = assistant === true
                 ? process.env.OPENAI_ASSIST_URL
                 : process.env.OPENAI_CHAT_URL;
             console.log('url', assistUrl);
