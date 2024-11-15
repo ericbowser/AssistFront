@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SplitButton} from "react-bootstrap";
 import {Model} from "../utils/constants";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -9,6 +9,10 @@ import AssistHistory from "./AssistHistory";
 const AssistModel = ({history, setModel, model = Model.OpenAi}) => {
   const [askingAi, setAskingAi] = useState(model);
   const [showHistory, setShowHistory] = useState(false);
+
+  useEffect(() => {
+  }, showHistory)
+
   return (
       <div>
         <label className={'text-white p-4'}>
@@ -50,7 +54,8 @@ const AssistModel = ({history, setModel, model = Model.OpenAi}) => {
         {showHistory && (
           <AssistHistory
             history={history}
-            showHistory={showHistory}>
+            showHistory={showHistory}
+            setShowHistory={setShowHistory}>
           </AssistHistory>
         )}
       </div>

@@ -61,7 +61,7 @@ const AssistImage = () => {
                    className={'my-24'}
             />}
         </Element>
-        <Form.Label title={'ImageSize'} htmlFor={'ImageSize'} column={0}>Image Size:
+        <Form.Label title={'ImageSize'}  column={0}>Image Size:
           <Form.Control
             onChange={handleImageSize}
             style={{width: '75px', marginLeft: '15px'}}

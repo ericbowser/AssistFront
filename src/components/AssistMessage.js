@@ -63,13 +63,14 @@ const AssistMessage = (
     } catch
       (err) {
       console.log(err.message)
+      setSpinner(false);
       setCurrent(err.message);
     }
   };
 
   return (
     <React.Fragment>
-      <Spinner variant={'primary'} animation={'grow'} hidden={!spinner}/>
+      <Spinner variant={'danger'} animation={'grow'} hidden={!spinner}/>
       <div>
 
         <Button
@@ -101,17 +102,16 @@ const AssistMessage = (
         >
           Submit
         </Button>
-        {model === Model.OpenAi && (
-          <FormCheck // prettier-ignore
-            value={isChecked === true ? 'checked' : 'unchecked'}
-            type="switch"
-            id="custom-switch"
-            label={'Assistant'}
-            onChange={() => {
-              setIsChecked(!isChecked);
-            }}
-          />
-        )}
+        <FormCheck // prettier-ignore
+          value={isChecked === true ? 'checked' : 'unchecked'}
+          disabled={model !== Model.OpenAi}
+          type="switch"
+          id="custom-switch"
+          label={'Assistant'}
+          onChange={() => {
+            setIsChecked(!isChecked);
+          }}
+        />
       </div>
       <textarea
         rows={5}

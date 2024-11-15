@@ -718,10 +718,6 @@ video {
   overflow-x: auto;
 }
 
-.text-wrap {
-  text-wrap: wrap;
-}
-
 .rounded-md {
   border-radius: 0.375rem;
 }
@@ -882,10 +878,10 @@ nav {
   flex-direction: column;
   height: 100vh;
   width: auto;
-  background-color: #7b88b0;
+  background-color: rgb(47, 129, 243);
   .input-container {
-    background-color: #39d063;
-    box-shadow: #fd0303 0px 0px 10px;
+    background-color: rgba(72, 239, 119, 0.64);
+    box-shadow: #32e1db 0px 0px 10px;
     color: #ffffff;
     font-size: x-large;
     position: absolute;
@@ -896,7 +892,11 @@ nav {
     width: calc(100% - 350px);
     bottom: 0;
     textarea {
-      max-height: 200px;
+      margin-top: 5px;
+      box-shadow: #5a5b45 0 5px 10px 3px;
+      border-radius: 5px;
+      border: #e6f50a 2px outset;
+      max-height: 250px;
       font-size: medium;
       background-color: black;
       color: white;
@@ -907,37 +907,49 @@ nav {
     }
   }
   .output-container {
-    background-color: black;
-    box-shadow: #07c1fc 0px 0px 10px;
+    background-color: #070706;
+    box-shadow: #111111 1px 1px 1px;
+    border: 3px outset #0c0101;
     code {
-      font-weight: bold;
-      color: #ffffff;
+      font-weight: bolder;
+      font-size: large;
+      font-style: "Burtons Nightmare", sans-serif, cursive, monospace;
+      background: linear-gradient(to right, red, orange, white, green, deeppink, lightseagreen, violet);
+      -webkit-background-clip: text;
+      color: transparent;
+      line-height: 2.0pt;
       comment {
-        color: #7b88b0;
+        color: #97999f;
       }
     }
     h1 {
       font-weight: bolder;
-      color: #07c1fc;
+      color: rgb(62, 198, 241);
     }
     h2 {
       font-weight: bolder;
-      color: #9ab1fd;
+      color: #b299ff;
     }
     h3 {
       font-weight: bolder;
-      color: rgb(252, 117, 5);
+      color: rgb(255, 176, 5);
     }
     strong {
-      color: #fa5353;
+      color: rgba(9, 227, 238, 0.97);
     }
     p {
-      color: #fce705;
+      color: rgb(252, 252, 252);
+    }
+    ul {
+      color: rgb(103, 250, 106);
+    }
+    ol {
+      color: rgb(13, 252, 5);
     }
     padding: 15px;
-    margin-bottom: 2px;
     position: absolute;
-    height: calc(100vh - 300px);
+    padding-bottom: 10px;
+    height: calc(100vh - 350px);
     /* Adjust height to fit within the viewport */
     width: calc(100% - 350px);
     margin-left: 200px;
@@ -952,7 +964,7 @@ nav {
   font-weight: bold;
   padding: 5px;
   height: 100vh;
-  max-width: 204px;
+  max-width: 200px;
   position: absolute;
   overflow-x: auto;
   left: 0;

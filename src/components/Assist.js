@@ -10,13 +10,12 @@ import AssistImage from "./AssistImage";
 const Assist = () => {
   const [thread, setThread] = useState(null);
   const [history, setHistory] = useState([]);
-  const [showHistory, setShowHistory] = useState(false);
   const [model, setModel] = useState(Model.OpenAi);
   const [language, setLanguage] = useState('HTML');
   const [current, setCurrent] = useState(null);
 
   useEffect(() => {
-  }, [thread, model, language, showHistory]);
+  }, [thread, model, language]);
 
   useEffect(() => {
     if (current) {

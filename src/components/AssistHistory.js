@@ -6,17 +6,13 @@ import {
   far
 } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-const AssistHistory = ({history = [], showHistory, language}) => {
-  const [show, setShow] = useState(showHistory);
-  const handleClose = () => setShow(false);
+const AssistHistory = ({history = [], showHistory, setShowHistory, language}) => {
+  const handleClose = () => setShowHistory(!showHistory);
   const handleShow = () => setShow(true)
-
-  useEffect(() => {
-  }, [show]);
 
   return (
     <React.Fragment>
-      <Offcanvas show={show} onHide={handleClose} className={'bg-black text-white'}>
+      <Offcanvas show={showHistory} onHide={handleClose} className={'bg-black text-white'}>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>History</Offcanvas.Title>
         </Offcanvas.Header>
