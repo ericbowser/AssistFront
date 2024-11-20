@@ -15,8 +15,6 @@ module.exports = {
                 green: '#008000',
                 turquoise: '#40e0d0',
             },
-            backgroundImage: {
-            }
         },
     },
     plugins: [

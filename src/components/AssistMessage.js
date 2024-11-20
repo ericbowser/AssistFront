@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {decideUrl} from "../utils/assistUtils";
 import {post} from "../api/httpApi";
 import 'react-quill/dist/quill.snow.css';
@@ -6,10 +6,12 @@ import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import {Model} from "../utils/constants";
 import {FormCheck} from "react-bootstrap";
+import AssistMarkdown from "./AssistMarkdown";
 
 
 const AssistMessage = (
   {
+    selectedChat,
     model = Model.OpenAi,
     setThread,
     setCurrent,
@@ -24,6 +26,9 @@ const AssistMessage = (
   useEffect(() => {
   }, [question, spinner, history]);
 
+  useMemo(() => {
+
+  }, [selectedChat]);
 
   function clear() {
     setQuestion(null);
@@ -68,29 +73,51 @@ const AssistMessage = (
     }
   };
 
+  function calculateValue() {
+    if (question === null && selectedChat?.question) {
+      setQuestion(selectedChat.question);
+    } else {
+      setQuestion(question);
+    }
+  }
+
   return (
     <React.Fragment>
       <Spinner variant={'danger'} animation={'grow'} hidden={!spinner}/>
-      <div>
+
+      <textarea
+        rows={5}
+        value={question || ''}
+        onChange={(event) => setQuestion(event.target.value)}>
+          {question}
+      </textarea>
+   {/*   {history && history.length > 0 && (
+        <AssistMarkdown ></AssistMarkdown>
+      )
+      }*/}
+      <div className={'flex flex-col text-white'}>
 
         <Button
+          className={'p-2 m-2'}
           onClick={() => clear()}>
           Clear Question
         </Button>
         <Button
-          variant={'outline-dark'}
+          className={'p-2 m-2'}
+          variant={'outline-light'}
           onClick={() =>
             setQuestion('Generate few JavaScript Snippets')}
         >
           A few JavaScript Snippets
         </Button>
         <Button
-          variant={'outline-dark'}
+          className={'p-2 m-2'}
+          variant={'outline-light'}
           onClick={() => setQuestion('Generate few C# snippets')}>
           A few C# Snippets
         </Button>
         <Button
-          className={'w-25 text-center align-content-center'}
+          className={'p-2 m-2'}
           id={'submitquestion'}
           disabled={question === null || question === ''}
           type='submit'
@@ -102,26 +129,25 @@ const AssistMessage = (
         >
           Submit
         </Button>
-        <FormCheck // prettier-ignore
-          value={isChecked === true ? 'checked' : 'unchecked'}
-          disabled={model !== Model.OpenAi}
-          type="switch"
-          id="custom-switch"
-          label={'Assistant'}
-          onChange={() => {
-            setIsChecked(!isChecked);
-          }}
-        />
+        <div className={'m-2 p-2 align-content-center'}>
+          <FormCheck // prettier-ignore
+            value={isChecked === true ? 'checked' : 'unchecked'}
+            disabled={model !== Model.OpenAi}
+            type="switch"
+            id="custom-switch"
+            label={'Assistant'}
+            onChange={() => {
+              setIsChecked(!isChecked);
+            }}
+          />
+
+        </div>
       </div>
-      <textarea
-        rows={5}
-        value={question || ''}
-        onChange={(event) => setQuestion(event.target.value)}>
-          {question}
-      </textarea>
+
 
     </React.Fragment>
-  );
+  )
+    ;
 }
 
 export default AssistMessage;

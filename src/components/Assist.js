@@ -13,9 +13,10 @@ const Assist = () => {
   const [model, setModel] = useState(Model.OpenAi);
   const [language, setLanguage] = useState('HTML');
   const [current, setCurrent] = useState(null);
+  const [selectedChat, setSelectedChat] = useState({});
 
   useEffect(() => {
-  }, [thread, model, language]);
+  }, [thread, model, language, selectedChat]);
 
   useEffect(() => {
     if (current) {
@@ -31,7 +32,7 @@ const Assist = () => {
   return (
     <React.Fragment>
       <section className={'main '}>
-        <section className={'output-container p-10'}>
+        <section className={'output-container'}>
           {current && (
             <Markdown
               className={'markdown'}
@@ -48,11 +49,14 @@ const Assist = () => {
             history={history}
             setHistory={setHistory}
             setCurrent={setCurrent}
+            selectedChat={selectedChat}
             setThread={setThread}
           />
         </section>
         <section className={'side-bar-left'}>
           <AssistModel
+            setSelectedChat={setSelectedChat}
+            selectedChat={selectedChat}
             history={history}
             setModel={setModel}
             model={model}

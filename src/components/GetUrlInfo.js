@@ -2,11 +2,10 @@ import React, {useEffect, useState} from "react";
 import {postUrlData} from "../api/httpApi";
 import {isValidUrl} from "../utils/assistUtils";
 import background from './circle-scatter-haikei.svg'
-
-console.log(process.env.GETFILEINFO_URL);
+const getFileInfoUrl = 'http://localhost:32628/api/getUrlInfo';
 
 function GetUrlInfo() {
-    const [urls, setUrls] = useState([]);
+    const [urls, setUrls] = useState(null);
     const [url, setUrl] = useState(null);
     const [content, setContent] = useState(null);
 
@@ -28,7 +27,7 @@ function GetUrlInfo() {
         try {
             if (isValidUrl(url)) {
                 setIsLoading(true);
-                const response = await postUrlData(process.env.GETFILEINFO_URL, {url});
+                const response = await postUrlData(getFileInfoUrl, {url});
                 if (response.status === 200) {
                     // const validUrls = parseUrls(links);
                     setUrls(response.urls);
@@ -63,7 +62,7 @@ function GetUrlInfo() {
                     </label>
                     <input type="text"
                            className={'text-black '}
-                           value={url}
+                           value={url || ''}
                            size={50}
                            placeholder={'Url'}
                            onChange={e => setUrl(e.target.value)}/>

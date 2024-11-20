@@ -7,11 +7,11 @@ FROM node:${NODE_VERSION}-alpine as base
 
 # Set working directory for all build stages.
 WORKDIR ./app
-COPY . ./app
+COPY . .
 
 
 # Install dependencies including webpack-cli.
-RUN npm install -D webpack-cli webpack dotenv
+RUN npm install -D webpack-cli webpack dotenv dotencr
 # Copy the production dependencies from the base stage and also
 
 CMD ["npm", "run", "build"]

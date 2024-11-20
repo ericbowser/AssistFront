@@ -702,6 +702,10 @@ video {
   flex-grow: 1;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -856,65 +860,59 @@ nav {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  color: #e6f50a;
+  color: #c9ce86;
   height: 100vh;
   width: 100vw;
-}
-
-.button-style {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 35px;
-  width: 100px;
-  margin: 20px;
-  padding: 4px;
-  background-color: #0606d3;
-  color: rgba(248, 244, 10, 0.15);
 }
 
 .main {
   display: flex;
   flex-direction: column;
+  background-color: #0c0101;
   height: 100vh;
-  width: auto;
-  background-color: rgb(47, 129, 243);
+  width: 100%;
+  opacity: 80%;
   .input-container {
-    background-color: rgba(72, 239, 119, 0.64);
-    box-shadow: #32e1db 0px 0px 10px;
-    color: #ffffff;
-    font-size: x-large;
+    display: flex;
+    flex-direction: row;
     position: absolute;
-    margin-left: 200px;
-    margin-right: 150px;
-    padding: 10px;
-    max-height: 500px;
-    width: calc(100% - 350px);
+    margin-left: 600px;
+    margin-right: 250px;
+    height: 300px;
+    max-height: 400px;
+    width: calc(100% - 750px);
+    overflow-y: scroll;
     bottom: 0;
+    left: 0;
     textarea {
-      margin-top: 5px;
-      box-shadow: #5a5b45 0 5px 10px 3px;
-      border-radius: 5px;
-      border: #e6f50a 2px outset;
-      max-height: 250px;
-      font-size: medium;
-      background-color: black;
-      color: white;
-      width: 100%;
-      height: 150px;
+      opacity: 80%;
+      box-shadow: #0c0101 0px 10px 10px;
+      font-weight: bold;
+      font-style: normal;
+      font-family: "Times New Roman", Times, serif;
+      font-size: x-large;
+      width: 60%;
+      height: auto;
       cursor: pointer;
       padding: 15px;
     }
   }
   .output-container {
-    background-color: #070706;
-    box-shadow: #111111 1px 1px 1px;
-    border: 3px outset #0c0101;
+    box-shadow: #faf6f6 1px 1px 1px;
+    background-color: #f2f8f2;
+    opacity: 70%;
+    padding: 3rem;
+    position: absolute;
+    height: calc(100vh - 305px);
+    /* Adjust height to fit within the viewport */
+    width: calc(100% - 350px);
+    margin-left: 200px;
+    overflow-y: auto;
+    top: 0;
     code {
-      font-weight: bolder;
-      font-size: large;
-      font-style: "Burtons Nightmare", sans-serif, cursive, monospace;
-      background: linear-gradient(to right, red, orange, white, green, deeppink, lightseagreen, violet);
+      font-weight: bold;
+      font-size: medium;
+      background: linear-gradient(to top, saddlebrown, rebeccapurple, burlywood);
       -webkit-background-clip: text;
       color: transparent;
       line-height: 2.0pt;
@@ -932,34 +930,30 @@ nav {
     }
     h3 {
       font-weight: bolder;
-      color: rgb(255, 176, 5);
+      font-style: italic;
+      color: rgb(105, 73, 4);
     }
     strong {
-      color: rgba(9, 227, 238, 0.97);
+      color: rgb(12, 1, 1);
     }
     p {
-      color: rgb(252, 252, 252);
+      color: rgb(1, 119, 7);
+      font-size: xx-large;
     }
     ul {
-      color: rgb(103, 250, 106);
+      font-style: italic;
+      font-weight: bolder;
+      color: rgb(15, 16, 15);
     }
     ol {
-      color: rgb(13, 252, 5);
+      color: rgb(14, 14, 14);
     }
-    padding: 15px;
-    position: absolute;
-    padding-bottom: 10px;
-    height: calc(100vh - 350px);
-    /* Adjust height to fit within the viewport */
-    width: calc(100% - 350px);
-    margin-left: 200px;
-    overflow-y: auto;
-    top: 0;
   }
 }
 
 .side-bar-left {
-  box-shadow: #e6f50a 0px 0px 10px;
+  box-shadow: #011101 0px 0px 10px;
+  background-color: #9ca3af;
   text-align: center;
   font-weight: bold;
   padding: 5px;
@@ -971,10 +965,9 @@ nav {
 }
 
 .side-bar-right {
-  background-color: #011101;
-  box-shadow: #fa5353 10px 0px 10px 10px;
+  background-color: #9ca3af;
+  box-shadow: #0c0101 10px 0px 10px 10px;
   padding: 15px;
-  opacity: 40%;
   height: 100vh;
   position: absolute;
   max-width: 150px;
@@ -982,12 +975,14 @@ nav {
 }
 
 .markdown-container {
+  box-shadow:  #0c0101 0px 0px 10px;
   height: 150px;
   padding: 15px;
   border-radius: 8px;
 }
 
 .markdown-container a {
+  box-shadow: #0c0101 0px 0px 10px;
   padding: 5px;
   text-decoration: none;
 }
@@ -1005,7 +1000,7 @@ nav {
 .markdown-container blockquote {
   margin: 20px 0;
   padding: 10px 20px;
-  border-left: 5px solid #23b926;
+  border-left: 5px solid #0c0c0c;
 }
 
 .markdown-container code {
@@ -1022,11 +1017,13 @@ nav {
 /* Custom Quill theme based on the snow theme */
 
 .ql-container {
+  box-shadow: #0c0101 0px 0px 10px;
   padding: 5px;
   border: 2px inset black;
 }
 
 .ql-editor {
+  box-shadow: #0c0101 0px 0px 10px;
   min-height: 150px;
   max-height: 300px;
 }

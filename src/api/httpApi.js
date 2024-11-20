@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 async function get(url, params = {}) {
+    console.log('url', url);
     try {
         const response = await axios(url, params);
         console.log('axios response: ', response);
