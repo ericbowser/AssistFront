@@ -14,50 +14,51 @@ const AssistModel = ({history, setSelectedChat, selectedChat, setModel, model = 
   }, [showHistory, askingAi, selectedChat]);
 
   return (
-    <div>
+    <div >
       <label className={'text-white p-4'}>
         Select a model to assist you:
       </label>
-      <SplitButton
-        key={askingAi || null}
-        id={`dropdown-split-variants-${askingAi}`}
-        variant={'success'}
-        title={askingAi || 'Select Model'}
-      >
-        {[Model.Gemini, Model.Claude, Model.OpenAi].map((model, index) => {
-          console.log(model);
-          return (
-            <Dropdown.Item
-              key={`${index}${model}`}
-              eventKey={askingAi}
-              title={model}
-              onClick={() => {
-                setAskingAi(model)
-                setModel(model);
-              }}>
-              {model}
-            </Dropdown.Item>)
-        })}
-      </SplitButton>
-      <Button onClick={() => setShowHistory(!showHistory)}>
-        Show History
-      </Button>
-      {history && history.length > 0 && (
-        history.map((item, index) => {
-          return (
-            <div key={`${item.question.substring(0, 10)}${index}`}>
-              <Alert className={'cursor-pointer'}
-                     variant={'light'}
-                     onClick={() => {
-                       console.log('selected chat: ', item);
-                       setSelectedChat(item.question);
-                     }}>
-                {item.question}
-              </Alert>
-            </div>
-          )
-        })
-      )}
+        <SplitButton
+          className={'m-1'}
+          key={askingAi || null}
+          id={`dropdown-split-variants-${askingAi}`}
+          variant={'success'}
+          title={askingAi || 'Select Model'}
+        >
+          {[Model.Gemini, Model.Claude, Model.OpenAi].map((model, index) => {
+            console.log(model);
+            return (
+              <Dropdown.Item
+                key={`${index}${model}`}
+                eventKey={askingAi}
+                title={model}
+                onClick={() => {
+                  setAskingAi(model)
+                  setModel(model);
+                }}>
+                {model}
+              </Dropdown.Item>)
+          })}
+        </SplitButton>
+        <Button onClick={() => setShowHistory(!showHistory)}>
+          Show History
+        </Button>
+        {history && history.length > 0 && (
+          history.map((item, index) => {
+            return (
+              <div className={'mt-5'} key={`${item.question.substring(0, 10)}${index}`}>
+                <Alert className={'cursor-pointer'}
+                       variant={'light'}
+                       onClick={() => {
+                         console.log('selected chat: ', item);
+                         setSelectedChat(item.question);
+                       }}>
+                  {item.question}
+                </Alert>
+              </div>
+            )
+          })
+        )}
       {showHistory && (
         <AssistHistory
           history={history}
