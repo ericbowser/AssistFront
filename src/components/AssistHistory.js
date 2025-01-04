@@ -8,7 +8,6 @@ import {
 
 const AssistHistory = ({history = [], showHistory, setShowHistory, language}) => {
   const handleClose = () => setShowHistory(!showHistory);
-  const handleShow = () => setShow(true)
 
   return (
     <React.Fragment>
@@ -17,7 +16,7 @@ const AssistHistory = ({history = [], showHistory, setShowHistory, language}) =>
           <Offcanvas.Title>History</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          {history && history.length > 0 &&
+          {history.length > 0 &&
             (
               history.map((item, index) => {
                 return (

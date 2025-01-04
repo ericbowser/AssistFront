@@ -50,7 +50,6 @@ const Assist = () => {
             setHistory={setHistory}
             setCurrent={setCurrent}
             selectedChat={selectedChat}
-            setThread={setThread}
           />
         </section>
         <section className={'side-bar-left'}>

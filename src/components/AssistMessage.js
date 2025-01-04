@@ -6,14 +6,14 @@ import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import {Model} from "../utils/constants";
 import {FormCheck} from "react-bootstrap";
-import AssistMarkdown from "./AssistMarkdown";
+import Alert from "react-bootstrap/Alert";
 
 
 const AssistMessage = (
   {
     selectedChat,
     model = Model.OpenAi,
-    setThread,
+    // setThread,
     setCurrent,
     history = [],
     setHistory,
@@ -22,9 +22,10 @@ const AssistMessage = (
   const [isChecked, setIsChecked] = useState(false);
   const [spinner, setSpinner] = useState(false);
   const [question, setQuestion] = useState(null);
+  const [thread, setThread] = useState(null);
 
   useEffect(() => {
-  }, [question, spinner, history]);
+  }, [question, spinner, history, thread]);
 
   useMemo(() => {
 
@@ -52,6 +53,7 @@ const AssistMessage = (
         const body = {
           content: {
             question: question,
+            history: [...history]
           }
         };
         setSpinner(true);
@@ -91,7 +93,7 @@ const AssistMessage = (
         onChange={(event) => setQuestion(event.target.value)}>
           {question}
       </textarea>
-   {/*   {history && history.length > 0 && (
+      {/*   {history && history.length > 0 && (
         <AssistMarkdown ></AssistMarkdown>
       )
       }*/}
@@ -143,6 +145,16 @@ const AssistMessage = (
 
         </div>
       </div>
+
+      {thread && thread.length > 0 && (
+        <Alert
+          className={'m-2 p-2'}
+          variant={'info'}>
+          <div className={'p-2 bg-info'}>
+            <strong>Thread: </strong> {thread}
+          </div>
+        </Alert>)
+      }
 
 
     </React.Fragment>

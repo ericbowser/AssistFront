@@ -8,6 +8,8 @@ import {
 import Assist from './components/Assist';
 import '../src/output.css';
 import UrlData from "./components/GetUrlInfo";
+import Background from "./components/Background";
+import GetUrlInfo from "./components/GetUrlInfo";
 
 const router = createBrowserRouter([
     {
@@ -21,9 +23,9 @@ const router = createBrowserRouter([
     {
         path: '/getUrlInfo',
         element: (
-            <div>
-                <UrlData/>
-            </div>
+          <div>
+            <GetUrlInfo/>
+          </div>
         )
     },
     {

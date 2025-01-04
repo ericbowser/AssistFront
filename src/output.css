@@ -758,6 +758,10 @@ video {
   background-color: rgb(55 65 81 / var(--tw-bg-opacity));
 }
 
+.bg-back {
+  background-image: url('/src/assets/circle-scatter-haikei.svg');
+}
+
 .bg-cover {
   background-size: cover;
 }

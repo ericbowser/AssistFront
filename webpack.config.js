@@ -24,7 +24,8 @@ module.exports = {
         historyApiFallback: true,
         open: true,
         port: port,
-        host: process.env.HOST
+        host: process.env.HOST,
+        hot: true,
     },
     mode: environment,
     resolve: {
@@ -93,6 +94,7 @@ module.exports = {
                analyzerHost: '127.0.0.1',
                analyzerPort: 8888  // Use a different port for each instance
            })*/
+
     ],
     performance:
         {

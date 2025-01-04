@@ -6,7 +6,8 @@ module.exports = {
         './src/**/*.js',
         './src/api/*.js',
         './src/*.js',
-        './src/components/*.js'
+        './src/components/*.js',
+      './src/assets/*.svg'
     ],
     theme: {
         extend: {
@@ -15,6 +16,9 @@ module.exports = {
                 green: '#008000',
                 turquoise: '#40e0d0',
             },
+          backgroundImage: ({
+            'back': "url('/src/assets/circle-scatter-haikei.svg')",
+          })
         },
     },
     plugins: [

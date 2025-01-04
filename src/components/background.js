@@ -1,10 +1,10 @@
-import {ReactComponent as Bird} from './circle-scatter-haikei.svg';
+import background from '../assets/circle-scatter-haikei.svg';
 import React from "react";
 
-const Background = () => {
+const Background = ({children}) => {
   return (
-    <div className={'w-screen h-screen'}>
-      <Bird />
+    <div style={{backgroundImage: background}} className={'w-screen h-screen bg-cover bg-back'}>
+      {children}
     </div>
   )
 }
