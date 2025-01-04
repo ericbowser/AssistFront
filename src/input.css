@@ -20,6 +20,7 @@ nav {
     flex-direction: column;
 
     .input-container {
+        color: #0ef61a;
         background-color: #0c0101;
         box-shadow: #0ef61a 0px 0px 8px;
         display: flex;
@@ -52,8 +53,8 @@ nav {
     }
 
     .output-container {
-        box-shadow: #faf6f6 1px 1px 1px;
-        background-color: #000000;
+        box-shadow: #ffffff 1px 1px 1px;
+        background-color: #0c0101;
         opacity: 87%;
         padding: 3rem;
         position: absolute;
@@ -66,13 +67,13 @@ nav {
         code {
             font-weight: bold;
             font-size: medium;
-            background: linear-gradient(to right, white, aquamarine, purple);
+            background: linear-gradient(to right, #e62525, aquamarine, purple);
             -webkit-background-clip: text;
             color: transparent;
             line-height: 2.0pt;
 
             comment {
-                color: #174ae3;
+                color: #9af49e;
             }
 
         }
@@ -93,24 +94,24 @@ nav {
         }
 
         strong {
-            color: rgb(255, 255, 255);
+            color: rgb(106, 106, 220);
             font-size: large;
         }
 
         p {
             opacity: 69%;
-            color: rgb(232, 9, 9);
+            color: rgb(255, 255, 255);
             font-size: x-large;
         }
 
         ul {
             font-style: italic;
             font-weight: bolder;
-            color: rgb(16, 234, 16);
+            color: rgb(139, 236, 139);
         }
 
         ol {
-            color: rgb(145, 9, 199);
+            color: rgb(225, 185, 241);
         }
 
     }

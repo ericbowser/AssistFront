@@ -1,4 +1,4 @@
-﻿import React, {useEffect, useState} from 'react';
+﻿import React, {useEffect, useRef, useState} from 'react';
 import AssistMessage from "./AssistMessage";
 import AssistModel from "./AssistModel";
 import {Model} from "../utils/constants";
@@ -6,6 +6,7 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {forEach} from "lodash";
 import AssistImage from "./AssistImage";
+import Button from "react-bootstrap/Button";
 
 const Assist = () => {
   const [thread, setThread] = useState(null);
@@ -15,6 +16,7 @@ const Assist = () => {
   const [current, setCurrent] = useState(null);
   const [selectedChat, setSelectedChat] = useState({});
 
+  const textAreaRef = useRef('MarkDown');
   useEffect(() => {
   }, [thread, model, language, selectedChat]);
 
@@ -28,12 +30,22 @@ const Assist = () => {
       });
     }
   }, [current, history]);
+  const CopyToClipboard = () => {
 
+
+    navigator.clipboard.writeText(current).then(() => {
+      console.log('Text copied to clipboard');
+    });
+  }
   return (
     <React.Fragment>
       <section className={'main '}>
         <section className={'output-container'}>
           {current && (
+            <>
+            <Button onClick={CopyToClipboard}>
+              Copy to Clipboard
+            </Button>
             <Markdown
               className={'markdown'}
               language={language}
@@ -41,6 +53,7 @@ const Assist = () => {
             >
               {current}
             </Markdown>
+            </>
           )}
         </section>
         <section className={'input-container'}>

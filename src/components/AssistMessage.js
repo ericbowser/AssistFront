@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import {decideUrl} from "../utils/assistUtils";
 import {post} from "../api/httpApi";
 import 'react-quill/dist/quill.snow.css';
@@ -83,6 +83,7 @@ const AssistMessage = (
     }
   }
 
+
   return (
     <React.Fragment>
       <Spinner variant={'danger'} animation={'grow'} hidden={!spinner}/>
@@ -145,6 +146,7 @@ const AssistMessage = (
 
         </div>
       </div>
+
 
       {thread && thread.length > 0 && (
         <Alert
