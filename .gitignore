@@ -5,7 +5,14 @@ build/
 env/
 dist/
 
+.vscode/
+.src/output.css
+
 .env*
 .flaskenv*
 !.env.project
 !.env.vault.codiumai
+!.env.vault
+
+.codiumai
+.codium

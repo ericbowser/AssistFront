@@ -7,20 +7,31 @@ import {
 } from 'react-router-dom';
 import Assist from './components/Assist';
 import '../src/output.css';
+import UrlData from "./components/GetUrlInfo";
+import Background from "./components/Background";
+import GetUrlInfo from "./components/GetUrlInfo";
 
 const router = createBrowserRouter([
     {
         path: '/askAssist',
         element: (
-          <div className={'container-sm bg-custom-image h-screen w-full'}>
+          <div>
               <Assist/>
+          </div>
+        )
+    },
+    {
+        path: '/getUrlInfo',
+        element: (
+          <div>
+            <GetUrlInfo/>
           </div>
         )
     },
     {
         path: '/',
         element: (
-          <div className={'bg-body-tertiary'}>
+          <div>
               <App/>
           </div>
         )

@@ -2,7 +2,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const dotenv = require('dotenv').config();
-console.log(dotenv);
 
 console.log('Node env: ', dotenv.parsed.NODE_ENV)
 console.log('Hosted port: ', dotenv.parsed.PORT)
@@ -25,7 +24,8 @@ module.exports = {
         historyApiFallback: true,
         open: true,
         port: port,
-        host: process.env.HOST
+        host: process.env.HOST,
+        hot: true,
     },
     mode: environment,
     resolve: {
@@ -76,17 +76,25 @@ module.exports = {
                 test: /\.txt$/,
                 use:
                     'raw-loader'
+            },
+            {
+                test: /\.svg$/,
+                use:  ['@svgr/webpack'],
+                issuer: {
+                    and: [ '/\\.(js|ts|jsx|tsx)x?$/' ]
+                }
             }
         ]
     },
     plugins: [
         new HtmlWebpackPlugin({template: "./public/index.html"}),
-        new Dotenv({path: '.env', systemvars: true})
+        new Dotenv(path.resolve(__dirname, ".env")),
         /*   new BundleAnalyzerPlugin({
                analyzerMode: 'server',
                analyzerHost: '127.0.0.1',
                analyzerPort: 8888  // Use a different port for each instance
            })*/
+
     ],
     performance:
         {

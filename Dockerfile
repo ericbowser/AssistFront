@@ -1,37 +1,27 @@
 
-# Use an official Node runtime as the base image
-FROM node:16
+ARG NODE_VERSION=20.17.0
 
-# Set the working directory in the container
-WORKDIR /app
+################################################################################
+# Use node image for base image for all stages.
+FROM node:${NODE_VERSION}-alpine as base
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
+# Set working directory for all build stages.
+WORKDIR ./app
 COPY . .
 
-RUN npx tailwindcss build
 
-# ENV ENV_FILE=.env
-# Set a default port (can be overridden when running the container)
-#ENV PORT=32635
-#ENV NODE_ENV=production
-#ENV HOST=127.0.0.1
-#ENV ASSIST_URL=http://localhost:32635
-#ENV GEMINI_ASSIST_URL=http://localhost:32636/askGemini
-#ENV OPENAI_ASSIST_URL=http://localhost:32636/askAssist
-#ENV CLAUDE_ASSIST_URL=http://localhost:32636/askClaude
-#ENV OPENAI_API_IMAGE=https://api.openai.com/v2/images/generations
-#
-# Build the application (including TailwindCSS processing)
-RUN npm run build
+# Install dependencies including webpack-cli.
+RUN npm install -D webpack-cli webpack dotenv dotencr
+# Copy the production dependencies from the base stage and also
 
-# Expose the port the app runs on
+CMD ["npm", "run", "build"]
+CMD ["npm",  "run", "tail"]
+
+COPY package*.json ./app/
+
+# Expose the port that the application listens on.
 EXPOSE 32635
+RUN npx dotenv-vault@latest pull
+COPY . /app
 
-# Command to run the application
-CMD ["webpack-dev-server"]
+CMD ["npm", "run", "webpack"]

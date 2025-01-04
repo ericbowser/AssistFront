@@ -2,10 +2,12 @@
 module.exports = {
     dark: 'class',
     content: [
+      './src/*.svg',
         './src/**/*.js',
         './src/api/*.js',
         './src/*.js',
-        './src/components/*.js'
+        './src/components/*.js',
+      './src/assets/*.svg'
     ],
     theme: {
         extend: {
@@ -14,9 +16,9 @@ module.exports = {
                 green: '#008000',
                 turquoise: '#40e0d0',
             },
-            backgroundImage: {
-                'custom-image': "url('../src/images/back.png')",
-            }
+          backgroundImage: ({
+            'back': "url('/src/assets/circle-scatter-haikei.svg')",
+          })
         },
     },
     plugins: [
