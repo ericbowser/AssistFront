@@ -19,6 +19,7 @@ async function postUrlData(url, data = {}) {
 
     try {
         const response = await axios.post(url, {...data});
+        console.log('axios response: ', response);
         if (response?.status === 200) {
             const res = await response;
             console.log('response: ', response);

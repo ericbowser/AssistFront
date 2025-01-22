@@ -13,6 +13,9 @@ function GetUrlInfo() {
   const [loading, setIsLoading] = useState(false);
   const [error, setHasError] = useState(false);
 
+  useEffect(() => {
+  }, [urls, loading, error, url]);
+
   const parseUrls = (urls = []) => {
     let validUrls = [];
     urls.forEach(url => {
@@ -44,8 +47,6 @@ function GetUrlInfo() {
     }
   }
 
-  useEffect(() => {
-  }, [urls, loading, error, url]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -69,20 +70,29 @@ function GetUrlInfo() {
                  size={50}
                  placeholder={'Url'}
                  onChange={e => setUrl(e.target.value)}/>
-          {urls && urls.length > 0 &&
-            <div>
-              {urls.map((url, index) => {
-                return (
-                  <div key={`${url}${index}`}>
-                    <a href={url}>
-                      {url}
-                    </a>
-                  </div>
-                )
-              })
-              }
-            </div>
-          }
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <textarea className={'w-75 h-full'}>
+            {urls && urls.length > 0 &&
+              <div>
+                {
+                  urls.map((url, index) => {
+                    return (
+                      <a href={url} key={index}>
+                        <p>
+
+                        {url}
+                        </p>
+                      </a>
+                    )
+                  })
+                }
+              </div>
+            }
+            </textarea>
           <div>
             <button
               className={'rounded-md text-black border-black border-2 bg-info shadow-xl shadow-amber-900 p-2 m-20'}

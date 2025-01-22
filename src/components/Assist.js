@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import {forEach} from "lodash";
 import AssistImage from "./AssistImage";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 
 const Assist = () => {
   const [thread, setThread] = useState(null);
@@ -15,8 +16,8 @@ const Assist = () => {
   const [language, setLanguage] = useState('HTML');
   const [current, setCurrent] = useState(null);
   const [selectedChat, setSelectedChat] = useState({});
+  const [copied, setCopied] = useState(false);
 
-  const textAreaRef = useRef('MarkDown');
   useEffect(() => {
   }, [thread, model, language, selectedChat]);
 
@@ -31,12 +32,12 @@ const Assist = () => {
     }
   }, [current, history]);
   const CopyToClipboard = () => {
-
-
     navigator.clipboard.writeText(current).then(() => {
+      setCopied(true);
       console.log('Text copied to clipboard');
     });
   }
+
   return (
     <React.Fragment>
       <section className={'main '}>
@@ -46,6 +47,8 @@ const Assist = () => {
             <Button onClick={CopyToClipboard}>
               Copy to Clipboard
             </Button>
+              {copied &&
+                <Alert variant={'light'}>Copied!</Alert>}
             <Markdown
               className={'markdown'}
               language={language}
