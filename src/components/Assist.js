@@ -5,7 +5,7 @@ import {Model} from "../utils/constants";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {forEach} from "lodash";
-import AssistImage from "./AssistImage";
+import {AssistImage} from "./AssistImage";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 
@@ -15,7 +15,7 @@ const Assist = () => {
   const [model, setModel] = useState(Model.OpenAi);
   const [language, setLanguage] = useState('HTML');
   const [current, setCurrent] = useState(null);
-  const [selectedChat, setSelectedChat] = useState({});
+  const [selectedChat, setSelectedChat] = useState(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -76,11 +76,6 @@ const Assist = () => {
             setModel={setModel}
             model={model}
           />
-        </section>
-        <section className={'side-bar-right'}>
-          <AssistImage>
-
-          </AssistImage>
         </section>
       </section>
     </React.Fragment>

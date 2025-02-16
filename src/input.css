@@ -24,12 +24,12 @@ nav {
         background-color: #0c0101;
         box-shadow: #0ef61a 0px 0px 8px;
         display: flex;
-        flex-direction: row;
+        align-content: flex-end;
         position: absolute;
-        margin-left: 300px;
-        margin-right: 150px;
+        flex-direction: row;
         max-height: 600px;
         width: -webkit-fill-available;
+        margin-left: 300px;
         height: 304px;
         overflow-y: auto;
         bottom: 0;
@@ -44,7 +44,7 @@ nav {
             font-weight: bold;
             font-style: normal;
             font-family: "Times New Roman", Times, serif;
-            font-size: large;
+            font-size: x-large;
             width: 60%;
             max-height: 280px;
             cursor: pointer;
@@ -59,14 +59,14 @@ nav {
         padding: 3rem;
         position: absolute;
         height: calc(100vh - 305px); /* Adjust height to fit within the viewport */
-        width: calc(100% - 450px);
+        width: calc(100% - 300px);
         margin-left: 300px;
         overflow-y: auto;
         top: 0;
 
         code {
             font-weight: bold;
-            font-size: medium;
+            font-size: x-large;
             background: linear-gradient(to right, #e62525, aquamarine, purple);
             -webkit-background-clip: text;
             color: transparent;
@@ -130,7 +130,7 @@ nav {
     left: 0;
 }
 
-.side-bar-right {
+/*.side-bar-right {
     background-color: #0c0101;
     box-shadow: #0ef61a 0px 0px 10px;
     padding: 15px;
@@ -139,7 +139,7 @@ nav {
     max-width: 150px;
     width: 150px;
     right: 0;
-}
+}*/
 
 
 .markdown-container {

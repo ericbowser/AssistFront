@@ -11,7 +11,7 @@
         a. Integrated through Google Cloud project with APIs enabled
 
 ## Node.js Back-end:
-    [https://github.com/ericbowser/Assist](https://github.com/ericbowser/Assist)
+    (https://github.com/ericbowser/Assist)
 
 ## TODO
     1. Better Image Generation

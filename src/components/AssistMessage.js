@@ -6,6 +6,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import {Model} from "../utils/constants";
 import {FormCheck} from "react-bootstrap";
+import AssistImage from "./AssistImage";
 import Alert from "react-bootstrap/Alert";
 
 
@@ -88,19 +89,20 @@ const AssistMessage = (
     <React.Fragment>
       <Spinner variant={'danger'} animation={'grow'} hidden={!spinner}/>
 
-      <textarea
-        rows={5}
-        value={question || ''}
-        onChange={(event) => setQuestion(event.target.value)}>
+        <textarea className={'w-100'}
+          rows={5}
+          value={question || ''}
+          onChange={(event) => setQuestion(event.target.value)}>
           {question}
-      </textarea>
+        </textarea>
+
       {/*   {history && history.length > 0 && (
         <AssistMarkdown ></AssistMarkdown>
       )
       }*/}
       <div className={'flex flex-col text-white'}>
 
-        <Button
+      <Button
           className={'p-2 m-2'}
           onClick={() => clear()}>
           Clear Question
@@ -127,11 +129,24 @@ const AssistMessage = (
           variant={'primary'}
           title={'Submit'}
           onClick={(e) => {
-            handleSubmit(e);
+            handleSubmit(e).then(r => console.log(e.target));
           }}
         >
           Submit
         </Button>
+      {/*  <Button
+          className={'p-2 m-2'}
+          id={'generate image'}
+          disabled={question === null || question === ''}
+          type='submit'
+          variant={'primary'}
+          title={'Submit'}
+          onClick={(e) => {
+            handleSubmit(e);
+          }}
+        >
+          Submit
+        </Button>*/}
         <div className={'m-2 p-2 align-content-center'}>
           <FormCheck // prettier-ignore
             value={isChecked === true ? 'checked' : 'unchecked'}
@@ -158,7 +173,10 @@ const AssistMessage = (
         </Alert>)
       }
 
+      {selectedChat && (
+        <AssistImage imagePrompt={question}/>
 
+      )}
     </React.Fragment>
   )
     ;
