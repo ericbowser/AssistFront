@@ -11,7 +11,7 @@ COPY . .
 
 
 # Install dependencies including webpack-cli.
-RUN npm install -D webpack-cli webpack dotenv dotencr
+RUN npm install -D webpack-cli webpack dotenv
 # Copy the production dependencies from the base stage and also
 
 CMD ["npm", "run", "build"]
@@ -20,7 +20,7 @@ CMD ["npm",  "run", "tail"]
 COPY package*.json ./app/
 
 # Expose the port that the application listens on.
-EXPOSE 32635
+EXPOSE 32635np
 RUN npx dotenv-vault@latest pull
 COPY . /app
 

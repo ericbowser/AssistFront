@@ -48,10 +48,12 @@ function GetUrlInfo() {
   }
 
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const urls = await getUrlData();
-    console.log('urls: ', urls);
+  const getUrls = () => {
+    return getUrlData().then(urls => {
+      console.log('urls returned from httprequest poin: ', urls);
+      setUrls(urls)
+      return urls;
+    });
   }
 
   return (
@@ -78,7 +80,7 @@ function GetUrlInfo() {
                       <a href={url} target='_blank' key={index}>
                         <p>
 
-                        {url}
+                          {url}
                         </p>
                       </a>
                     )
@@ -91,7 +93,7 @@ function GetUrlInfo() {
             <button
               className={'rounded-md text-black border-black border-2 bg-info shadow-xl shadow-amber-900 p-2 m-20'}
               type={'submit'}
-              onClick={(e) => handleSubmit(e)}>
+              onClick={() => getUrls().then(urls => console.log(urls.length))}>
               <span className={'text-md-center'}>Fetch Results</span>
             </button>
 
