@@ -10,19 +10,29 @@ export function isValidUrl(url) {
     return !!urlPattern.test(url);
 }
 
-export function decideUrl(askingAi, assistant) {
+export function decideUrl(askingAi, assistant = false, createImage = false) {
     switch (askingAi) {
         case Model.Claude:
             return process.env.CLAUDE_ASSIST_URL;
         case Model.OpenAi:
-            const assistUrl = assistant === true
-                ? process.env.OPENAI_ASSIST_URL
-                : process.env.OPENAI_CHAT_URL;
-            console.log('url', assistUrl);
-            return assistUrl;
+            if (assistant && createImage) {
+                console.log('Error, both assistant and createImage are true')
+                return null;
+            } else if(createImage) {
+                console.info('Create image api will be called')
+                return process.env.OPENAI_API_IMAGE_URL;
+            } else if (assistant) {
+                console.info('Assistant api will be called')
+                return process.env.OPENAI_API_ASSIST_URL;
+            } else {
+                return process.env.OPENAI_API_CHAT_URL;
+            }
+            console.error('No choices were made which is not right');
+            return null;
         case Model.Gemini:
-            console.log('Gemini Url: ', process.env.GEMINI_ASSIST_URL);
             return process.env.GEMINI_ASSIST_URL;
+        case Model.DeepSeek:
+            return process.env.DEEPSEEK_ASSIST_URL;
         default:
             console.log('Default: ', process.env.OPENAI_ASSIST_URL);
             return process.env.OPENAI_ASSIST_URL;

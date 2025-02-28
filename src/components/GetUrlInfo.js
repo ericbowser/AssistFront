@@ -57,23 +57,17 @@ function GetUrlInfo() {
   return (
     <div className={'h-screen w-screen bg-cover bg-center text-white text-2xl'}
          style={{backgroundImage: `url(${background})`}}>
-
       <div className={'bg-cover h-screen w-screen text-white text-2xl'}>
-
         <form className={'p-20'}>
           <label className={'px-3'} htmlFor={'url'} id={'url'} title={'url'}>
             Input crawl url:
           </label>
           <input type="text"
-                 className={'text-black '}
-                 value={url || ''}
-                 size={50}
-                 placeholder={'Url'}
-                 onChange={e => setUrl(e.target.value)}/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
+           className={'text-black'}
+           value={url}
+           size={50}
+           placeholder={'Url'}
+           onChange={e => setUrl(e.target.value)}/>
           <br/>
           <textarea className={'w-75 h-full'}>
             {urls && urls.length > 0 &&
@@ -81,7 +75,7 @@ function GetUrlInfo() {
                 {
                   urls.map((url, index) => {
                     return (
-                      <a href={url} key={index}>
+                      <a href={url} target='_blank' key={index}>
                         <p>
 
                         {url}

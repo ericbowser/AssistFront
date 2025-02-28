@@ -1,7 +1,8 @@
 const Model = {
     OpenAi: 'OpenAi',
     Gemini: 'Gemini',
-    Claude: 'Claude'
+    Claude: 'Claude',
+    DeepSeek: 'DeepSeek'
 }
 
 const Lang = [

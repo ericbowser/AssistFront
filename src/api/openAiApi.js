@@ -3,7 +3,7 @@
 async function GenerateImage(prompt) {
     try {
         const response = await axios.post(
-            'http://localhost:32636/generateImage',
+            process.env.OPENAI_API_IMAGE,
             {
                 prompt: prompt,
 /*

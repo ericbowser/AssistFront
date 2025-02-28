@@ -25,7 +25,7 @@ const AssistModel = ({history, setSelectedChat, selectedChat, setModel, model = 
           variant={'success'}
           title={askingAi || 'Select Model'}
         >
-          {[Model.Gemini, Model.Claude, Model.OpenAi].map((model, index) => {
+          {[Model.Gemini, Model.Claude, Model.OpenAi, Model.DeepSeek].map((model, index) => {
             console.log(model);
             return (
               <Dropdown.Item

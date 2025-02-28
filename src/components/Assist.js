@@ -1,4 +1,4 @@
-﻿import React, {useEffect, useRef, useState} from 'react';
+﻿import React, {useEffect, useState} from 'react';
 import AssistMessage from "./AssistMessage";
 import AssistModel from "./AssistModel";
 import {Model} from "../utils/constants";
@@ -30,6 +30,7 @@ const Assist = () => {
         console.log(`history item ${index}: `, item, index);
       });
     }
+    console.log('History length: ', history.length)
   }, [current, history]);
   const CopyToClipboard = () => {
     navigator.clipboard.writeText(current).then(() => {
@@ -40,7 +41,7 @@ const Assist = () => {
 
   return (
     <React.Fragment>
-      <section className={'main '}>
+      <section className={'main bg-black'}>
         <section className={'output-container'}>
           {current && (
             <>
@@ -76,11 +77,6 @@ const Assist = () => {
             setModel={setModel}
             model={model}
           />
-        </section>
-        <section className={'side-bar-right'}>
-          <AssistImage>
-
-          </AssistImage>
         </section>
       </section>
     </React.Fragment>
