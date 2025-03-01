@@ -1,6 +1,6 @@
 # Assist Front
 # Assist Back
-    - 
+    - https://github.com/ericbowser/Assist
 
 ## React.js front-end for LLM support:
     1. OpenAI API
@@ -11,6 +11,8 @@
         a. Basic integration through Anthropic
     3. Gemini
         a. Integrated through Google Cloud project with APIs enabled
+    4. Deepseek
+        a. Chat and Image generation
 
 ## Node.js Back-end:
     (https://github.com/ericbowser/Assist)
