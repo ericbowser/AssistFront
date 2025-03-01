@@ -1,6 +1,6 @@
 # Assist Front
 # Assist Back
-    - https://github.com/ericbowser/Assist
+    [https://github.com/ericbowser/Assist](https://github.com/ericbowser/Assist Front end to Assist Backend.)
 
 ## React.js front-end for LLM support:
     1. OpenAI API
