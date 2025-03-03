@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {decideUrl} from "../utils/assistUtils";
-import {post} from "../api/httpApi";
+import {post, postImage} from "../api/httpApi";
 import 'react-quill/dist/quill.snow.css';
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
@@ -14,9 +14,10 @@ const AssistMessage = (
     selectedChat,
     model = Model.OpenAi,
     // setThread,
-    setCurrent,
+    setCurrent = () => {},
     history = [],
-    setHistory,
+    setHistory = () => {},
+    setImageUrl = () => {}
   }) => {
 
   const [assistant, setAssistant] = useState(false);
@@ -24,10 +25,11 @@ const AssistMessage = (
   const [question, setQuestion] = useState('');
   const [thread, setThread] = useState(null);
   const [createImage, setCreateImage] = useState(false);
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
-  }, [question, spinner, history, thread, createImage]);
+  }, [question, spinner, history, thread, createImage, errorMessage, image]);
 
   useMemo(() => {
 
@@ -38,6 +40,8 @@ const AssistMessage = (
   }
 
   const setCurrentHistory = (response) => {
+    setImageUrl(null);
+    setImage(null);
     setThread(response.thread);
     console.log('current thread: ', response.thread);
     setCurrent(response.answer); // callback to the parent for current message
@@ -45,13 +49,37 @@ const AssistMessage = (
       question: question,
       thread: response.thread,
       answer: response.answer,
-      createImage,
     }]);
+  }
+
+  const handleImageSubmit = async () => {
+    try {
+      const body = {
+        content: {
+          question: question
+        }
+      };
+      setSpinner(true);
+
+      const response = await postImage(process.env.OPENAI_API_IMAGE_URL, body);
+      if (response.status === 200) {
+        setImage(response.answer);
+        setImageUrl(response.answer);
+        setCurrent(`Image url ${imageUrl}`);
+      } else if (!response || response.status !== 200) {
+        setCurrent(`Server error ${response.status}`);
+      }
+    } catch (err) {
+      console.log('Oops error! ', err.message);
+      setSpinner(false);
+      setCurrent(err.message);
+      setErrorMessage(err.message);
+    }
   }
 
   const handleSubmit = async () => {
     try {
-      const url = decideUrl(model, assistant, createImage);
+      const url = decideUrl(model, assistant);
       console.log('The Assist back-end url: ', url);
       if (question && url) {
         const body = {
@@ -75,7 +103,7 @@ const AssistMessage = (
       console.log('Oops error! ', err.message);
       setSpinner(false);
       setCurrent('');
-      setError(err.message);
+      setErrorMessage(err.message);
     }
   };
 
@@ -111,17 +139,32 @@ const AssistMessage = (
           onClick={() => setQuestion('Generate few C# snippets')}>
           A few C# Snippets
         </Button>
-        <Button
-          className={'p-2 m-2'}
-          id={'submitquestion'}
-          disabled={question === null || question === ''}
-          type='submit'
-          variant={'primary'}
-          title={'Submit'}
-          onClick={handleSubmit}
-        >
-          Submit
-        </Button>
+        {!createImage &&
+          <Button
+            className={'p-2 m-2'}
+            id={'submitQuestion'}
+            disabled={question === null || question === ''}
+            type='submit'
+            variant={'primary'}
+            title={'Submit'}
+            onClick={handleSubmit}
+          >
+            Submit
+          </Button>
+        }
+        {createImage &&
+          <Button
+            className={'p-2 m-2'}
+            id={'submitImage'}
+            disabled={question === null || question === ''}
+            type='submit'
+            variant={'primary'}
+            title={'ImageSubmit'}
+            onClick={handleImageSubmit}
+          >
+            Create Image
+          </Button>
+        }
         <div className={'m-2 p-2 align-content-center'}>
           {!createImage &&
             <FormCheck // prettier-ignore
@@ -149,23 +192,18 @@ const AssistMessage = (
           }
         </div>
       </div>
-
-
-      {error && (
+      {errorMessage ?
         <Alert
           className={'m-2 p-2'}
-          variant={'info'}>
+          variant={'danger'}>
           <div className={'p-2 bg-info'}>
             <strong>Thread: </strong> {thread}
           </div>
-        </Alert>
-      )
-      }
-
-
+          {errorMessage}
+        </Alert> : null
+      } 
     </React.Fragment>
   )
-    ;
 }
 
 export default AssistMessage;

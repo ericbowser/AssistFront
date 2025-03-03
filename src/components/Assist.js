@@ -8,6 +8,7 @@ import {forEach} from "lodash";
 import {AssistImage} from "./AssistImage";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
+import Image from "react-bootstrap/Image";
 
 const Assist = () => {
   const [thread, setThread] = useState(null);
@@ -17,6 +18,7 @@ const Assist = () => {
   const [current, setCurrent] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
   }, [thread, model, language, selectedChat]);
@@ -45,18 +47,24 @@ const Assist = () => {
         <section className={'output-container'}>
           {current && (
             <>
-            <Button onClick={CopyToClipboard}>
-              Copy to Clipboard
-            </Button>
+              <Button onClick={CopyToClipboard}>
+                Copy to Clipboard
+              </Button>
               {copied &&
                 <Alert variant={'light'}>Copied!</Alert>}
-            <Markdown
-              className={'markdown'}
-              language={language}
-              remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
-            >
-              {current}
-            </Markdown>
+              {!imageUrl ?
+                <Markdown
+                  className={'markdown'}
+                  language={language}
+                  remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
+                >
+                  {current}
+                </Markdown>
+                : 
+                <div>
+                  <Image src={imageUrl} alt={'Image'}/>
+                </div>
+              }
             </>
           )}
         </section>
@@ -67,6 +75,7 @@ const Assist = () => {
             setHistory={setHistory}
             setCurrent={setCurrent}
             selectedChat={selectedChat}
+            setImageUrl={setImageUrl}
           />
         </section>
         <section className={'side-bar-left'}>

@@ -44,6 +44,38 @@ async function postUrlData(url, data = {}) {
     }
 }
 
+async function postImage(url, data = {}) {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    console.log('POST body', data);
+
+    try {
+        const response = await axios.post(url, {...data});
+        if (response?.status === 200) {
+            const data = await response;
+            console.log('response: ', data);
+            if (data) {
+                const response = {
+                    status: 200,
+                    created: data.data.created,
+                    answer: data.data.imageUrl,
+                    thread: data.data.thread,
+                };
+                console.log('response', response);
+                return response;
+            } else {
+                return null;
+            }
+        } else {
+            console.error(response);
+            return null;
+        }
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
 async function post(url, data = {}) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -76,4 +108,4 @@ async function post(url, data = {}) {
     }
 }
 
-export {get, post, postUrlData};
+export {get, post, postUrlData, postImage};
