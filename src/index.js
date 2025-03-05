@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 import Assist from './components/Assist';
 import '../src/output.css';
-import UrlData from "./components/GetUrlInfo";
-import Background from "./components/Background";
 import GetUrlInfo from "./components/GetUrlInfo";
 
 const router = createBrowserRouter([
