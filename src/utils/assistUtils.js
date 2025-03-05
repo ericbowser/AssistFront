@@ -26,6 +26,7 @@ export function decideUrl(askingAi, assistant = false) {
         case Model.Gemini:
             return process.env.GEMINI_ASSIST_URL;
         case Model.DeepSeek:
+            console.log('Asking DeepSeek')
             return process.env.DEEPSEEK_ASSIST_URL;
         default:
             console.log('Default: ', process.env.OPENAI_API_CHAT_URL);
