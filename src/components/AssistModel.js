@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {SplitButton} from "react-bootstrap";
-import {Model} from "../utils/constants";
+import {Model} from "../Utils/constants";
 import Dropdown from "react-bootstrap/Dropdown";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";

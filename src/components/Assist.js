@@ -1,11 +1,10 @@
 ﻿import React, {useEffect, useState} from 'react';
 import AssistMessage from "./AssistMessage";
 import AssistModel from "./AssistModel";
-import {Model} from "../utils/constants";
+import {Model} from "../Utils/constants";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {forEach} from "lodash";
-import {AssistImage} from "./AssistImage";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";

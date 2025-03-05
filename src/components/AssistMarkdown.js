@@ -3,7 +3,7 @@ import remarkGfm from "remark-gfm";
 import SplitButton from "react-bootstrap/SplitButton";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
-import {Lang} from "../utils/constants";
+import {Lang} from "../Utils/constants";
 import Markdown from "react-markdown";
 
 const AssistMarkdown = () => {

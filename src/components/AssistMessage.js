@@ -1,10 +1,10 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {decideUrl} from "../utils/assistUtils";
+import {decideUrl} from "../Utils/assistUtils";
 import {post, postImage} from "../api/httpApi";
 import 'react-quill/dist/quill.snow.css';
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
-import {Model} from "../utils/constants";
+import {Model} from "../Utils/constants";
 import {FormCheck} from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import TextareaAutosize from 'react-textarea-autosize';
