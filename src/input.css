@@ -15,114 +15,110 @@ nav {
 
 
 .main {
-    background-color: #011101;
     display: flex;
     flex-direction: column;
+    width: 100vw;
+}
 
-    .input-container {
-        color: #0ef61a;
-        background-color: #0c0101;
-        box-shadow: #0ef61a 0px 0px 8px;
-        display: flex;
-        flex-direction: row;
-        position: absolute;
-        margin-left: 250px;
-        max-height: 600px;
-        height: auto;
-        overflow-y: auto;
-        bottom: 0;
-        width: calc(100% - 250px);
 
-        textarea {
-            opacity: 87%;
-            background-color: transparent;
-            padding: 10px;
-            margin: 20px;
-            box-shadow: #0ef61a 0px 0px 10px;
-            font-weight: bold;
-            font-style: normal;
-            font-family: "Times New Roman", Times, serif;
-            font-size: large;
-            width: 80%;
-            max-height: 280px;
-            cursor: pointer;
+.input-container {
+    border: #070004 3px inset;
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    position: relative;
+    display: flex;
+       
 
-        }
+    textarea {
+        padding: 10px;
+        color: #070d06;
+        font-weight: bolder;
+        margin: 20px;
+        box-shadow: #0ef61a 0px 0px 10px;
+        font-family: "Burtons", Times, serif;
+        font-size: xx-large;
+        width: 80%;
+        cursor: pointer;
     }
 
-    .output-container {
-        background-color: #0c0101;
-        opacity: 87%;
-        padding: 3rem;
-        position: absolute;
-        height: calc(100vh - 200px); /* Adjust height to fit within the viewport */
-        width: calc(100% - 250px);
-        margin-left: 250px;
-        overflow-y: auto;
-        top: 0;
+    button {
+        color: #e1eb0d;
+        background-color: #070004;
+    }
 
-        code {
-            font-weight: bold;
-            font-size: medium;
-            background: linear-gradient(to right, #e62525, aquamarine, purple);
-            -webkit-background-clip: text;
-            color: transparent;
-            line-height: 2.0pt;
+}
 
-            comment {
-                color: #9af49e;
-            }
+.output-container {
+    background-color: #070d06;
+    color: gainsboro;
+    border: white 2px outset;
+    padding: 3rem;
+    flex-grow: 1;
+    min-height: 100vh; /* Adjust height to fit within the viewport */
+    width: calc(100% - 250px);
+    margin-left: 250px;
 
-        }
+    code {
+        font-weight: bold;
+        font-size: medium;
+        background: linear-gradient(to right, #e62525, aquamarine, purple);
+        -webkit-background-clip: text;
+        color: transparent;
+        line-height: 2.0pt;
 
-        h1 {
-            font-weight: bolder;
-            color: rgb(137, 199, 250);
-        }
-
-        h2 {
-            font-weight: bolder;
-            color: #b299ff;
-        }
-
-        h3 {
-            font-weight: bold;
-            color: rgb(211, 147, 10);
-        }
-
-        strong {
-            color: rgb(106, 106, 220);
-            font-size: large;
-        }
-
-        p {
-            opacity: 69%;
-            color: rgb(255, 255, 255);
-            font-size: x-large;
-        }
-
-        ul {
-            font-style: italic;
-            font-weight: bolder;
-            color: rgb(139, 236, 139);
-        }
-
-        ol {
-            color: rgb(225, 185, 241);
+        comment {
+            color: #9af49e;
         }
 
     }
+
+    h1 {
+        font-weight: bolder;
+        color: rgb(137, 199, 250);
+    }
+
+    h2 {
+        font-weight: bolder;
+        color: #b299ff;
+    }
+
+    h3 {
+        font-weight: bold;
+        color: rgb(211, 147, 10);
+    }
+
+    strong {
+        color: rgb(106, 106, 220);
+        font-size: large;
+    }
+
+    p {
+        opacity: 69%;
+        color: rgb(255, 255, 255);
+        font-size: x-large;
+    }
+
+    ul {
+        font-style: italic;
+        font-weight: bolder;
+        color: rgb(139, 236, 139);
+    }
+
+    ol {
+        color: rgb(225, 185, 241);
+    }
+
 }
 
 .side-bar-left {
-    box-shadow: #0fef0f 0px 0px 10px;
-    background-color: #0c0101;
+    background-color: #38f9e8;
+    border: #0c0101 inset 2px;
     text-align: center;
     font-weight: bold;
     padding: 25px;
     height: 100vh;
     max-width: 250px;
-    position: absolute;
+    position: fixed;
     overflow-x: auto;
     left: 0;
 }

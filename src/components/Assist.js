@@ -42,7 +42,7 @@ const Assist = () => {
 
   return (
     <React.Fragment>
-      <section className={'main bg-black'}>
+      <section className={'main'}>
         <section className={'output-container'}>
           {current && (
             <>
