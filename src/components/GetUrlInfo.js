@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {postUrlData} from "../api/httpApi";
-import {isValidUrl} from "../Utils/assistUtils";
+import {isValidUrl} from "../helpers/utils/assistUtils";
 import background from "../assets/circle-scatter-haikei.svg";
 
 const getFileInfoUrl = 'http://localhost:32628/api/getUrlInfo';

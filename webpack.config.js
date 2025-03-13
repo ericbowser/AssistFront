@@ -46,12 +46,15 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(gif|png|jpe?g|svg)$/i,
-                loader: 'file-loader',
-                options: {
-                    bypassOnDebug: true, // webpack@1.x
-                    disable: true, // webpack@2.x and newer
-                }
+                test: /\.(png|jpe?g|gif|svg)$/i,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[path][name].[ext]',
+                        },
+                    },
+                ],
             },
             {
                 test: /\.(js|jsx)$/,

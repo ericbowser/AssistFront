@@ -16,3 +16,5 @@ dist/
 
 .codiumai
 .codium
+
+src/output.css

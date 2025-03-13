@@ -18,29 +18,44 @@ nav {
     display: flex;
     flex-direction: column;
     width: 100vw;
+    height: 100vh;
+    background-color: transparent;
 }
 
 
 .input-container {
-    border: #070004 3px inset;
-    margin-left: 250px;
-    width: calc(100% - 250px);
-    position: relative;
+    justify-content: space-evenly;
+    width: 70%;
+    height: 250px;
+    position: absolute;
     display: flex;
+    flex-direction: row;
+    top: 2%;
+    left: 25%;
+    border: 3px solid white;
+    border-radius: 15px;
+    box-shadow: #08f416 1px 10px 10px 5px;
+    cursor: default;
        
 
     textarea {
+        border: #0c0101 outset 5px;
+        border-radius: 5px;
+        border-bottom-style: groove;
         padding: 10px;
-        color: #070d06;
-        font-weight: bolder;
-        margin: 20px;
-        box-shadow: #0ef61a 0px 0px 10px;
-        font-family: "Burtons", Times, serif;
+        background-color: #38f9e8;
+        color: #070004;
+        font-weight: bold;
+        box-shadow: #f7ddcb 0 5px 5px 5px;
+        font-family: "Bookman Old Style", sans-serif;
         font-size: xx-large;
-        width: 80%;
+        max-height: 300px;
+        min-height: 200px;
+        width: 50%;
+        margin-top: 25px;
         cursor: pointer;
     }
-
+    
     button {
         color: #e1eb0d;
         background-color: #070004;
@@ -49,71 +64,82 @@ nav {
 }
 
 .output-container {
-    background-color: #070d06;
-    color: gainsboro;
-    border: white 2px outset;
-    padding: 3rem;
-    flex-grow: 1;
-    min-height: 100vh; /* Adjust height to fit within the viewport */
+    color: #070004;
+    background-color: black;
+    border: #ee0505 2px inset;
+    box-shadow: #e80303 100px 100px 100px 100px;
+    padding: 2rem;
+    position: relative;
+    overflow: auto;
+    height: 100vh;
+    top: 35%;
     width: calc(100% - 250px);
     margin-left: 250px;
 
+    markdown {
+        border-radius: 4px;
+        border: #e1eb0d inset 10px;
+        padding: 10px;
+        opacity: 20%;
+    }
+    
     code {
         font-weight: bold;
         font-size: medium;
-        background: linear-gradient(to right, #e62525, aquamarine, purple);
+        background: linear-gradient(to right, #f6fbfa, aquamarine, purple);
         -webkit-background-clip: text;
         color: transparent;
         line-height: 2.0pt;
 
         comment {
-            color: #9af49e;
+            color: #c7d50d;
         }
 
     }
 
     h1 {
         font-weight: bolder;
-        color: rgb(137, 199, 250);
+        color: rgb(240, 7, 7);
     }
 
     h2 {
         font-weight: bolder;
-        color: #b299ff;
+        color: #ccc0f4;
     }
 
     h3 {
         font-weight: bold;
-        color: rgb(211, 147, 10);
+        color: rgb(252, 173, 5);
     }
 
     strong {
-        color: rgb(106, 106, 220);
+        color: rgb(228, 245, 6);
         font-size: large;
     }
 
     p {
         opacity: 69%;
-        color: rgb(255, 255, 255);
+        color: rgb(254, 254, 254);
         font-size: x-large;
     }
 
     ul {
         font-style: italic;
         font-weight: bolder;
-        color: rgb(139, 236, 139);
+        color: rgb(118, 238, 118);
     }
 
     ol {
-        color: rgb(225, 185, 241);
+        color: rgb(183, 3, 249);
     }
 
 }
 
 .side-bar-left {
-    background-color: #38f9e8;
-    border: #0c0101 inset 2px;
+    background-color: #01453e;
+    border: #fb0303 double 5px;
     text-align: center;
+    box-shadow: #e1eb0d 5px 5px 5px 1px;
     font-weight: bold;
     padding: 25px;
     height: 100vh;
@@ -121,6 +147,7 @@ nav {
     position: fixed;
     overflow-x: auto;
     left: 0;
+    top: 0;
 }
 
 .side-bar-right {
@@ -136,14 +163,16 @@ nav {
 
 
 .markdown-container {
-    box-shadow: #0c0101 0px 0px 10px;
-    height: 150px;
+    box-shadow: #550808 0px 0px 10px;
+    background-color: brown;
+    height: auto;
     padding: 15px;
     border-radius: 8px;
 }
 
 .markdown-container a {
-    box-shadow: #0c0101 0px 0px 10px;
+    background-color: #0c0101;
+    box-shadow: #991c1c 0px 0px 10px;
     padding: 5px;
     text-decoration: none;
 }
@@ -154,23 +183,27 @@ nav {
 
 .markdown-container ul,
 .markdown-container ol {
+    background-color: #0c0101;
     margin-left: 20px;
     margin-bottom: 20px;
 }
 
 .markdown-container blockquote {
+    background-color: #0c0101;
     margin: 20px 0;
     padding: 10px 20px;
     border-left: 5px solid #0c0c0c;
 }
 
 .markdown-container code {
+    background-color: #0c0101;
     padding: 2px 4px;
     border-radius: 4px;
     font-family: 'Courier New', Courier, monospace;
 }
 
 .markdown-container pre {
+    background-color: #0c0101;
     padding: 10px;
     border-radius: 8px;
 }
@@ -180,9 +213,11 @@ nav {
     box-shadow: #0c0101 0px 0px 10px;
     padding: 5px;
     border: 2px inset black;
+    background-color: #0c0101;
 }
 
 .ql-editor {
+    background-color: #0c0101;
     box-shadow: #0c0101 0px 0px 10px;
     min-height: 150px;
     max-height: 300px;

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {SplitButton} from "react-bootstrap";
-import {Model} from "../Utils/constants";
+import {Model} from "../helpers/utils/constants";
 import Dropdown from "react-bootstrap/Dropdown";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -25,7 +25,7 @@ const AssistModel = ({history, setSelectedChat, selectedChat, setModel, model = 
           variant={'success'}
           title={askingAi || 'Select Model'}
         >
-          {[Model.Gemini, Model.Claude, Model.OpenAi, Model.DeepSeek].map((model, index) => {
+          {[Model.Gemini, Model.Claude, Model.OpenAi, Model.DeepSeek, Model.DALLE_2, Model.DALLE_3].map((model, index) => {
             console.log(model);
             return (
               <Dropdown.Item

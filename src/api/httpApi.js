@@ -58,7 +58,7 @@ async function postImage(url, data = {}) {
                 const response = {
                     status: 200,
                     created: data.data.created,
-                    answer: data.data.imageUrl,
+                    answer: data.data.b64_json,
                     thread: data.data.thread,
                 };
                 console.log('response', response);

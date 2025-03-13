@@ -16,9 +16,9 @@ module.exports = {
                 green: '#008000',
                 turquoise: '#40e0d0',
             },
-          backgroundImage: ({
-            'back': "url('/src/assets/circle-scatter-haikei.svg')",
-          })
+              backgroundImage: {
+                'back': "url('/src/assets/circle-scatter-haikei.svg')",
+              },
         },
     },
     plugins: [
