@@ -33,12 +33,18 @@ const AssistMessage = (
   const [imageSize, setImageSize] = useState(null);
   const [base64, setBase64] = useState(null);
 
+ /* // In ChatProvider, add this after useState:
+  useEffect(() => {
+    // Load messages from localStorage on initial load
+    const savedMessages = localStorage.getItem('chatMessages');
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    }
+  }, []);*/
+  
+  
   useEffect(() => {
   }, [question, spinner, history, thread, createImage, errorMessage, image, imageSize, base64]);
-
-  useMemo(() => {
-
-  }, [selectedChat]);
 
   function clear() {
     setQuestion(null);
@@ -52,6 +58,7 @@ const AssistMessage = (
     console.log('current thread: ', response.thread);
     setCurrent(response.answer); // callback to the parent for current message
     setHistory([...history, {
+      role: 'user',
       question: question,
       thread: response.thread,
       answer: response.answer,
@@ -70,11 +77,13 @@ const AssistMessage = (
       setSpinner(true);
 
       const response = await postImage(process.env.OPENAI_API_IMAGE_URL, body);
+      
       if (response.status === 200) {
         console.log('Image response: ', response.answer);
         setImage(response.answer);
         setBase64(response.answer);
         setBase64String(response.answer);
+        
         setImageUrlParent(response.answer);
         setSpinner(false);
         setCurrent(response.answer);
@@ -94,15 +103,13 @@ const AssistMessage = (
       const url = decideUrl(model, assistant);
       console.log('The Assist back-end url: ', url);
       if (question && url) {
-        const body = {
-          content: {
-            question: question,
-            history: [...history]
-          }
-        };
+        const data = [
+          ...history,
+          {role: 'user', content: question},
+        ];
         setSpinner(true);
 
-        const response = await post(url, body);
+        const response = await post(url, data);
         if (response.status === 200) {
           setCurrentHistory(response);
         } else if (!response || response.status !== 200) {
@@ -145,8 +152,6 @@ const AssistMessage = (
     <React.Fragment>
       <Spinner variant={'danger'} animation={'border'} hidden={!spinner}/>
       <TextareaAutosize
-        maxRows={8}
-        minRows={3}
         inputMode={'text'}
         cacheMeasurements={true}
         value={question}

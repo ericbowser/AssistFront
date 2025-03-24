@@ -17,7 +17,7 @@ const Assist = () => {
   const [current, setCurrent] = useState(null);
   const [selectedChat, setSelectedChat] = useState(null);
   const [copied, setCopied] = useState(false);
-  const [imageUrl, setImageUrlParent] = useState(null);
+  const [imageUrl, setImageUrlParent] = useState([]);
   const [imageSizeParent, setImageSizeParent] = useState(null);
   const [base64String, setBase64String] = useState(null);
 
@@ -33,7 +33,6 @@ const Assist = () => {
         console.log(`history item ${index}: `, item, index);
       });
     }
-    console.log('History length: ', history.length)
   }, [current, history]);
 
   async function CopyToClipboard() {
@@ -59,7 +58,7 @@ const Assist = () => {
     console.log('The image source: ', base64String);
     const wh = imageSizeParent.split('x');
     return (
-      <Image src={src} width={wh[0]} height={wh[1]} alt={'Image'} />
+      <Image src={src} width={wh[0]} height={wh[1]} alt={'Image'}/>
     )
   }
 
@@ -67,58 +66,58 @@ const Assist = () => {
     <React.Fragment>
       <section className={'main'}>
         <section className={'side-bar-left'}>
-          <AssistModel
-            setSelectedChat={setSelectedChat}
-            selectedChat={selectedChat}
-            history={history}
-            setModel={setModel}
-            model={model}
-          />
+            <AssistModel
+              setSelectedChat={setSelectedChat}
+              selectedChat={selectedChat}
+              history={history}
+              setModel={setModel}
+              model={model}
+            />
         </section>
-        <section className={'input-container'}>
-          <AssistMessage
-            model={model}
-            history={history}
-            setHistory={setHistory}
-            setThreadParent={setThreadParent}
-            setCurrent={setCurrent}
-            selectedChat={selectedChat}
-            setImageUrlParent={setImageUrlParent}
-            setImageSizeParent={setImageSizeParent}
-            setBase64String={setBase64String}
-          />
-        </section>
-        <section className={'output-container'}>
-          {current && (
-            <>
-              <Button onClick={CopyToClipboard}>
-                Copy to Clipboard
-              </Button>
-              {copied &&
-                <Alert variant={'light'}>Copied!</Alert>}
-              {!base64String ?
-                <Markdown
-                  className={'markdown'}
-                  language={language}
-                  remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
-                >
-                  {current}
-                </Markdown>
-                :
-                <div>
-                 {/* <Image
+      <section className={'input-container'}>
+        <AssistMessage
+          model={model}
+          history={history}
+          setHistory={setHistory}
+          setThreadParent={setThreadParent}
+          setCurrent={setCurrent}
+          selectedChat={selectedChat}
+          setImageUrlParent={setImageUrlParent}
+          setImageSizeParent={setImageSizeParent}
+          setBase64String={setBase64String}
+        />
+      </section>
+      <section className={'output-container'}>
+        {current && (
+          <>
+            <Button onClick={CopyToClipboard}>
+              Copy to Clipboard
+            </Button>
+            {copied &&
+              <Alert variant={'light'}>Copied!</Alert>}
+            {!base64String ?
+              <Markdown
+                className={'markdown'}
+                language={language}
+                remarkPlugins={[[remarkGfm, {singleTilde: false}]]}
+              >
+                {current}
+              </Markdown>
+              :
+              <div>
+                {/* <Image
                     src={imageUrl}
                     alt={'Image'}
                   />*/}
-                  {base64ToImage()}
-                </div>
-              }
-            </>
-          )}
-        </section>
+                {base64ToImage()}
+              </div>
+            }
+          </>
+        )}
       </section>
-    </React.Fragment>
-  )
+    </section>
+</React.Fragment>
+)
 };
 
 

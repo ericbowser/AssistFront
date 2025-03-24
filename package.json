@@ -7,7 +7,7 @@
   "main": "index.js",
   "scripts": {
     "run:docker": "docker run -p 32635:32635 --env-file .env ericbowser/assist-front:latest",
-    "build:docker": "docker build -t assist-front .",
+    "build:docker": "docker build -t ericbowser/assist-front .",
     "build": "webpack --mode=development",
     "start": "node scripts/start.js",
     "build:dev": "webpack --mode=development",

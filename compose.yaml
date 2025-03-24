@@ -1,11 +1,56 @@
-services:
-  server:
-    build:
-      context: .
-    env_file:
-      - .env
-    environment:
-      NODE_ENV: production
-    ports:
-      - 32635:32635
+#services:
+#  app:
+#    build:
+#      context: .
+#    ports:
+#      - "32635:32635"
+#    restart: unless-stopped
+#    init: true
+#    # env_file: ./.env  # Uncomment if .env file exists
+#    networks:
+#      - app_network
+#networks:
+#  app_network:
+#    driver: bridge
+  
+version: '3.9'
 
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: postgres-assist
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - assist-network
+
+  assist-backend:
+    build: .
+    container_name: assist-backend
+    restart: unless-stopped
+    ports:
+      - "32636:32636"
+    environment:
+      DB_HOST: postgres-db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+    depends_on:
+      - postgres-db
+    networks:
+      - assist-network
+
+volumes:
+  postgres-data:
+
+networks:
+  assist-network:
+    driver: bridge

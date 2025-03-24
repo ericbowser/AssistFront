@@ -25,18 +25,16 @@ nav {
 
 .input-container {
     justify-content: space-evenly;
-    width: 70%;
-    height: 250px;
-    position: absolute;
+    height: 300px;
+    width: 72%;
     display: flex;
     flex-direction: row;
-    top: 2%;
-    left: 25%;
-    border: 3px solid white;
-    border-radius: 15px;
-    box-shadow: #08f416 1px 10px 10px 5px;
+    position: absolute;
+    top: 0;
+    margin-left: 250px;
+    border: 5px solid white;
+    box-shadow: #08f416 1px 1px 1px 5px;
     cursor: default;
-       
 
     textarea {
         border: #0c0101 outset 5px;
@@ -46,35 +44,57 @@ nav {
         background-color: #38f9e8;
         color: #070004;
         font-weight: bold;
-        box-shadow: #f7ddcb 0 5px 5px 5px;
-        font-family: "Bookman Old Style", sans-serif;
-        font-size: xx-large;
-        max-height: 300px;
-        min-height: 200px;
+        box-shadow: #eeaa79 0 0 3px 3px;
+        font-family: "Burtons", sans-serif;
+        font-size: large;
+        max-height: 200px;
         width: 50%;
         margin-top: 25px;
         cursor: pointer;
     }
-    
+
     button {
         color: #e1eb0d;
         background-color: #070004;
     }
 
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        height: auto;
+        position: relative;
+        margin-left: 0;
+        flex-direction: column;
+        padding: 15px;
+        textarea {
+            padding: 15px;
+            font-size: xx-large;
+            font-weight: bolder;
+            margin: 15px;
+            height: auto;
+            width: auto;
+        }
+    }
 }
 
 .output-container {
+    background-color: #070004;
     color: #070004;
-    background-color: black;
-    border: #ee0505 2px inset;
-    box-shadow: #e80303 100px 100px 100px 100px;
+    box-shadow: blue 5px 0 0 5px;
     padding: 2rem;
-    position: relative;
     overflow: auto;
+    position: relative;
+    width: 100vw;
     height: 100vh;
-    top: 35%;
-    width: calc(100% - 250px);
+    margin-top: 310px;
     margin-left: 250px;
+
+    @media screen and (max-width: 768px) {
+        margin: 15px 0 15px 0;
+        position: relative;
+        top: auto;
+        width: 100%;
+        height: 100%;
+    }
 
     markdown {
         border-radius: 4px;
@@ -82,7 +102,7 @@ nav {
         padding: 10px;
         opacity: 20%;
     }
-    
+
     code {
         font-weight: bold;
         font-size: medium;
@@ -130,96 +150,91 @@ nav {
     }
 
     ol {
-        color: rgb(183, 3, 249);
+        color: rgb(108, 2, 148);
     }
 
+    .markdown-container {
+        box-shadow: #550808 0px 0px 10px;
+        background-color: brown;
+        height: auto;
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    .markdown-container a {
+        background-color: #0c0101;
+        box-shadow: #991c1c 0px 0px 10px;
+        padding: 5px;
+        text-decoration: none;
+    }
+
+    .markdown-container a:hover {
+        text-decoration: underline;
+    }
+
+    .markdown-container ul,
+    .markdown-container ol {
+        background-color: #d41515;
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
+
+    .markdown-container blockquote {
+        background-color: #03841a;
+        margin: 20px 0;
+        padding: 10px 20px;
+        border-left: 5px solid #bfb4b4;
+    }
+
+    .markdown-container code {
+        background-color: #201515;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .markdown-container pre {
+        background-color: #fb8a8a;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    /* !* Custom Quill theme based on the snow theme *!
+     .ql-container {
+         box-shadow: #0c0101 0px 0px 10px;
+         padding: 5px;
+         border: 2px inset black;
+         background-color: #0c0101;
+     }
+ 
+     .ql-editor {
+         background-color: #0c0101;
+         box-shadow: #0c0101 0px 0px 10px;
+         min-height: 150px;
+         max-height: 300px;
+     }*/
 }
 
 .side-bar-left {
     background-color: #01453e;
-    border: #fb0303 double 5px;
+    border: #f00707 double 5px;
     text-align: center;
-    box-shadow: #e1eb0d 5px 5px 5px 1px;
+    box-shadow: #474a05 5px 5px 5px 1px;
     font-weight: bold;
-    padding: 25px;
     height: 100vh;
-    max-width: 250px;
-    position: fixed;
-    overflow-x: auto;
+    width: 250px;
+    position: absolute;
     left: 0;
     top: 0;
-}
 
-.side-bar-right {
-    background-color: #0c0101;
-    box-shadow: #0ef61a 0px 0px 10px;
-    padding: 15px;
-    height: 100vh;
-    position: absolute;
-    max-width: 150px;
-    width: 150px;
-    right: 0;
+    @media screen and (max-width: 768px) {
+        padding: 20px;
+        width: 100%;
+        height: auto;
+        position: relative;
+        height: auto;
+    }
 }
 
 
-.markdown-container {
-    box-shadow: #550808 0px 0px 10px;
-    background-color: brown;
-    height: auto;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.markdown-container a {
-    background-color: #0c0101;
-    box-shadow: #991c1c 0px 0px 10px;
-    padding: 5px;
-    text-decoration: none;
-}
-
-.markdown-container a:hover {
-    text-decoration: underline;
-}
-
-.markdown-container ul,
-.markdown-container ol {
-    background-color: #0c0101;
-    margin-left: 20px;
-    margin-bottom: 20px;
-}
-
-.markdown-container blockquote {
-    background-color: #0c0101;
-    margin: 20px 0;
-    padding: 10px 20px;
-    border-left: 5px solid #0c0c0c;
-}
-
-.markdown-container code {
-    background-color: #0c0101;
-    padding: 2px 4px;
-    border-radius: 4px;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.markdown-container pre {
-    background-color: #0c0101;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-/* Custom Quill theme based on the snow theme */
-.ql-container {
-    box-shadow: #0c0101 0px 0px 10px;
-    padding: 5px;
-    border: 2px inset black;
-    background-color: #0c0101;
-}
-
-.ql-editor {
-    background-color: #0c0101;
-    box-shadow: #0c0101 0px 0px 10px;
-    min-height: 150px;
-    max-height: 300px;
-}
 

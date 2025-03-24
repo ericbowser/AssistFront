@@ -79,19 +79,21 @@ async function postImage(url, data = {}) {
 async function post(url, data = {}) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    console.log('POST body', data);
+    
+    const body = {
+        content: data,
+    }
     
     try {
-        const response = await axios.post(url, {...data});
+        const response = await axios.post(url, body);
         if (response?.status === 200) {
-            const content = await response;
-            console.log('response: ', content);
-            if(content) {
+            const res = await response;
+            console.log('response: ', res);
+            if(res) {
                 const response = {
                     status: 200,
-                    answer: content.data.answer,
-                    thread: content.data.thread,
-                    vectors: content.data.vectors
+                    content: res.data.answer,
+                    thread: res.data.thread,
                 };
                 console.log('response', response);
                 return response;

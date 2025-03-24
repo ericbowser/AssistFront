@@ -14,7 +14,7 @@ const AssistModel = ({history, setSelectedChat, selectedChat, setModel, model = 
   }, [showHistory, askingAi, selectedChat]);
 
   return (
-    <div >
+    <div>
       <label className={'text-white p-4'}>
         Select a model to assist you:
       </label>
