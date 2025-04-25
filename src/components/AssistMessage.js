@@ -56,10 +56,8 @@ const AssistMessage = (
     setImageUrlParent(null);
     setThreadParent(response.thread);
     console.log('current thread: ', response.thread);
-    setCurrent(response.answer); // callback to the parent for current message
+    setCurrent(response.content); // callback to the parent for current message
     setHistory([...history, {
-      role: 'user',
-      question: question,
       thread: response.thread,
       answer: response.answer,
     }]);
@@ -105,7 +103,7 @@ const AssistMessage = (
       if (question && url) {
         const data = [
           ...history,
-          {role: 'user', content: question},
+          {role: 'user', content: question, thread},
         ];
         setSpinner(true);
 

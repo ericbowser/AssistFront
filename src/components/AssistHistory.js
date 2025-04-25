@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Alert from "react-bootstrap/Alert";
 import SyntaxHighlighter from "react-syntax-highlighter";
@@ -15,24 +15,28 @@ const AssistHistory = ({history = [], showHistory, setShowHistory, language}) =>
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>History</Offcanvas.Title>
         </Offcanvas.Header>
-        <Offcanvas.Body>
-          {history.length > 0 &&
-            (
-              history.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <Alert>Question: {item.question}</Alert>
-                    <SyntaxHighlighter style={far}>
+        {history?.length > 0 && (
+          <Offcanvas.Body>
+            {history.map((item, index) => {
+              console.log(item);
+              return (
+                <div key={`${item}${index}-history`}>
+                  <Alert>Question: {item.content}</Alert>
+                  <SyntaxHighlighter
+                    language={language}
+                    style={far}
+                    wrapLongLines={true}
+                    showLineNumbers={true}
+                  >
 
                       {item.answer}
                     </SyntaxHighlighter>
                   </div>
                 )
               })
-            )
-          }
-        </Offcanvas.Body>
-
+            }
+          </Offcanvas.Body>
+        )}
       </Offcanvas>
     </React.Fragment>
   )

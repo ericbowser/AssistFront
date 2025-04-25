@@ -3,7 +3,6 @@ import {Element, scroller} from "react-scroll";
 import Image from "react-bootstrap/Image";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
-import Alert from "react-bootstrap/Alert";
 import GenerateImage from "../api/openAiApi";
 import Form from "react-bootstrap/Form";
 /*

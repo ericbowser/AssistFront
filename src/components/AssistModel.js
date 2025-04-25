@@ -45,15 +45,16 @@ const AssistModel = ({history, setSelectedChat, selectedChat, setModel, model = 
         </Button>
         {history && history.length > 0 && (
           history.map((item, index) => {
+            console.log(item);
             return (
-              <div className={'mt-5'} key={`${item.question.substring(0, 10)}${index}`}>
+              <div className={'mt-5'} key={`${item.content.substring(0, 10)}${index}`}>
                 <Alert className={'cursor-pointer'}
                        variant={'light'}
                        onClick={() => {
                          console.log('selected chat: ', item);
-                         setSelectedChat(item.question);
+                         setSelectedChat(item.content);
                        }}>
-                  {item.question}
+                  {item.content}
                 </Alert>
               </div>
             )

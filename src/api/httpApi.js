@@ -61,6 +61,9 @@ async function postImage(url, data = {}) {
                     answer: data.data.b64_json,
                     thread: data.data.thread,
                 };
+                if (response?.multiple) {
+                    
+                }
                 console.log('response', response);
                 return response;
             } else {
@@ -83,6 +86,7 @@ async function post(url, data = {}) {
     const body = {
         content: data,
     }
+    console.log('post data: ', body);
     
     try {
         const response = await axios.post(url, body);

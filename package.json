@@ -16,7 +16,8 @@
     "serve": "serve",
     "clean": "rm node_modules/ -R && npm install",
     "tail": "npx tailwindcss -i ./src/input.css -o ./src/output.css",
-    "tail:watch": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch"
+    "tail:watch": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -44,15 +45,15 @@
     "tailwindcss": "^3.0.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.7",
+    "@babel/core": "^7.26.10",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@babel/preset-env": "^7.23.7",
+    "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.23.3",
     "@jest/globals": "^29.7.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgdotjs/svg.js": "^3.2.4",
     "@svgr/webpack": "^8.1.0",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.0",
     "@types/react-syntax-highlighter": "^15.5.11",
     "assert": "^2.1.0",
     "autoprefixer": "^10.4.19",
@@ -79,6 +80,7 @@
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
     "mini-css-extract-plugin": "^2.4.5",
+    "npm-force-resolutions": "^0.0.10",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "postcss": "^8.4.4",
