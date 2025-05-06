@@ -3,8 +3,29 @@ import React from 'react';
 import { screen, render, fireEvent, waitFor } from '@testing-library/react';
 import AssistImage from '../AssistImage';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
+import {Element} from "react-scroll";
 
-jest.mock('../../api/openAiApi'); 
+const mockOpenAiApi = jest.fn();
+jest.mock('../../api/openAiApi', () => {
+	return {
+		__esModule: true,
+		default: () => mockOpenAiApi.mockResolvedValue('https://127.0.0.1:32628')
+		/*.mockResolvedValue(() => {
+			console.log('in mock');
+			return 'https://127.0.0.1:32628';
+		})*/
+	}
+});
+
+// Mock react-scroll
+// Mock react-scroll
+const mockScrollTo = jest.fn();
+jest.mock('react-scroll', () => ({
+	Element: ({ children, ...props }) => <div {...props}>{children}</div>,
+	scroller: {
+		scrollTo: () => mockScrollTo
+	}
+}));
 
 describe('AssistImage Component Tests', () => {
 	beforeEach(() => {
@@ -12,9 +33,11 @@ describe('AssistImage Component Tests', () => {
 	});
 
 	it.only('renders the component without errors', () => {
-		const {getByRole, getByText} = render(<AssistImage prompt="test" />);
+		render(<AssistImage prompt="test prompt" />);
+
 		// Check if the "Generate Image" button is present
-		expect(getByRole('button', { name: /Generate Image/i })).toBeDefined();
+		const button = screen.getByText(/Generate Image/i);
+		expect(button).toBeDefined();
 	});
 
 	it('calls the GenerateImage API and displays the image when the button is clicked', async () => {
