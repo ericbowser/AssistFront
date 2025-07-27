@@ -47,7 +47,7 @@ const AssistModel = ({history, setSelectedChat, selectedChat, setModel, model = 
           history.map((item, index) => {
             console.log(item);
             return (
-              <div className={'mt-5'} key={`${item.content.substring(0, 10)}${index}`}>
+              <div className={'mt-5'} key={index}>
                 <Alert className={'cursor-pointer'}
                        variant={'light'}
                        onClick={() => {

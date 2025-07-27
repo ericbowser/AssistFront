@@ -36,16 +36,16 @@ const AssistImage = (prompt = '') => {
 		if (!imagePrompt) return null;
 		const url = await GenerateImage(imagePrompt);
 		console.log('image url:', url);
-		if (imageUrl) {
-			await setImageUrl(url);
+		if (url) {
+			setImageUrl(url);
 			scrollToImage();
 		}
 	}
 
 	return (
-		<React.Fragment>
+		<React.Fragment data_test_id={'AssistImage'}>
 			<Form>
-				<Element key={'ImagePrompt'} id={'ImageUrl'}>
+				<Element data_test_id={'ImagePrompt'} id={'ImageUrl'}>
 					{prompt && imageUrl &&
 						<Image key={'ImageUrl'}
 									 src={prompt || ''}
@@ -68,12 +68,13 @@ const AssistImage = (prompt = '') => {
 					{imagePrompt}
 					
 				</div>
-				{prompt && imageUrl && (
+				{imageUrl && (
 					<Button id={'imageUrl'}
 									className={'mr-2'}
 									variant='secondary'
 									onClick={async (e) => {
-										await getImageUrl()
+										const imageUrl = await getImageUrl()
+										setImageUrl(imageUrl);
 										await scrollToImage();
 									}}
 					>

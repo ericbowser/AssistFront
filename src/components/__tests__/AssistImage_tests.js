@@ -9,19 +9,13 @@ const mockOpenAiApi = jest.fn();
 jest.mock('../../api/openAiApi', () => {
 	return {
 		__esModule: true,
-		default: () => mockOpenAiApi.mockResolvedValue('https://127.0.0.1:32628')
-		/*.mockResolvedValue(() => {
-			console.log('in mock');
-			return 'https://127.0.0.1:32628';
-		})*/
+		default: () => mockOpenAiApi
 	}
 });
 
 // Mock react-scroll
-// Mock react-scroll
 const mockScrollTo = jest.fn();
 jest.mock('react-scroll', () => ({
-	Element: ({ children, ...props }) => <div {...props}>{children}</div>,
 	scroller: {
 		scrollTo: () => mockScrollTo
 	}
@@ -29,14 +23,13 @@ jest.mock('react-scroll', () => ({
 
 describe('AssistImage Component Tests', () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
 	});
 
 	it.only('renders the component without errors', () => {
-		render(<AssistImage prompt="test prompt" />);
+		const {getAllByText} = render(<AssistImage prompt={"test"}/>);
 
 		// Check if the "Generate Image" button is present
-		const button = screen.getByText(/Generate Image/i);
+		const button = getByText(/Generate Image/i);
 		expect(button).toBeDefined();
 	});
 
