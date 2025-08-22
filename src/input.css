@@ -24,29 +24,26 @@ nav {
 
 
 .input-container {
-    justify-content: space-evenly;
-    height: 400px;
-    width: 72%;
+    justify-content: space-around;
+    height: auto;
+    width: 70%;
     display: flex;
     flex-direction: row;
     position: absolute;
-    top: 0;
+    bottom: 0;
     margin-left: 250px;
-    border: 5px solid white;
-    box-shadow: #08f416 1px 1px 1px 5px;
     cursor: default;
 
     textarea {
         padding: 10px;
         background-color: #38f9e8;
-        color: #070004;
+        color: #21211f;
         font-weight: bold;
-        box-shadow: #eeaa79 0 0 3px 3px;
         font-family: "Burtons", sans-serif;
         font-size: large;
-        max-height: 200px;
-        width: 50%;
-        margin-top: 25px;
+        max-height: 250px;
+        height: 200px;
+        width: 60%;
         cursor: pointer;
     }
 
@@ -76,13 +73,13 @@ nav {
 .output-container {
     /*background-color: #070004;*/
     color: #f1f4f1;
-    position: relative;
-    box-shadow: blue 5px 0 0 5px;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
     padding: 2rem;
     overflow: auto;
     width: 100vw;
-    height: 100vh;
-    margin-top: calc(100vh - 500px);
+    height: 65%;
     margin-left: 250px;
 
     @media screen and (max-width: 768px) {
@@ -95,10 +92,8 @@ nav {
 }
 
 .side-bar-left {
-    background-color: #01453e;
-    border: #f00707 double 5px;
+    background-color: #9c5557;
     text-align: center;
-    box-shadow: #474a05 5px 5px 5px 1px;
     font-weight: bold;
     height: 100vh;
     width: 250px;
