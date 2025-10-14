@@ -9,6 +9,7 @@ import {Model} from "../helpers/utils/constants";
 import {FormCheck} from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import TextareaAutosize from 'react-textarea-autosize';
+import VoiceTranscript from './VoiceTranscript';
 
 const AssistMessage = (
   {
@@ -156,6 +157,7 @@ const AssistMessage = (
         onChange={(event) => setQuestion(event.target.value)}>
         {question}
       </TextareaAutosize>
+      <VoiceTranscript setContent={setQuestion} />
       <div className={'flex flex-col text-white'}>
         <Button
           className={'p-2 m-2'}

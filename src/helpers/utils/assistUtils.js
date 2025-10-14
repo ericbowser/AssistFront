@@ -1,4 +1,5 @@
 import {Model} from "./constants";
+import {CLAUDE_ASSIST_URL} from '../../../'
 
 export function isValidUrl(url) {
     const urlPattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -13,23 +14,19 @@ export function isValidUrl(url) {
 export function decideUrl(askingAi, assistant = false) {
     switch (askingAi) {
         case Model.Claude:
-            return process.env.CLAUDE_ASSIST_URL;
+            return CLAUDE_ASSIST_URL;
         case Model.OpenAi:
             if (assistant) {
-                console.info('Assistant api will be called')
-                return process.env.OPENAI_API_ASSIST_URL;
+                return OPENAI_API_ASSIST_URL;
             } else {
-                return process.env.OPENAI_API_CHAT_URL;
+                return OPENAI_API_CHAT_URL;
             }
-            console.error('No choices were made which is not right');
             return null;
         case Model.Gemini:
-            return process.env.GEMINI_ASSIST_URL;
+            return GEMINI_ASSIST_URL;
         case Model.DeepSeek:
-            console.log('Asking DeepSeek')
-            return process.env.DEEPSEEK_ASSIST_URL;
+            return DEEPSEEK_ASSIST_URL;
         default:
-            console.log('Default: ', process.env.OPENAI_API_CHAT_URL);
-            return process.env.OPENAI_API_CHAT_URL;
+            return OPENAI_API_CHAT_URL;
     }
 }
